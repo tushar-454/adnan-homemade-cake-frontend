@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { Container } from '../shared/container';
 import { Button } from '../ui/button';
+import Gradient from '../ui/gradient';
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -33,7 +34,7 @@ const Header = () => {
     };
   }, []);
   return (
-    <header className='border-b py-3' ref={headerRef}>
+    <header className='border-b bg-white py-3' ref={headerRef}>
       <Container>
         <nav className='flex items-center justify-between'>
           <Link href='/'>
@@ -60,7 +61,7 @@ const Header = () => {
                     >
                       <span className='flex items-center justify-center gap-2'>
                         <Icon />
-                        {item.name}
+                        <Gradient>{item.name}</Gradient>
                       </span>
                     </Link>
                   </li>
@@ -122,7 +123,7 @@ const Header = () => {
             )}
             <span className='relative'>
               <ShoppingCart />
-              <small className='absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] text-white'>
+              <small className='absolute -right-2 -top-2 grid h-4 w-4 place-content-center rounded-full bg-red-500 text-[9px] text-white'>
                 10
               </small>
             </span>

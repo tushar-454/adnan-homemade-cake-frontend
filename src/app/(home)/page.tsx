@@ -1,9 +1,13 @@
 import { Carousel } from '@/components/carousel/carousel';
+import { Category } from '@/components/category/category';
 
-export default function Home() {
+const Home = () => {
   return (
     <main className=''>
       <Carousel />
+      <Category />
     </main>
   );
-}
+};
+
+export default Home;

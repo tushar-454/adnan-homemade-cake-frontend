@@ -1,31 +1,21 @@
 'use client';
 
+import { useCarouselQuery } from '@/api/carousel';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Container } from '../shared/container';
+import { CarouselSkeleton } from '../skeleton/carousel';
+import { TypographyMuted, TypographyP } from '../ui/typography';
 import { CarouselItem } from './carousel_item';
 
-export type TCarousel = {
-  _id: string;
-  image: string;
-  button_link?: string;
-  button_text?: string;
-  description?: string;
-  title?: string;
-};
-
-export const carouselsData: TCarousel[] = [
-  {
-    _id: '543ds583490343454343',
-    image: '',
-  },
-];
-
 const Carousel = () => {
+  const { data: carousels, isLoading, isError } = useCarouselQuery();
   const [currentSlide, setCurrentSlide] = useState(0);
+
   // carousel control function
-  const handleCarousel = (action: string) => {
-    const totalSlides = carouselsData.length - 1;
+  const handleCarousel = (action: 'next' | 'prev') => {
+    if (!carousels) return;
+    const totalSlides = carousels.length - 1;
     if (action === 'next') {
       if (currentSlide === totalSlides) {
         return setCurrentSlide(0);
@@ -42,29 +32,55 @@ const Carousel = () => {
   // auto slide
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((currentSlider) =>
-        currentSlider === carouselsData.length - 1 ? 0 : currentSlider + 1,
-      );
+      if (!isLoading && !isError && carousels) {
+        setCurrentSlide((currentSlider) =>
+          currentSlider === carousels.length - 1 ? 0 : currentSlider + 1,
+        );
+      }
     }, 1000 * 3);
     return () => clearInterval(interval);
-  }, []);
+  }, [isLoading, isError, carousels]);
+
+  if (isLoading && !isError) {
+    return <CarouselSkeleton />;
+  }
+
+  if ((!isLoading && isError) || carousels === undefined) {
+    return (
+      <Container>
+        <TypographyP className='my-8 grid h-32 place-content-center rounded-2xl border text-center text-red-500'>
+          Failed to load carousels
+        </TypographyP>
+      </Container>
+    );
+  }
+
+  if (!isLoading && !isError && Array.isArray(carousels) && carousels.length === 0) {
+    return (
+      <Container>
+        <TypographyMuted className='my-8 grid h-32 place-content-center rounded-2xl border text-center'>
+          No carousels found
+        </TypographyMuted>
+      </Container>
+    );
+  }
 
   return (
     <section>
       <Container>
         {/* Carousel wrapper  */}
-        <div className='relative my-8 overflow-hidden'>
+        <div className='relative my-8 !overflow-hidden'>
           <div
-            className='ease-[cubic-bezier(0.81, 0.01, 0, 0.28)] flex duration-500'
+            className='ease-[cubic-bezier(0.81, 0.01, 0, 0.28)] flex h-40 duration-500 sm:h-60 md:h-96 2xl:h-[650px]'
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
-            {carouselsData.map((carousel) => (
-              <CarouselItem key={carousel.title} carousel={carousel} />
+            {carousels.map((carousel) => (
+              <CarouselItem key={carousel._id} carousel={carousel} />
             ))}
           </div>
 
           {/* slider controls */}
-          {carouselsData.length > 1 && (
+          {carousels.length > 1 && (
             <div className='absolute top-1/2 z-50 flex w-full -translate-y-1/2 items-center justify-between'>
               <span onClick={() => handleCarousel('prev')}>
                 <ChevronLeft className='cursor-pointer text-4xl text-white' />

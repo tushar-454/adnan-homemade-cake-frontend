@@ -66,9 +66,8 @@
   body {
     @apply bg-background text-foreground;
   }
-  .nav_animation {
-    animation: nav_keyframe 1s;
-    transform-origin: top;
+  html {
+    scroll-behavior: smooth !important;
   }
   @keyframes nav_keyframe {
     0% {
