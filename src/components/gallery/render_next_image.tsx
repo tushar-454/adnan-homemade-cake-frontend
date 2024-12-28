@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { RenderImageContext, RenderImageProps } from 'react-photo-album';
-import 'react-photo-album/rows.css';
+import 'react-photo-album/masonry.css';
 
 export function renderNextImage(
   { alt = '', title, sizes }: RenderImageProps,

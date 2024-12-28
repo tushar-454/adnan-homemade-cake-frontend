@@ -1,3 +1,4 @@
+import Footer from '@/components/footer/footer';
 import { Header } from '@/components/header/header';
 import { Wrapper } from './wrapper';
 
@@ -10,6 +11,7 @@ const RootLayout = ({
     <Wrapper>
       <Header />
       <div>{children}</div>
+      <Footer />
     </Wrapper>
   );
 };
