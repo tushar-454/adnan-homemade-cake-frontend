@@ -6,7 +6,7 @@ import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { TypographyH3, TypographyH4, TypographyP } from '../ui/typography';
 
-const TopSellingCard = ({ product }: { product: TProduct }) => {
+const FeaturedCard = ({ product }: { product: TProduct }) => {
   return (
     <div
       key={product._id}
@@ -54,7 +54,7 @@ const TopSellingCard = ({ product }: { product: TProduct }) => {
             </Badge>
           </span>
           <Link href={`/cakes/${product.slug}`}>
-            <Button variant={'secondary'}>Order Now</Button>
+            <Button variant={'secondary'}>View Details</Button>
           </Link>
         </div>
       </div>
@@ -62,4 +62,4 @@ const TopSellingCard = ({ product }: { product: TProduct }) => {
   );
 };
 
-export default TopSellingCard;
+export default FeaturedCard;

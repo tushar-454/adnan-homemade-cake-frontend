@@ -13,8 +13,8 @@ const nav_items: TNavItem[] = [
     icon: ChartNetwork,
   },
   {
-    name: 'Features',
-    link: '#features',
+    name: 'Featured',
+    link: '#featured',
     icon: Feather,
   },
   {

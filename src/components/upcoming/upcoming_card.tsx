@@ -1,12 +1,11 @@
 import { TProduct } from '@/api/product';
 import Image from 'next/image';
-import Link from 'next/link';
-import Rating from '../shared/rating';
+// import Rating from '../shared/rating';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { TypographyH3, TypographyH4, TypographyP } from '../ui/typography';
 
-const TopSellingCard = ({ product }: { product: TProduct }) => {
+const UpcomingCard = ({ product }: { product: TProduct }) => {
   return (
     <div
       key={product._id}
@@ -38,28 +37,26 @@ const TopSellingCard = ({ product }: { product: TProduct }) => {
             </Badge>
           </span>
 
-          <span className='flex flex-col items-center gap-1'>
+          {/* <span className='flex flex-col items-center gap-1'>
             <span>
               Rating:{' '}
               {product.rating.toString().length === 1 ? `${product.rating}.0` : product.rating}
             </span>
             <Rating rating={product.rating} />
-          </span>
+          </span> */}
         </div>
         <div className='flex flex-wrap items-center justify-between gap-4'>
           <span className='flex flex-wrap items-center gap-1'>
             <TypographyH3 className='relative'>Price: ${product.price} </TypographyH3>
-            <Badge variant={'destructive'} className='whitespace-nowrap'>
+            {/* <Badge variant={'destructive'} className='whitespace-nowrap'>
               {product.discount}% Off
-            </Badge>
+            </Badge> */}
           </span>
-          <Link href={`/cakes/${product.slug}`}>
-            <Button variant={'secondary'}>Order Now</Button>
-          </Link>
+          <Button variant={'secondary'}>Pre Order</Button>
         </div>
       </div>
     </div>
   );
 };
 
-export default TopSellingCard;
+export default UpcomingCard;

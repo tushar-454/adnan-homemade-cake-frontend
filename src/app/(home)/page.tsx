@@ -1,6 +1,8 @@
 import { Carousel } from '@/components/carousel/carousel';
 import { Category } from '@/components/category/category';
+import { Featured } from '@/components/featured/featured';
 import { TopSelling } from '@/components/top_selling/top_selling';
+import { Upcoming } from '@/components/upcoming/upcoming';
 
 const Home = () => {
   return (
@@ -8,6 +10,10 @@ const Home = () => {
       <Carousel />
       <Category />
       <TopSelling />
+      <span className='my-24 block'></span>
+      <Featured />
+      <span className='my-24 block'></span>
+      <Upcoming />
     </main>
   );
 };
