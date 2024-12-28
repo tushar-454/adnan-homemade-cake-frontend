@@ -3,7 +3,7 @@ import { BASE_URL } from '@/constant';
 import { Container } from '../shared/container';
 import Gradient from '../ui/gradient';
 import { TypographyH2, TypographyP } from '../ui/typography';
-import TopSellingCard from './top_selling_card';
+import { TopSellingCard } from './top_selling_card';
 
 const TopSelling = async () => {
   let products: TProduct[] = [];

@@ -13,7 +13,7 @@ import Gradient from '../ui/gradient';
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const headerRef = useRef<HTMLHeadingElement>(null);
-  const user = true;
+  const user = false;
   useEffect(() => {
     const head = headerRef.current;
     document.addEventListener('scrollend', () => {

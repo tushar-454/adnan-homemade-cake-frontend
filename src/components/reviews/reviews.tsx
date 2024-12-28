@@ -1,17 +1,16 @@
 'use client';
-
-import { useCategoryQuery } from '@/api/category';
+import { useReviewsQuery } from '@/api/reviews';
 import { useEffect, useRef } from 'react';
 import { Container } from '../shared/container';
-import { CategorySkeleton } from '../skeleton/category';
+import ReviewSkeleton from '../skeleton/review';
 import Gradient from '../ui/gradient';
 import { TypographyH2, TypographyMuted, TypographyP } from '../ui/typography';
-import { CategoryCard } from './category_card';
+import { ReviewCard } from './review_card';
 
-const Category = () => {
+const Reviews = () => {
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { data: categories, isLoading, isError } = useCategoryQuery();
+  const { data: reviews, isLoading, isError } = useReviewsQuery();
 
   useEffect(() => {
     startAutoSlide();
@@ -94,33 +93,33 @@ const Category = () => {
 
   let placeholder;
   if (isLoading && !isError) {
-    placeholder = <CategorySkeleton />;
+    placeholder = <ReviewSkeleton />;
   }
 
   if (!isLoading && isError) {
     placeholder = (
-      <TypographyP className='text-center text-red-500'>Failed to load categories</TypographyP>
+      <TypographyP className='text-center text-red-500'>Failed to load reviews</TypographyP>
     );
   }
 
-  if (!isLoading && !isError && Array.isArray(categories) && categories.length === 0) {
-    placeholder = <TypographyMuted className='text-center'>No categories found</TypographyMuted>;
+  if (!isLoading && !isError && Array.isArray(reviews) && reviews.length === 0) {
+    placeholder = <TypographyMuted className='text-center'>No reviews found</TypographyMuted>;
   }
 
   return (
     <section>
       <Container>
-        <TypographyH2>
-          <Gradient>Category</Gradient>
+        <TypographyH2 id='reviews'>
+          <Gradient>Reviews & Feedback</Gradient>
         </TypographyH2>
         {/* wrapper  */}
         {placeholder ? (
-          placeholder
+          <div className='my-8'>{placeholder}</div>
         ) : (
           <div
             id='slider'
             ref={sliderRef}
-            className='my-4 flex flex-nowrap items-center justify-between gap-6 overflow-x-hidden'
+            className='my-8 flex flex-nowrap items-center justify-between gap-6 overflow-x-hidden'
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUpOrLeave}
@@ -129,15 +128,8 @@ const Category = () => {
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            {categories &&
-              categories.map((category, index) => (
-                <div
-                  key={category._id}
-                  className={`flex select-none flex-col items-center gap-3 px-10 ${index === 0 ? 'pl-0' : ''} ${index === categories.length - 1 ? 'pr-0' : ''}`}
-                >
-                  <CategoryCard category={category} />
-                </div>
-              ))}
+            {/* product */}
+            {reviews && reviews?.map((review) => <ReviewCard key={review._id} review={review} />)}
           </div>
         )}
       </Container>
@@ -145,4 +137,4 @@ const Category = () => {
   );
 };
 
-export { Category };
+export { Reviews };

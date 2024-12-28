@@ -1,6 +1,6 @@
 import { TProduct } from '@/api/product';
 import Image from 'next/image';
-// import Rating from '../shared/rating';
+// import {Rating} from '../shared/rating';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { TypographyH3, TypographyH4, TypographyP } from '../ui/typography';
