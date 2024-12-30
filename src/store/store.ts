@@ -4,9 +4,11 @@ import { gallery } from '@/api/gallery';
 import { product } from '@/api/product';
 import { reviews } from '@/api/reviews';
 import { configureStore } from '@reduxjs/toolkit';
+import globalReducer from './features/globalReducer';
 
 const store = configureStore({
   reducer: {
+    global: globalReducer,
     [category.reducerPath]: category.reducer,
     [carousel.reducerPath]: carousel.reducer,
     [product.reducerPath]: product.reducer,

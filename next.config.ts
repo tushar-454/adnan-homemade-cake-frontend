@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       'thumbs.dreamstime.com',
       'raw.githubusercontent.com',
       'via.placeholder.com',
+      'encrypted-tbn0.gstatic.com',
     ],
   },
 };

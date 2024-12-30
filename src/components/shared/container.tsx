@@ -4,7 +4,7 @@ type TContainer = {
 import React from 'react';
 
 const Container = ({ children }: TContainer) => {
-  return <div className='mx-auto w-[92%] px-4 2xl:px-0'>{children}</div>;
+  return <div className='mx-auto w-full px-2 lg:w-[92%] 2xl:px-0'>{children}</div>;
 };
 
 export { Container };

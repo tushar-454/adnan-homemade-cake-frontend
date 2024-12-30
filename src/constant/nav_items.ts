@@ -1,4 +1,12 @@
-import { ChartNetwork, Feather, Flame, Images, Menu, MessageSquareDiff } from 'lucide-react';
+import {
+  CakeIcon,
+  ChartNetwork,
+  Feather,
+  Flame,
+  Images,
+  Menu,
+  MessageSquareDiff,
+} from 'lucide-react';
 
 export type TNavItem = {
   name: string;
@@ -7,6 +15,11 @@ export type TNavItem = {
 };
 
 const nav_items: TNavItem[] = [
+  {
+    name: 'Cakes',
+    link: '/cakes',
+    icon: CakeIcon,
+  },
   {
     name: 'Top Sell',
     link: '#top_sell',
