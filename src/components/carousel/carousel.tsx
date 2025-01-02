@@ -75,7 +75,7 @@ const Carousel = () => {
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
             {carousels.map((carousel) => (
-              <CarouselItem key={carousel._id} carousel={carousel} />
+              <CarouselItem key={carousel.id} carousel={carousel} />
             ))}
           </div>
 

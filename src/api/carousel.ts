@@ -2,7 +2,7 @@ import { BASE_URL } from '@/constant';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export type TCarousel = {
-  _id: string;
+  id: string;
   image: string;
   button_link?: string;
   button_text?: string;

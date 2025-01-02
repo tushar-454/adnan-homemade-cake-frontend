@@ -2,7 +2,7 @@ import { BASE_URL } from '@/constant';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export type TReview = {
-  _id: string;
+  id: string;
   user: string;
   name: string;
   email: string;

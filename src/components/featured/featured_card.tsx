@@ -9,7 +9,7 @@ import { TypographyH3, TypographyH4, TypographyP } from '../ui/typography';
 const FeaturedCard = ({ product }: { product: TProduct }) => {
   return (
     <div
-      key={product._id}
+      key={product.id}
       className='flex h-full flex-col rounded-2xl border bg-white p-2 shadow-md'
     >
       <Image

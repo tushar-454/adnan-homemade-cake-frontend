@@ -2,7 +2,7 @@ import { BASE_URL } from '@/constant';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export type TCategory = {
-  _id: number;
+  id: number;
   name: string;
   image: string;
 };

@@ -2,7 +2,7 @@ import { BASE_URL } from '@/constant';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export type TGallery = {
-  _id: number;
+  id: number;
   src: string;
   width: number;
   height: number;

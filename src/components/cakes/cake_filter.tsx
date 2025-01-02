@@ -57,9 +57,11 @@ const CakesFilter = () => {
           <ul className='flex flex-col gap-2'>
             {categories &&
               categories.map((category) => (
-                <li key={category._id} className='flex items-center gap-2'>
+                <li key={category.id} className='flex cursor-pointer items-center gap-2'>
                   <Checkbox id={category.name} />
-                  <label htmlFor={category.name}>{category.name}</label>
+                  <label htmlFor={category.name} className='cursor-pointer'>
+                    {category.name}
+                  </label>
                 </li>
               ))}
           </ul>

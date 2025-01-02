@@ -129,7 +129,7 @@ const Reviews = () => {
             onTouchEnd={handleTouchEnd}
           >
             {/* product */}
-            {reviews && reviews?.map((review) => <ReviewCard key={review._id} review={review} />)}
+            {reviews && reviews?.map((review) => <ReviewCard key={review.id} review={review} />)}
           </div>
         )}
       </Container>

@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       'raw.githubusercontent.com',
       'via.placeholder.com',
       'encrypted-tbn0.gstatic.com',
+      'images.unsplash.com',
     ],
   },
 };

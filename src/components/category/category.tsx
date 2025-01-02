@@ -132,7 +132,7 @@ const Category = () => {
             {categories &&
               categories.map((category, index) => (
                 <div
-                  key={category._id}
+                  key={category.id}
                   className={`flex select-none flex-col items-center gap-3 px-10 ${index === 0 ? 'pl-0' : ''} ${index === categories.length - 1 ? 'pr-0' : ''}`}
                 >
                   <CategoryCard category={category} />
