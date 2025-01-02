@@ -46,7 +46,9 @@ const Upcoming = async () => {
         {/* wrapper  */}
         <div className='my-8 grid grid-cols-1 items-start justify-between gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
           {/* product */}
-          {products?.map((product) => <FeaturedCard key={product.id} product={product} />)}
+          {products
+            ?.filter((p) => p.is_upcoming === true)
+            .map((product) => <FeaturedCard key={product.id} product={product} />)}
         </div>
       </>
     );

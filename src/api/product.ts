@@ -23,6 +23,8 @@ export type TProduct = {
   slug: string;
 };
 
+export type TProductsImages = TProduct['images'];
+
 const product = createApi({
   reducerPath: 'product',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),

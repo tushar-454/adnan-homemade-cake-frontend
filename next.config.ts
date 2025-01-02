@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       'via.placeholder.com',
       'encrypted-tbn0.gstatic.com',
       'images.unsplash.com',
+      'scontent.fcgp36-1.fna.fbcdn.net',
     ],
   },
 };

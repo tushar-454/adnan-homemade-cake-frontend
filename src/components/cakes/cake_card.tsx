@@ -13,11 +13,11 @@ const CakeCard = ({ product }: { product: TProduct }) => {
       className='flex h-full flex-col rounded-2xl border bg-white p-2 shadow-md'
     >
       <Image
-        src='https://via.placeholder.com/100'
+        src={product.images[0]}
         alt={product.name}
         width={100}
         height={100}
-        className='h-[250px] w-full rounded-lg md:h-[280px] lg:h-[350px]'
+        className='h-[250px] w-full rounded-lg object-cover md:h-[280px] lg:h-[350px]'
       />
       <div className='flex flex-grow flex-col space-y-2 bg-white pt-2'>
         <div className='flex-grow'>

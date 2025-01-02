@@ -46,7 +46,9 @@ const TopSelling = async () => {
         {/* wrapper  */}
         <div className='my-8 grid grid-cols-1 items-start justify-between gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
           {/* product */}
-          {products?.map((product) => <TopSellingCard key={product.id} product={product} />)}
+          {products
+            ?.filter((p) => p.sell_count > 40)
+            .map((product) => <TopSellingCard key={product.id} product={product} />)}
         </div>
       </>
     );
