@@ -1,5 +1,6 @@
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import Gradient from '../ui/gradient';
@@ -106,9 +107,11 @@ const Cart = ({ cartOpen, setCartOpen }: CartProps) => {
             </div>
           </div>
           {/* cart footer here */}
-          <Button variant={'default'} className='flex-end w-full'>
-            Checkout
-          </Button>
+          <Link href={'/checkout'}>
+            <Button variant={'default'} className='flex-end w-full'>
+              Checkout
+            </Button>
+          </Link>
         </div>
       </div>
     </>
