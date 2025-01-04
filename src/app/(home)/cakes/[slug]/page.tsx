@@ -1,11 +1,10 @@
 import { TProduct } from '@/api/product';
+import AddToCart from '@/components/cakes_details/add_to_cart';
 import { CakesImages } from '@/components/cakes_details/CakesImages';
 import { Container } from '@/components/shared/container';
 import { Rating } from '@/components/shared/rating';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { BASE_URL } from '@/constant';
-import { ShoppingCart } from 'lucide-react';
 
 const CakeDetails = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
@@ -41,26 +40,7 @@ const CakeDetails = async ({ params }: { params: Promise<{ slug: string }> }) =>
             <Badge variant={'destructive'}>{cake.sell_count} - Sells</Badge>
             <p className='my-4 text-gray-700'>{cake.description}</p>
 
-            <div className='mb-6'>
-              <h3 className='mb-2 text-lg font-semibold'>Variants:</h3>
-              <div className='flex space-x-2'>
-                {cake.variants.map((variant) => (
-                  <Badge key={variant.id} variant={'secondary'}>
-                    {variant.name}
-                    {variant.price && ` - $${variant.price}`}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-
-            <div className='mb-6 flex space-x-4'>
-              <Button variant={'default'}>
-                <span className='flex items-center gap-2'>
-                  <ShoppingCart />
-                  Add to Cart
-                </span>
-              </Button>
-            </div>
+            <AddToCart cake={cake} />
           </div>
         </div>
       </Container>

@@ -2,19 +2,21 @@
 
 import { assets } from '@/assets/assets';
 import { nav_items } from '@/constant/nav_items';
+import { getDataLocalStorage } from '@/lib/utils';
 import { setOpenFilter } from '@/store/features/globalReducer';
-import { AppDispatch } from '@/store/store';
+import { AppDispatch, RootState } from '@/store/store';
 import { MenuIcon, Plus, Search, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Cart from '../cart/cart';
 import { Container } from '../shared/container';
 import { Button } from '../ui/button';
 import Gradient from '../ui/gradient';
 
 const Header = () => {
+  const cartlength = useSelector((state: RootState) => state.global.cartlength);
   const dispatch = useDispatch<AppDispatch>();
   const [cartOpen, setCartOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -136,7 +138,7 @@ const Header = () => {
               <span className='relative cursor-pointer'>
                 <ShoppingCart onClick={() => setCartOpen(!cartOpen)} />
                 <small className='absolute -right-2 -top-2 grid h-4 w-4 place-content-center rounded-full bg-red-500 text-[9px] text-white'>
-                  10
+                  {cartlength || getDataLocalStorage('carts')?.length || 0}
                 </small>
               </span>
               <span className='lg:hidden' onClick={() => setShowMenu(!showMenu)}>

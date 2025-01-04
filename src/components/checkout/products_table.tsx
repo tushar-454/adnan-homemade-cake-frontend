@@ -80,6 +80,54 @@ const ProductsTable = () => {
               </TableCell>
             </TableRow>
           ))}
+          <TableRow>
+            <TableCell colSpan={3} className='text-right'>
+              <TypographyLarge>Total:</TypographyLarge>
+            </TableCell>
+            <TableCell colSpan={1} className='text-right'>
+              <TypographyLarge>+ 2000</TypographyLarge>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={3} className='text-right'>
+              <TypographyLarge>Discount:</TypographyLarge>
+            </TableCell>
+            <TableCell colSpan={1} className='text-right'>
+              <TypographyLarge>- 200</TypographyLarge>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={3} className='text-right'>
+              <TypographyLarge>Sub total:</TypographyLarge>
+            </TableCell>
+            <TableCell colSpan={1} className='text-right'>
+              <TypographyLarge>+ 2000</TypographyLarge>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={3} className='text-right'>
+              <TypographyLarge>Shipping:</TypographyLarge>
+            </TableCell>
+            <TableCell colSpan={1} className='text-right'>
+              <TypographyLarge>+ 200</TypographyLarge>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={3} className='text-right'>
+              <TypographyLarge>Coupon Discount:</TypographyLarge>
+            </TableCell>
+            <TableCell colSpan={1} className='text-right'>
+              <TypographyLarge>- 200</TypographyLarge>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={3} className='text-right'>
+              <TypographyLarge>Nit Total:</TypographyLarge>
+            </TableCell>
+            <TableCell colSpan={1} className='text-right'>
+              <TypographyLarge>+ 1390</TypographyLarge>
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </div>

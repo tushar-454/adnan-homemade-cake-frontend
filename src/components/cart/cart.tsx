@@ -107,7 +107,7 @@ const Cart = ({ cartOpen, setCartOpen }: CartProps) => {
             </div>
           </div>
           {/* cart footer here */}
-          <Link href={'/checkout'}>
+          <Link href={'/checkout'} onClick={() => setCartOpen(false)}>
             <Button variant={'default'} className='flex-end w-full'>
               Checkout
             </Button>
