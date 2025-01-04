@@ -4,11 +4,13 @@ import { gallery } from '@/api/gallery';
 import { product } from '@/api/product';
 import { reviews } from '@/api/reviews';
 import { configureStore } from '@reduxjs/toolkit';
+import cartReducer from './features/cart';
 import globalReducer from './features/globalReducer';
 
 const store = configureStore({
   reducer: {
     global: globalReducer,
+    cart: cartReducer,
     [category.reducerPath]: category.reducer,
     [carousel.reducerPath]: carousel.reducer,
     [product.reducerPath]: product.reducer,

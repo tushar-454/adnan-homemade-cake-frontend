@@ -1,5 +1,4 @@
 'use client';
-
 import {
   Select,
   SelectContent,
@@ -100,4 +99,4 @@ const ShippingAddress = () => {
   );
 };
 
-export default ShippingAddress;
+export { ShippingAddress };

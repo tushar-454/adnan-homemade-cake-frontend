@@ -1,3 +1,4 @@
+'use client';
 import {
   Table,
   TableBody,
@@ -11,9 +12,27 @@ import {
 import { Badge } from '@/components/ui/badge';
 import Gradient from '@/components/ui/gradient';
 import { TypographyH3, TypographyLarge, TypographyP } from '@/components/ui/typography';
+import { RootState } from '@/store/store';
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
 
 const ProductsTable = () => {
+  const carts = useSelector((state: RootState) => state.cart.carts);
+  // const { toast } = useToast();
+  // const router = useRouter();
+
+  // useEffect(() => {
+  //   const handleEmptyCart = () => {
+  //     toast({
+  //       title: 'Cart is Empty',
+  //       description: 'Please add some products to cart',
+  //     });
+  //     router.push('/cakes');
+  //   };
+  //   if (getDataSessionStorage('carts')?.length === 0) {
+  //     handleEmptyCart();
+  //   }
+  // }, [carts, toast, router]);
   return (
     <div className='overflow-x-auto'>
       <Table className='min-w-[1024px] lg:w-full'>
@@ -35,31 +54,26 @@ const ProductsTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {[{}, {}, {}, {}].map((product, index) => (
-            <TableRow key={index}>
+          {carts?.map((cart) => (
+            <TableRow key={cart.id}>
               <TableCell>
                 <div className='flex gap-2'>
                   {/* image and variant other details here */}
                   <Image
-                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmLzTSljaTNyI0kNe9vMOk13KnsVw0l8w05vzTAAeYu2ejKacj1G3mAxtsZXAV2AQvr-I&usqp=CAU'
-                    alt='product'
+                    src={cart.image}
+                    alt={cart.name}
                     width={50}
                     height={50}
                     className='size-16 rounded-lg object-cover'
                   />
                   <div className='flex flex-col gap-1'>
-                    <TypographyP>
-                      Dominican Republic ; Black Forest cake, often known as Black Forest
-                    </TypographyP>
+                    <TypographyP>{cart.name}</TypographyP>
                     <span className='flex flex-wrap items-center gap-1'>
                       <Badge variant={'default'} className='max-w-fit whitespace-nowrap'>
-                        Variant
+                        {cart.category}
                       </Badge>
                       <Badge variant={'default'} className='max-w-fit whitespace-nowrap'>
-                        1 Pound
-                      </Badge>
-                      <Badge variant={'default'} className='max-w-fit whitespace-nowrap'>
-                        Vanilla
+                        {cart.variant?.name} - {cart.variant?.price}
                       </Badge>
                     </span>
                   </div>
@@ -67,15 +81,17 @@ const ProductsTable = () => {
               </TableCell>
               <TableCell>
                 <div className='flex flex-col gap-1'>
-                  <TypographyLarge>$100</TypographyLarge>
+                  <TypographyLarge>
+                    ${cart.price - cart.price * (cart.discount / 100)}
+                  </TypographyLarge>
                 </div>
               </TableCell>
               <TableCell>
-                <TypographyLarge>10</TypographyLarge>
+                <TypographyLarge>{cart.quantity}</TypographyLarge>
               </TableCell>
               <TableCell className='text-right'>
                 <TypographyH3>
-                  <Gradient>$200</Gradient>
+                  <Gradient>${cart.totalPrice}</Gradient>
                 </TypographyH3>
               </TableCell>
             </TableRow>
@@ -134,4 +150,4 @@ const ProductsTable = () => {
   );
 };
 
-export default ProductsTable;
+export { ProductsTable };

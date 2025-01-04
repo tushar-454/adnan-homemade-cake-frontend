@@ -1,8 +1,7 @@
 'use client';
 import { TProduct } from '@/api/product';
 import { useToast } from '@/hooks/use-toast';
-import { getDataLocalStorage, setDataLocalStorage } from '@/lib/utils';
-import { setCartlength } from '@/store/features/globalReducer';
+import { addCartItem } from '@/store/features/cart';
 import { AppDispatch } from '@/store/store';
 import { ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
@@ -24,7 +23,7 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
       return;
     }
     const cart = {
-      id: cake.id,
+      id: crypto.randomUUID(),
       image: cake.images[0],
       name: cake.name,
       category: cake.category,
@@ -34,8 +33,7 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
       quantity: 1,
       totalPrice: variant.price,
     };
-    setDataLocalStorage('carts', cart);
-    dispatch(setCartlength(getDataLocalStorage('carts').length));
+    dispatch(addCartItem(cart));
     toast({
       title: 'Added to cart',
       description: `${cake.name} - ${variant.name} added to cart`,

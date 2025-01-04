@@ -2,7 +2,8 @@
 
 import { assets } from '@/assets/assets';
 import { nav_items } from '@/constant/nav_items';
-import { getDataLocalStorage } from '@/lib/utils';
+import { getDataSessionStorage } from '@/lib/utils';
+import { initCart } from '@/store/features/cart';
 import { setOpenFilter } from '@/store/features/globalReducer';
 import { AppDispatch, RootState } from '@/store/store';
 import { MenuIcon, Plus, Search, ShoppingCart } from 'lucide-react';
@@ -16,7 +17,7 @@ import { Button } from '../ui/button';
 import Gradient from '../ui/gradient';
 
 const Header = () => {
-  const cartlength = useSelector((state: RootState) => state.global.cartlength);
+  const carts = useSelector((state: RootState) => state.cart.carts);
   const dispatch = useDispatch<AppDispatch>();
   const [cartOpen, setCartOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -32,7 +33,8 @@ const Header = () => {
         head.classList.remove('sticky_animation');
       }
     });
-
+    const data = getDataSessionStorage('carts');
+    dispatch(initCart(data ? data : []));
     return () => {
       document.removeEventListener('scrollend', () => {
         if (head && window.scrollY > 90) {
@@ -40,7 +42,7 @@ const Header = () => {
         }
       });
     };
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <header className='border-b bg-white py-3' ref={headerRef}>
@@ -138,10 +140,10 @@ const Header = () => {
               <span className='relative cursor-pointer'>
                 <ShoppingCart onClick={() => setCartOpen(!cartOpen)} />
                 <small className='absolute -right-2 -top-2 grid h-4 w-4 place-content-center rounded-full bg-red-500 text-[9px] text-white'>
-                  {cartlength || getDataLocalStorage('carts')?.length || 0}
+                  {carts?.length || 0}
                 </small>
               </span>
-              <span className='lg:hidden' onClick={() => setShowMenu(!showMenu)}>
+              <span className='cursor-pointer lg:hidden' onClick={() => setShowMenu(!showMenu)}>
                 {showMenu ? <Plus className='rotate-45' /> : <MenuIcon />}
               </span>
             </div>

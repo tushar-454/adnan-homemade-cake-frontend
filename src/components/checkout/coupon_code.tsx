@@ -20,4 +20,4 @@ const CouponCode = () => {
   );
 };
 
-export default CouponCode;
+export { CouponCode };

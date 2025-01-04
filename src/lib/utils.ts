@@ -1,3 +1,4 @@
+import { TCart } from '@/components/cart/cart';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -5,21 +6,44 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function setDataLocalStorage(key: string, value: unknown) {
-  const isExist = localStorage.getItem(key);
+export function setDataSessionStorage(key: string, value: unknown) {
+  const isExist = sessionStorage.getItem(key);
   if (isExist) {
     const parsed = JSON.parse(isExist);
     const newValue = [...parsed, value];
-    localStorage.setItem(key, JSON.stringify(newValue));
+    sessionStorage.setItem(key, JSON.stringify(newValue));
     return;
   }
-  localStorage.setItem(key, JSON.stringify([value]));
+  sessionStorage.setItem(key, JSON.stringify([value]));
 }
 
-export function getDataLocalStorage(key: string) {
-  const data = localStorage.getItem(key);
+export function getDataSessionStorage(key: string) {
+  const data = sessionStorage.getItem(key);
   if (data) {
     return JSON.parse(data);
   }
   return null;
+}
+
+export function removeDataSessionStorage(key: string, id: string) {
+  const data = sessionStorage.getItem(key);
+  if (data) {
+    const parsed = JSON.parse(data);
+    const newValue = parsed.filter((item: TCart) => item.id !== id);
+    sessionStorage.setItem(key, JSON.stringify(newValue));
+  }
+}
+
+export function updateDataSessionStorage(key: string, id: string, value: TCart) {
+  const data = sessionStorage.getItem(key);
+  if (data) {
+    const parsed = JSON.parse(data);
+    const newValue = parsed.map((item: TCart) => {
+      if (item.id === id) {
+        return value;
+      }
+      return item;
+    });
+    sessionStorage.setItem(key, JSON.stringify(newValue));
+  }
 }
