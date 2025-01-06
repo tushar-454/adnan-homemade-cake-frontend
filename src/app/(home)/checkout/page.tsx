@@ -10,18 +10,23 @@ import { TypographyH3 } from '@/components/ui/typography';
 import { useToast } from '@/hooks/use-toast';
 import { getDataSessionStorage } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const Checkout = () => {
   const { toast } = useToast();
   const router = useRouter();
+  const [shipping, setShipping] = useState(0);
+  const [couponDiscount, setCouponDiscount] = useState(0);
 
-  if (getDataSessionStorage('carts')?.length === 0) {
-    toast({
-      title: 'Cart is Empty',
-      description: 'Please add some products to cart',
-    });
-    router.push('/cakes');
-  }
+  useEffect(() => {
+    if (getDataSessionStorage('carts')?.length === 0) {
+      toast({
+        title: 'Cart is Empty',
+        description: 'Please add some products to cart',
+      });
+      router.push('/cakes');
+    }
+  }, [toast, router]);
 
   return (
     <main>
@@ -31,10 +36,10 @@ const Checkout = () => {
         </TypographyH3>
         {/* main wrapper  */}
         <div className='my-8'>
-          <ProductsTable />
+          <ProductsTable shipping={shipping} couponDiscount={couponDiscount} />
           <div className='mx-auto mt-10 w-full space-y-10 md:max-w-[768px]'>
-            <CouponCode />
-            <ShippingAddress />
+            <CouponCode couponDiscount={couponDiscount} setCouponDiscount={setCouponDiscount} />
+            <ShippingAddress setShipping={setShipping} />
             <PaymentInformation />
             <Button variant={'default'} className='mx-auto max-w-fit'>
               Place Order

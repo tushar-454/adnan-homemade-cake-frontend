@@ -16,23 +16,14 @@ import { RootState } from '@/store/store';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 
-const ProductsTable = () => {
-  const carts = useSelector((state: RootState) => state.cart.carts);
-  // const { toast } = useToast();
-  // const router = useRouter();
+type ProductsTableProps = {
+  shipping: number;
+  couponDiscount: number;
+};
 
-  // useEffect(() => {
-  //   const handleEmptyCart = () => {
-  //     toast({
-  //       title: 'Cart is Empty',
-  //       description: 'Please add some products to cart',
-  //     });
-  //     router.push('/cakes');
-  //   };
-  //   if (getDataSessionStorage('carts')?.length === 0) {
-  //     handleEmptyCart();
-  //   }
-  // }, [carts, toast, router]);
+const ProductsTable = ({ shipping, couponDiscount }: ProductsTableProps) => {
+  const carts = useSelector((state: RootState) => state.cart.carts);
+
   return (
     <div className='overflow-x-auto'>
       <Table className='min-w-[1024px] lg:w-full'>
@@ -91,7 +82,11 @@ const ProductsTable = () => {
               </TableCell>
               <TableCell className='text-right'>
                 <TypographyH3>
-                  <Gradient>${cart.totalPrice}</Gradient>
+                  <Gradient>
+                    $
+                    {cart.price * cart.quantity -
+                      cart.price * cart.quantity * (cart.discount / 100)}
+                  </Gradient>
                 </TypographyH3>
               </TableCell>
             </TableRow>
@@ -101,7 +96,14 @@ const ProductsTable = () => {
               <TypographyLarge>Total:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>+ 2000</TypographyLarge>
+              <TypographyLarge>
+                +{' '}
+                {carts.reduce((acc, cur) => {
+                  return (
+                    acc + cur.price * cur.quantity - cur.price * cur.quantity * (cur.discount / 100)
+                  );
+                }, 0)}
+              </TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -109,15 +111,12 @@ const ProductsTable = () => {
               <TypographyLarge>Discount:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>- 200</TypographyLarge>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={3} className='text-right'>
-              <TypographyLarge>Sub total:</TypographyLarge>
-            </TableCell>
-            <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>+ 2000</TypographyLarge>
+              <TypographyLarge>
+                -{' '}
+                {carts.reduce((acc, cur) => {
+                  return acc + cur.price * cur.quantity * (cur.discount / 100);
+                }, 0)}
+              </TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -125,7 +124,7 @@ const ProductsTable = () => {
               <TypographyLarge>Shipping:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>+ 200</TypographyLarge>
+              <TypographyLarge>+ {shipping}</TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -133,7 +132,7 @@ const ProductsTable = () => {
               <TypographyLarge>Coupon Discount:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>- 200</TypographyLarge>
+              <TypographyLarge>- {couponDiscount}</TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -141,7 +140,16 @@ const ProductsTable = () => {
               <TypographyLarge>Nit Total:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>+ 1390</TypographyLarge>
+              <TypographyLarge>
+                +{' '}
+                {carts.reduce((acc, cur) => {
+                  return (
+                    acc + cur.price * cur.quantity - cur.price * cur.quantity * (cur.discount / 100)
+                  );
+                }, 0) +
+                  shipping -
+                  couponDiscount}
+              </TypographyLarge>
             </TableCell>
           </TableRow>
         </TableBody>
