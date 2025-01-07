@@ -7,6 +7,7 @@ import { initCart } from '@/store/features/cart';
 import { setOpenFilter } from '@/store/features/globalReducer';
 import { AppDispatch, RootState } from '@/store/store';
 import { MenuIcon, Plus, Search, ShoppingCart } from 'lucide-react';
+import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -22,7 +23,9 @@ const Header = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const headerRef = useRef<HTMLHeadingElement>(null);
-  const user = false;
+
+  const { data: user } = useSession();
+
   useEffect(() => {
     const head = headerRef.current;
     document.addEventListener('scrollend', () => {
@@ -82,17 +85,17 @@ const Header = () => {
             </div>
             <div className='flex items-center gap-6'>
               {user ? (
-                <Link href='/'>
+                <Link href='/dashboard'>
                   <Image
-                    src={assets.DEFAULT_AVATAR}
-                    alt='user_image'
+                    src={user.user?.image || assets.DEFAULT_AVATAR}
+                    alt={`${user.user?.name} user_image`}
                     width={50}
                     height={50}
-                    className='size-10 cursor-pointer rounded-full object-cover'
+                    className='size-10 min-w-10 cursor-pointer rounded-full object-cover'
                   />
                 </Link>
               ) : (
-                <Button variant={'secondary'}>
+                <Button variant={'secondary'} onClick={() => signIn('google')}>
                   <span>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'

@@ -3,9 +3,14 @@ import {
   ChartNetwork,
   Feather,
   Flame,
+  FolderKanban,
   Images,
+  LayoutDashboard,
+  LayoutList,
   Menu,
   MessageSquareDiff,
+  Settings,
+  UsersRound,
 } from 'lucide-react';
 
 export type TNavItem = {
@@ -47,4 +52,32 @@ const nav_items: TNavItem[] = [
   },
 ];
 
-export { nav_items };
+const dashboard_nav_items: TNavItem[] = [
+  {
+    name: 'Dashboard',
+    link: '/dashboard',
+    icon: LayoutDashboard,
+  },
+  {
+    name: 'Orders',
+    link: '/dashboard/orders',
+    icon: FolderKanban,
+  },
+  {
+    name: 'Products',
+    link: '/dashboard/products',
+    icon: LayoutList,
+  },
+  {
+    name: 'Customers',
+    link: '/dashboard/customers',
+    icon: UsersRound,
+  },
+  {
+    name: 'Settings',
+    link: '/dashboard/settings',
+    icon: Settings,
+  },
+];
+
+export { dashboard_nav_items, nav_items };
