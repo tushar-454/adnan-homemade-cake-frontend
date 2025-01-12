@@ -7,7 +7,7 @@ const CategoryCard = ({ category }: { category: TCategory }) => {
     <>
       <Image
         src={
-          category.image ||
+          category.photo ||
           'https://thumbs.dreamstime.com/b/category-word-purple-category-word-purple-background-273163166.jpg'
         }
         alt=''

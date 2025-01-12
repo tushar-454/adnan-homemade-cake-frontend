@@ -1,17 +1,20 @@
-import { BASE_URL } from '@/constant';
+import { BASE_URL2 } from '@/constant';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
 export type TCategory = {
-  id: number;
+  _id: string;
   name: string;
-  image: string;
+  photo: string;
+};
+export type TCategories = {
+  success: boolean;
+  data: TCategory[];
 };
 
 const category = createApi({
   reducerPath: 'category',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL2 }),
   endpoints: (builder) => ({
-    category: builder.query<TCategory[], void>({
+    category: builder.query<TCategories, void>({
       query: () => '/category',
     }),
   }),

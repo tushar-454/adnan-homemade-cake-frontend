@@ -11,7 +11,7 @@ import { CategoryCard } from './category_card';
 const Category = () => {
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { data: categories, isLoading, isError } = useCategoryQuery();
+  const { data: { data: categories } = {}, isLoading, isError } = useCategoryQuery();
 
   useEffect(() => {
     startAutoSlide();
@@ -129,10 +129,10 @@ const Category = () => {
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            {categories &&
+            {Array.isArray(categories) &&
               categories.map((category, index) => (
                 <div
-                  key={category.id}
+                  key={category._id}
                   className={`flex select-none flex-col items-center gap-3 px-10 ${index === 0 ? 'pl-0' : ''} ${index === categories.length - 1 ? 'pr-0' : ''}`}
                 >
                   <CategoryCard category={category} />

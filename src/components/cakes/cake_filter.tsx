@@ -16,7 +16,7 @@ import { TypographyH3, TypographyH4, TypographyMuted, TypographyP } from '../ui/
 const CakesFilter = () => {
   const dispatch = useDispatch<AppDispatch>();
   const openFilter = useSelector((state: RootState) => state.global.openFilter);
-  const { data: categories, isLoading, isError } = useCategoryQuery();
+  const { data: { data: categories } = {}, isLoading, isError } = useCategoryQuery();
 
   let placeholder;
   if (isLoading && !isError) {
@@ -55,9 +55,9 @@ const CakesFilter = () => {
           placeholder
         ) : (
           <ul className='flex flex-col gap-2'>
-            {categories &&
+            {Array.isArray(categories) &&
               categories.map((category) => (
-                <li key={category.id} className='flex cursor-pointer items-center gap-2'>
+                <li key={category._id} className='flex cursor-pointer items-center gap-2'>
                   <Checkbox id={category.name} />
                   <label htmlFor={category.name} className='cursor-pointer'>
                     {category.name}
