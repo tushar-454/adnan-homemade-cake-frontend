@@ -14,7 +14,7 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [variantId, setVariantId] = useState('');
   const addtocart = () => {
-    const variant = cake.variants.find((variant) => variant.id === variantId);
+    const variant = cake.variants.find((variant) => variant._id === variantId);
     if (!variant) {
       toast({
         title: 'Select Variant',
@@ -47,10 +47,10 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
         <div className='flex space-x-2'>
           {cake.variants.map((variant) => (
             <Badge
-              key={variant.id}
+              key={variant._id}
               variant={'secondary'}
-              onClick={() => setVariantId(variantId === variant.id ? '' : variant.id)}
-              className={`cursor-pointer ${variant.id === variantId ? 'bg-gray-300 hover:bg-gray-300' : ''}`}
+              onClick={() => setVariantId(variantId === variant._id ? '' : variant._id)}
+              className={`cursor-pointer ${variant._id === variantId ? 'bg-gray-300 hover:bg-gray-300' : ''}`}
             >
               {variant.name}
               {variant.price && ` - $${variant.price}`}

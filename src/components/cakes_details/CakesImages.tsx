@@ -7,13 +7,15 @@ const CakesImages = ({ images }: { images: TProductsImages }) => {
   const [selectedImage, setSelectedImage] = useState(images[0]);
   return (
     <div className='mb-8 w-full px-4 md:w-1/2'>
-      <Image
-        src={selectedImage}
-        alt='Product preview main image'
-        width={1080}
-        height={720}
-        className='mb-4 w-full rounded-lg shadow-md'
-      />
+      <div className='h-[32rem] w-full 2xl:h-[40rem]'>
+        <Image
+          src={selectedImage}
+          alt='Product preview main image'
+          width={1080}
+          height={720}
+          className='mb-4 h-full w-full rounded-lg object-cover shadow-md hover:object-contain'
+        />
+      </div>
       <div className='flex justify-center gap-4 overflow-x-auto py-4'>
         {images?.map((image) => (
           <Image

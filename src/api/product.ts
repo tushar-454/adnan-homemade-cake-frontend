@@ -2,7 +2,7 @@ import { BASE_URL } from '@/constant';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export type TProduct = {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   price: number;
@@ -15,12 +15,17 @@ export type TProduct = {
   rating: number;
   category: string;
   variants: {
-    id: string;
+    _id: string;
     name: string;
     price: number;
   }[];
   status: string;
   slug: string;
+};
+
+export type TProductResponse = {
+  success: boolean;
+  data: TProduct[];
 };
 
 export type TProductsImages = TProduct['images'];

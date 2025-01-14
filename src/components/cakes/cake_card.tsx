@@ -9,7 +9,7 @@ import { TypographyH3, TypographyH4, TypographyP } from '../ui/typography';
 const CakeCard = ({ product }: { product: TProduct }) => {
   return (
     <div
-      key={product.id}
+      key={product._id}
       className='flex h-full flex-col rounded-2xl border bg-white p-2 shadow-md'
     >
       <Image
@@ -53,7 +53,7 @@ const CakeCard = ({ product }: { product: TProduct }) => {
               {product.discount}% Off
             </Badge>
           </span>
-          <Link href={`/cakes/${product.id}`}>
+          <Link href={`/cakes/${product.slug}`}>
             <Button variant={'secondary'}>View Details</Button>
           </Link>
         </div>
