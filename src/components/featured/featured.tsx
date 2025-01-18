@@ -1,6 +1,7 @@
 import { TProduct } from '@/api/product';
-import { BASE_URL } from '@/constant';
+import { BASE_URL2 } from '@/constant';
 import { Container } from '../shared/container';
+import { ProductResponse } from '../top_selling/top_selling';
 import Gradient from '../ui/gradient';
 import { TypographyH2, TypographyP } from '../ui/typography';
 import FeaturedCard from './featured_card';
@@ -12,7 +13,7 @@ const Featured = async () => {
 
   // Fetch top cakes
   try {
-    const res = await fetch(`${BASE_URL}/products`, {
+    const res: Response = await fetch(`${BASE_URL2}/product?is_featured=true`, {
       next: { revalidate: 3600 },
     });
 
@@ -21,7 +22,10 @@ const Featured = async () => {
       throw new Error('Failed to fetch featured cakes');
     }
 
-    products = await res.json();
+    const { success, data }: ProductResponse = await res.json();
+    if (success && data && Array.isArray(data)) {
+      products = data || [];
+    }
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -48,7 +52,7 @@ const Featured = async () => {
           {/* product */}
           {products
             ?.filter((p) => p.is_featured === true)
-            ?.map((product) => <FeaturedCard key={product.id} product={product} />)}
+            ?.map((product) => <FeaturedCard key={product._id} product={product} />)}
         </div>
       </>
     );

@@ -1,9 +1,14 @@
 import { TProduct } from '@/api/product';
-import { BASE_URL } from '@/constant';
+import { BASE_URL2 } from '@/constant';
 import { Container } from '../shared/container';
 import Gradient from '../ui/gradient';
 import { TypographyH2, TypographyP } from '../ui/typography';
 import { TopSellingCard } from './top_selling_card';
+
+export type ProductResponse = {
+  success: boolean;
+  data: TProduct[];
+};
 
 const TopSelling = async () => {
   let products: TProduct[] = [];
@@ -12,7 +17,7 @@ const TopSelling = async () => {
 
   // Fetch top cakes
   try {
-    const res = await fetch(`${BASE_URL}/products`, {
+    const res = await fetch(`${BASE_URL2}/product?sell_count=20`, {
       next: { revalidate: 3600 },
     });
 
@@ -21,7 +26,10 @@ const TopSelling = async () => {
       throw new Error('Failed to fetch top cakes');
     }
 
-    products = await res.json();
+    const { success, data }: ProductResponse = await res.json();
+    if (success && data && Array.isArray(data)) {
+      products = data || [];
+    }
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -46,9 +54,9 @@ const TopSelling = async () => {
         {/* wrapper  */}
         <div className='my-8 grid grid-cols-1 items-start justify-between gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
           {/* product */}
-          {products
-            ?.filter((p) => p.sell_count > 40)
-            .map((product) => <TopSellingCard key={product.id} product={product} />)}
+          {products.map((product) => (
+            <TopSellingCard key={product._id} product={product} />
+          ))}
         </div>
       </>
     );

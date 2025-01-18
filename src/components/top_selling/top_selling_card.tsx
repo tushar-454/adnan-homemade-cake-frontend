@@ -9,11 +9,11 @@ import { TypographyH3, TypographyH4, TypographyP } from '../ui/typography';
 const TopSellingCard = ({ product }: { product: TProduct }) => {
   return (
     <div
-      key={product.id}
+      key={product._id}
       className='flex h-full flex-col rounded-2xl border bg-white p-2 shadow-md'
     >
       <Image
-        src='https://via.placeholder.com/100'
+        src={product.images[0] || 'https://via.placeholder.com/100'}
         alt={product.name}
         width={100}
         height={100}
