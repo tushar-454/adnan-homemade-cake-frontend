@@ -1,19 +1,24 @@
-import { BASE_URL } from '@/constant';
+import { BASE_URL2 } from '@/constant';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export type TGallery = {
-  id: number;
+  _id: number;
   src: string;
   width: number;
   height: number;
   label: string;
 };
 
+type TGalleryResponse = {
+  success: boolean;
+  data: TGallery[];
+};
+
 const gallery = createApi({
   reducerPath: 'gallery',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL2 }),
   endpoints: (builder) => ({
-    gallery: builder.query<TGallery[], void>({
+    gallery: builder.query<TGalleryResponse, void>({
       query: () => '/gallery',
     }),
   }),

@@ -9,8 +9,10 @@ import { TypographyMuted, TypographyP } from '../ui/typography';
 import { CarouselItem } from './carousel_item';
 
 const Carousel = () => {
-  const { data: carousels, isLoading, isError } = useCarouselQuery();
+  const { data, isLoading, isError } = useCarouselQuery();
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  const { data: carousels } = data || { success: false, data: [] };
 
   // carousel control function
   const handleCarousel = (action: 'next' | 'prev') => {
@@ -75,7 +77,7 @@ const Carousel = () => {
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
             {carousels.map((carousel) => (
-              <CarouselItem key={carousel.id} carousel={carousel} />
+              <CarouselItem key={carousel._id} carousel={carousel} />
             ))}
           </div>
 

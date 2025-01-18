@@ -1,8 +1,8 @@
-import { BASE_URL } from '@/constant';
+import { BASE_URL2 } from '@/constant';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export type TReview = {
-  id: string;
+  _id: string;
   user: string;
   name: string;
   email: string;
@@ -12,12 +12,17 @@ export type TReview = {
   is_deleted: boolean;
 };
 
+type TReviewResponse = {
+  success: boolean;
+  data: TReview[];
+};
+
 const reviews = createApi({
   reducerPath: 'reviews',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL2 }),
   endpoints: (builder) => ({
-    reviews: builder.query<TReview[], void>({
-      query: () => '/reviews',
+    reviews: builder.query<TReviewResponse, void>({
+      query: () => '/review',
     }),
   }),
 });

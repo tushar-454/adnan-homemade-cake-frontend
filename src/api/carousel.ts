@@ -1,8 +1,8 @@
-import { BASE_URL } from '@/constant';
+import { BASE_URL2 } from '@/constant';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export type TCarousel = {
-  id: string;
+  _id: string;
   image: string;
   button_link?: string;
   button_text?: string;
@@ -10,11 +10,16 @@ export type TCarousel = {
   title?: string;
 };
 
+type TCarouselResponse = {
+  success: boolean;
+  data: TCarousel[];
+};
+
 const carousel = createApi({
   reducerPath: 'carousel',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL2 }),
   endpoints: (builder) => ({
-    carousel: builder.query<TCarousel[], void>({
+    carousel: builder.query<TCarouselResponse, void>({
       query: () => '/carousel',
     }),
   }),

@@ -11,8 +11,9 @@ import { TypographyH2, TypographyMuted, TypographyP } from '../ui/typography';
 import { renderNextImage } from './render_next_image';
 
 const Gallery = () => {
-  const { data: photos, isLoading, isError } = useGalleryQuery();
+  const { data, isLoading, isError } = useGalleryQuery();
   const [showall, setShowall] = useState(false);
+  const { data: photos } = data || { success: false, data: [] };
   let placeholder;
   if (isLoading && !isError) {
     placeholder = <GallerySkeleton />;

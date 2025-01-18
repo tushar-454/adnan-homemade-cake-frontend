@@ -10,7 +10,9 @@ import { ReviewCard } from './review_card';
 const Reviews = () => {
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { data: reviews, isLoading, isError } = useReviewsQuery();
+  const { data, isLoading, isError } = useReviewsQuery();
+
+  const { data: reviews } = data || { success: false, data: [] };
 
   useEffect(() => {
     startAutoSlide();
@@ -129,7 +131,7 @@ const Reviews = () => {
             onTouchEnd={handleTouchEnd}
           >
             {/* product */}
-            {reviews && reviews?.map((review) => <ReviewCard key={review.id} review={review} />)}
+            {reviews && reviews?.map((review) => <ReviewCard key={review._id} review={review} />)}
           </div>
         )}
       </Container>
