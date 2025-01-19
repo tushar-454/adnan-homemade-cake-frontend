@@ -1,10 +1,10 @@
-import { TProduct } from '@/api/product';
+import { TProduct, TProductResponse } from '@/api/product';
 import AddToCart from '@/components/cakes_details/add_to_cart';
 import { CakesImages } from '@/components/cakes_details/CakesImages';
 import { Container } from '@/components/shared/container';
 import { Rating } from '@/components/shared/rating';
 import { Badge } from '@/components/ui/badge';
-import { BASE_URL, BASE_URL2 } from '@/constant';
+import { BASE_URL2 } from '@/constant';
 
 type CakeResponse = {
   success: boolean;
@@ -56,8 +56,8 @@ const CakeDetails = async ({ params }: { params: Promise<{ slug: string }> }) =>
 export default CakeDetails;
 
 export async function generateStaticParams() {
-  const res: Response = await fetch(`${BASE_URL}/products`);
-  const products: TProduct[] = await res.json();
+  const res: Response = await fetch(`${BASE_URL2}/product`);
+  const { data: products }: TProductResponse = await res.json();
 
   return products.map((product) => ({
     id: product._id,
