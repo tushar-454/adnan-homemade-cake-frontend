@@ -7,7 +7,7 @@ import { BASE_URL2 } from '@/constant';
 const Cakes = async () => {
   const res: Response = await fetch(`${BASE_URL2}/product`, {
     next: {
-      revalidate: 3600,
+      revalidate: 600,
     },
   });
   const { data: cakes }: TProductResponse = await res.json();

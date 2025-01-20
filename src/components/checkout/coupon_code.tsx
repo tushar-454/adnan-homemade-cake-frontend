@@ -1,20 +1,70 @@
+import { TCouponRes } from '@/api/Coupon';
 import { Button } from '@/components/ui/button';
 import Gradient from '@/components/ui/gradient';
 import { Input } from '@/components/ui/input';
 import { TypographyH4, TypographySmall } from '@/components/ui/typography';
+import { BASE_URL2 } from '@/constant';
 import React, { useState } from 'react';
 
 type CouponCodeProps = {
-  couponDiscount: number;
-  setCouponDiscount: React.Dispatch<React.SetStateAction<number>>;
+  couponObj: {
+    type: string;
+    discount: number;
+  };
+  setCouponObj: React.Dispatch<
+    React.SetStateAction<{
+      type: string;
+      discount: number;
+    }>
+  >;
 };
 
-const CouponCode = ({ couponDiscount, setCouponDiscount }: CouponCodeProps) => {
-  const [coupon, setCoupon] = useState('');
+const CouponCode = ({ couponObj, setCouponObj }: CouponCodeProps) => {
+  const [code, setCode] = useState('');
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const applyCoupon = (coupon: string) => {
-    if (coupon === 'FREE') {
-      setCouponDiscount(100);
+  const applyCoupon = async (e: React.FormEvent<HTMLFormElement>, code: string) => {
+    e.preventDefault();
+    setError(false);
+    if (!code) {
+      setError(true);
+      setErrorMessage('Type coupon code');
+      return;
+    }
+    const res: Response = await fetch(`${BASE_URL2}/coupon/${code}`);
+    const { success, data }: TCouponRes = await res.json();
+    if (!success && !data) {
+      setError(true);
+      setErrorMessage('Invalid coupon code');
+      return;
+    }
+    if (success && data && data.type === 'flat' && data.quantity === 0) {
+      setError(true);
+      setErrorMessage('Coupon code has been used');
+      return;
+    }
+    if (success && data && data.type === 'percentage' && data.quantity === 0) {
+      setError(true);
+      setErrorMessage('Coupon quantity has been ended');
+      return;
+    }
+    if (success && data && data.startAt > Date.now()) {
+      setError(true);
+      setErrorMessage('Coupon is not valid for now');
+      return;
+    }
+    if (success && data && data.expireAt < Date.now()) {
+      setError(true);
+      setErrorMessage('Coupon has been expired');
+      return;
+    }
+    if (success && data) {
+      setError(false);
+      setCouponObj({
+        type: data.type,
+        discount: data.discount,
+      });
     }
   };
 
@@ -23,18 +73,20 @@ const CouponCode = ({ couponDiscount, setCouponDiscount }: CouponCodeProps) => {
       <TypographyH4>
         <Gradient>Apply Coupon Code</Gradient>
       </TypographyH4>
-      <div className='mt-3 flex w-full md:max-w-[768px]'>
+
+      <form onSubmit={(e) => applyCoupon(e, code)} className='mt-3 flex w-full md:max-w-[768px]'>
         <Input
           placeholder='AHMC10'
           className='w-3/4 rounded-r-none'
-          value={coupon}
-          onChange={(e) => setCoupon(e.target.value)}
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
         />
-        {couponDiscount === 0 ? (
+        {couponObj.discount === 0 ? (
           <Button
+            type='submit'
             variant={'default'}
             className='w-1/4 min-w-fit rounded-l-none'
-            onClick={() => applyCoupon(coupon)}
+            // onClick={() => applyCoupon(code)}
           >
             Apply Coupon
           </Button>
@@ -43,15 +95,19 @@ const CouponCode = ({ couponDiscount, setCouponDiscount }: CouponCodeProps) => {
             variant={'destructive'}
             className='w-1/4 min-w-fit rounded-l-none'
             onClick={() => {
-              setCouponDiscount(0);
-              setCoupon('');
+              setCouponObj({
+                type: '',
+                discount: 0,
+              });
+              setCode('');
             }}
           >
             Remove Coupon
           </Button>
         )}
-      </div>
-      <TypographySmall className='mt-2'>Coupon code is applied successfully</TypographySmall>
+      </form>
+
+      {error && <TypographySmall className='mt-2 text-red-500'>{errorMessage}</TypographySmall>}
     </div>
   );
 };

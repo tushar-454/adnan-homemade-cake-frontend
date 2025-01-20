@@ -18,10 +18,13 @@ import { useSelector } from 'react-redux';
 
 type ProductsTableProps = {
   shipping: number;
-  couponDiscount: number;
+  couponObj: {
+    type: string;
+    discount: number;
+  };
 };
 
-const ProductsTable = ({ shipping, couponDiscount }: ProductsTableProps) => {
+const ProductsTable = ({ shipping, couponObj }: ProductsTableProps) => {
   const carts = useSelector((state: RootState) => state.cart.carts);
 
   return (
@@ -132,7 +135,21 @@ const ProductsTable = ({ shipping, couponDiscount }: ProductsTableProps) => {
               <TypographyLarge>Coupon Discount:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>- {couponDiscount}</TypographyLarge>
+              <TypographyLarge>
+                -{' '}
+                {couponObj?.type === 'flat'
+                  ? couponObj?.discount
+                  : couponObj?.type === 'percentage'
+                    ? carts.reduce((acc, cur) => {
+                        return (
+                          acc +
+                          cur.price * cur.quantity -
+                          cur.price * cur.quantity * (cur.discount / 100)
+                        );
+                      }, 0) *
+                      (couponObj.discount / 100)
+                    : 0}
+              </TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -148,7 +165,18 @@ const ProductsTable = ({ shipping, couponDiscount }: ProductsTableProps) => {
                   );
                 }, 0) +
                   shipping -
-                  couponDiscount}
+                  (couponObj?.type === 'flat'
+                    ? couponObj?.discount
+                    : couponObj?.type === 'percentage'
+                      ? carts.reduce((acc, cur) => {
+                          return (
+                            acc +
+                            cur.price * cur.quantity -
+                            cur.price * cur.quantity * (cur.discount / 100)
+                          );
+                        }, 0) *
+                        (couponObj.discount / 100)
+                      : 0)}
               </TypographyLarge>
             </TableCell>
           </TableRow>

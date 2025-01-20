@@ -14,7 +14,7 @@ const Upcoming = async () => {
   // Fetch top cakes
   try {
     const res = await fetch(`${BASE_URL2}/product?is_upcoming=true`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 600 },
     });
 
     if (!res.ok) {

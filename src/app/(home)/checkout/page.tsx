@@ -16,7 +16,10 @@ const Checkout = () => {
   const { toast } = useToast();
   const router = useRouter();
   const [shipping, setShipping] = useState(0);
-  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [couponObj, setCouponObj] = useState({
+    type: '',
+    discount: 0,
+  });
 
   useEffect(() => {
     if (getDataSessionStorage('carts')?.length === 0) {
@@ -36,9 +39,9 @@ const Checkout = () => {
         </TypographyH3>
         {/* main wrapper  */}
         <div className='my-8'>
-          <ProductsTable shipping={shipping} couponDiscount={couponDiscount} />
+          <ProductsTable shipping={shipping} couponObj={couponObj} />
           <div className='mx-auto mt-10 w-full space-y-10 md:max-w-[768px]'>
-            <CouponCode couponDiscount={couponDiscount} setCouponDiscount={setCouponDiscount} />
+            <CouponCode couponObj={couponObj} setCouponObj={setCouponObj} />
             <ShippingAddress setShipping={setShipping} />
             <PaymentInformation />
             <Button variant={'default'} className='mx-auto max-w-fit'>

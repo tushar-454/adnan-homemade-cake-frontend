@@ -15,7 +15,7 @@ const CakeDetails = async ({ params }: { params: Promise<{ slug: string }> }) =>
   const { slug } = await params;
   const res: Response = await fetch(`${BASE_URL2}/product/${slug}`, {
     next: {
-      revalidate: 3600,
+      revalidate: 600,
     },
   });
   const { data: cake }: CakeResponse = await res.json();
