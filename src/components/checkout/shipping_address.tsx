@@ -14,27 +14,14 @@ import {
   DIVISIONS_KEY_TYPE,
   UPAZILLAS,
 } from '@/constant/location';
-import { useEffect, useState } from 'react';
-import { Button } from '../ui/button';
+import { useState } from 'react';
 import Gradient from '../ui/gradient';
 import { Input } from '../ui/input';
 import { TypographyH4 } from '../ui/typography';
 
-type ShippingAddressProps = {
-  setShipping: React.Dispatch<React.SetStateAction<number>>;
-};
-
-const ShippingAddress = ({ setShipping }: ShippingAddressProps) => {
+const ShippingAddress = () => {
   const [division, setDivision] = useState<DIVISIONS_KEY_TYPE>('10');
   const [district, setDistrict] = useState<DISTRICTS_KEY_TYPE>('1');
-
-  useEffect(() => {
-    if (district === '26') {
-      setShipping(80);
-    } else {
-      setShipping(120);
-    }
-  }, [district, setShipping]);
 
   return (
     <div>
@@ -105,7 +92,6 @@ const ShippingAddress = ({ setShipping }: ShippingAddressProps) => {
           </Select>
         </div>
         <Input placeholder='Full Address' />
-        <Button variant={'default'}>Save Address</Button>
       </div>
     </div>
   );

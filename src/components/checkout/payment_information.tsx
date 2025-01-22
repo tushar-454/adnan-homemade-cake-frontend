@@ -1,5 +1,5 @@
+import { Checkbox } from '../ui/checkbox';
 import Gradient from '../ui/gradient';
-import { Input } from '../ui/input';
 import { TypographyH4 } from '../ui/typography';
 
 const PaymentInformation = () => {
@@ -8,13 +8,11 @@ const PaymentInformation = () => {
       <TypographyH4 className=''>
         <Gradient>Payment Information</Gradient>
       </TypographyH4>
-      <div className='mt-3 flex flex-col gap-3 md:flex-row'>
-        <Input placeholder='Card Number' />
-        <Input placeholder='Name on Card' />
-      </div>
-      <div className='mt-3 flex flex-col gap-3 md:flex-row'>
-        <Input placeholder='Expiry Date' />
-        <Input placeholder='CVV' />
+      <div className='mt-4'>
+        <label htmlFor='cod' className='flex select-none items-center gap-2'>
+          <Checkbox id='cod' checked disabled />
+          Cash on Delivery
+        </label>
       </div>
     </div>
   );

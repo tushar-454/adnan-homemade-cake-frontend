@@ -16,17 +16,9 @@ import { RootState } from '@/store/store';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 
-type ProductsTableProps = {
-  shipping: number;
-  couponObj: {
-    type: string;
-    discount: number;
-  };
-};
-
-const ProductsTable = ({ shipping, couponObj }: ProductsTableProps) => {
+const ProductsTable = () => {
   const carts = useSelector((state: RootState) => state.cart.carts);
-
+  const shipping = 0;
   return (
     <div className='overflow-x-auto'>
       <Table className='min-w-[1024px] lg:w-full'>
@@ -135,21 +127,7 @@ const ProductsTable = ({ shipping, couponObj }: ProductsTableProps) => {
               <TypographyLarge>Coupon Discount:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>
-                -{' '}
-                {couponObj?.type === 'flat'
-                  ? couponObj?.discount
-                  : couponObj?.type === 'percentage'
-                    ? carts.reduce((acc, cur) => {
-                        return (
-                          acc +
-                          cur.price * cur.quantity -
-                          cur.price * cur.quantity * (cur.discount / 100)
-                        );
-                      }, 0) *
-                      (couponObj.discount / 100)
-                    : 0}
-              </TypographyLarge>
+              <TypographyLarge>-0 </TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -163,20 +141,7 @@ const ProductsTable = ({ shipping, couponObj }: ProductsTableProps) => {
                   return (
                     acc + cur.price * cur.quantity - cur.price * cur.quantity * (cur.discount / 100)
                   );
-                }, 0) +
-                  shipping -
-                  (couponObj?.type === 'flat'
-                    ? couponObj?.discount
-                    : couponObj?.type === 'percentage'
-                      ? carts.reduce((acc, cur) => {
-                          return (
-                            acc +
-                            cur.price * cur.quantity -
-                            cur.price * cur.quantity * (cur.discount / 100)
-                          );
-                        }, 0) *
-                        (couponObj.discount / 100)
-                      : 0)}
+                }, 0) + shipping}
               </TypographyLarge>
             </TableCell>
           </TableRow>

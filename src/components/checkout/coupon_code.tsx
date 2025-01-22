@@ -1,70 +1,38 @@
-import { TCouponRes } from '@/api/Coupon';
+import { TCoupon } from '@/api/Coupon';
 import { Button } from '@/components/ui/button';
 import Gradient from '@/components/ui/gradient';
 import { Input } from '@/components/ui/input';
 import { TypographyH4, TypographySmall } from '@/components/ui/typography';
 import { BASE_URL2 } from '@/constant';
-import React, { useState } from 'react';
+import { updateOrderDiscount } from '@/store/features/order';
+import { AppDispatch, RootState } from '@/store/store';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-type CouponCodeProps = {
-  couponObj: {
-    type: string;
-    discount: number;
-  };
-  setCouponObj: React.Dispatch<
-    React.SetStateAction<{
-      type: string;
-      discount: number;
-    }>
-  >;
-};
-
-const CouponCode = ({ couponObj, setCouponObj }: CouponCodeProps) => {
+const CouponCode = () => {
   const [code, setCode] = useState('');
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [placeholder, setPlaceholder] = useState('');
+  const order = useSelector((state: RootState) => state.order);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const applyCoupon = async (e: React.FormEvent<HTMLFormElement>, code: string) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(false);
-    if (!code) {
-      setError(true);
-      setErrorMessage('Type coupon code');
-      return;
-    }
-    const res: Response = await fetch(`${BASE_URL2}/coupon/${code}`);
-    const { success, data }: TCouponRes = await res.json();
-    if (!success && !data) {
-      setError(true);
-      setErrorMessage('Invalid coupon code');
-      return;
-    }
-    if (success && data && data.type === 'flat' && data.quantity === 0) {
-      setError(true);
-      setErrorMessage('Coupon code has been used');
-      return;
-    }
-    if (success && data && data.type === 'percentage' && data.quantity === 0) {
-      setError(true);
-      setErrorMessage('Coupon quantity has been ended');
-      return;
-    }
-    if (success && data && data.startAt > Date.now()) {
-      setError(true);
-      setErrorMessage('Coupon is not valid for now');
-      return;
-    }
-    if (success && data && data.expireAt < Date.now()) {
-      setError(true);
-      setErrorMessage('Coupon has been expired');
-      return;
-    }
-    if (success && data) {
-      setError(false);
-      setCouponObj({
-        type: data.type,
-        discount: data.discount,
-      });
+    if (code === '') return setPlaceholder('Enter coupon');
+    try {
+      const res: Response = await fetch(`${BASE_URL2}/coupon/${code}`);
+      const data = await res.json();
+      if (data.success === false) return setPlaceholder(data.message);
+      if (data.success && data.data) {
+        const { discount, quantity, startAt, expireAt, type } = data.data as TCoupon;
+
+        if (startAt > Date.now()) return setPlaceholder('Coupon not valid yet.');
+        if (expireAt < Date.now()) return setPlaceholder('Coupon is Expire.');
+        if (quantity === 0) return setPlaceholder('Coupon quantity finished');
+        dispatch(updateOrderDiscount({ discount, type }));
+        setPlaceholder('Coupon applied');
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -74,20 +42,16 @@ const CouponCode = ({ couponObj, setCouponObj }: CouponCodeProps) => {
         <Gradient>Apply Coupon Code</Gradient>
       </TypographyH4>
 
-      <form onSubmit={(e) => applyCoupon(e, code)} className='mt-3 flex w-full md:max-w-[768px]'>
+      <form onSubmit={onSubmit} className='mt-3 flex w-full md:max-w-[768px]'>
         <Input
           placeholder='AHMC10'
           className='w-3/4 rounded-r-none'
           value={code}
           onChange={(e) => setCode(e.target.value)}
+          disabled={order.discount !== 0}
         />
-        {couponObj.discount === 0 ? (
-          <Button
-            type='submit'
-            variant={'default'}
-            className='w-1/4 min-w-fit rounded-l-none'
-            // onClick={() => applyCoupon(code)}
-          >
+        {order.discount === 0 ? (
+          <Button type='submit' variant={'default'} className='w-1/4 min-w-fit rounded-l-none'>
             Apply Coupon
           </Button>
         ) : (
@@ -95,11 +59,8 @@ const CouponCode = ({ couponObj, setCouponObj }: CouponCodeProps) => {
             variant={'destructive'}
             className='w-1/4 min-w-fit rounded-l-none'
             onClick={() => {
-              setCouponObj({
-                type: '',
-                discount: 0,
-              });
               setCode('');
+              dispatch(updateOrderDiscount({ type: 'flat', discount: 0 }));
             }}
           >
             Remove Coupon
@@ -107,7 +68,13 @@ const CouponCode = ({ couponObj, setCouponObj }: CouponCodeProps) => {
         )}
       </form>
 
-      {error && <TypographySmall className='mt-2 text-red-500'>{errorMessage}</TypographySmall>}
+      {placeholder && (
+        <TypographySmall
+          className={`mt-2 ${order.discount ? 'text-muted-foreground' : 'text-red-500'}`}
+        >
+          {placeholder}
+        </TypographySmall>
+      )}
     </div>
   );
 };

@@ -10,16 +10,16 @@ import { TypographyH3 } from '@/components/ui/typography';
 import { useToast } from '@/hooks/use-toast';
 import { getDataSessionStorage } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+
+export type TCouponObj = {
+  type: string;
+  discount: number;
+};
 
 const Checkout = () => {
   const { toast } = useToast();
   const router = useRouter();
-  const [shipping, setShipping] = useState(0);
-  const [couponObj, setCouponObj] = useState({
-    type: '',
-    discount: 0,
-  });
 
   useEffect(() => {
     if (getDataSessionStorage('carts')?.length === 0) {
@@ -39,10 +39,10 @@ const Checkout = () => {
         </TypographyH3>
         {/* main wrapper  */}
         <div className='my-8'>
-          <ProductsTable shipping={shipping} couponObj={couponObj} />
+          <ProductsTable />
           <div className='mx-auto mt-10 w-full space-y-10 md:max-w-[768px]'>
-            <CouponCode couponObj={couponObj} setCouponObj={setCouponObj} />
-            <ShippingAddress setShipping={setShipping} />
+            <CouponCode />
+            <ShippingAddress />
             <PaymentInformation />
             <Button variant={'default'} className='mx-auto max-w-fit'>
               Place Order

@@ -22,7 +22,7 @@ const coupon = createApi({
   reducerPath: 'coupon',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL2 }),
   endpoints: (builder) => ({
-    coupon: builder.query<TCouponRes, void>({
+    coupon: builder.query<TCouponRes, string>({
       query: (code) => `/coupon/${code}`,
     }),
   }),
