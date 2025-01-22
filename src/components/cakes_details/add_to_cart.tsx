@@ -23,7 +23,7 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
       return;
     }
     const cart = {
-      id: crypto.randomUUID(),
+      _id: cake._id,
       image: cake.images[0],
       name: cake.name,
       category: cake.category,

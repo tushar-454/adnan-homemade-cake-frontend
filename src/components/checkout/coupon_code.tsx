@@ -4,7 +4,7 @@ import Gradient from '@/components/ui/gradient';
 import { Input } from '@/components/ui/input';
 import { TypographyH4, TypographySmall } from '@/components/ui/typography';
 import { BASE_URL2 } from '@/constant';
-import { updateOrderDiscount } from '@/store/features/order';
+import { resetOrderDiscount, updateOrderDiscount } from '@/store/features/order';
 import { AppDispatch, RootState } from '@/store/store';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +21,11 @@ const CouponCode = () => {
     try {
       const res: Response = await fetch(`${BASE_URL2}/coupon/${code}`);
       const data = await res.json();
-      if (data.success === false) return setPlaceholder(data.message);
+      if (data.success === false) {
+        dispatch(resetOrderDiscount());
+        setPlaceholder(data.message);
+        return;
+      }
       if (data.success && data.data) {
         const { code, discount, quantity, startAt, expireAt, type } = data.data as TCoupon;
 
@@ -60,7 +64,7 @@ const CouponCode = () => {
             className='w-1/4 min-w-fit rounded-l-none'
             onClick={() => {
               setCode('');
-              dispatch(updateOrderDiscount({ type: 'flat', discount: 0 }));
+              dispatch(resetOrderDiscount());
             }}
           >
             Remove Coupon

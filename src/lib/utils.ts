@@ -29,7 +29,7 @@ export function removeDataSessionStorage(key: string, id: string) {
   const data = sessionStorage.getItem(key);
   if (data) {
     const parsed = JSON.parse(data);
-    const newValue = parsed.filter((item: TCart) => item.id !== id);
+    const newValue = parsed.filter((item: TCart) => item._id !== id);
     sessionStorage.setItem(key, JSON.stringify(newValue));
   }
 }
@@ -39,7 +39,7 @@ export function updateDataSessionStorage(key: string, id: string, value: TCart) 
   if (data) {
     const parsed = JSON.parse(data);
     const newValue = parsed.map((item: TCart) => {
-      if (item.id === id) {
+      if (item._id === id) {
         return value;
       }
       return item;

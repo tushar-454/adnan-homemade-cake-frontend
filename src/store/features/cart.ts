@@ -26,12 +26,12 @@ const cartReducer = createSlice({
       setDataSessionStorage('carts', action.payload);
     },
     removeCartItem: (state, action) => {
-      state.carts = state.carts.filter((item) => item.id !== action.payload);
+      state.carts = state.carts.filter((item) => item._id !== action.payload);
       removeDataSessionStorage('carts', action.payload);
     },
     updateCartItem: (state, action) => {
       const { id, quantity, type } = action.payload;
-      const cart = state.carts.find((item) => item.id === id);
+      const cart = state.carts.find((item) => item._id === id);
       if (cart) {
         cart.quantity =
           type === 'increment'
@@ -46,8 +46,13 @@ const cartReducer = createSlice({
         updateDataSessionStorage('carts', id, cart);
       }
     },
+    clearCart: (state) => {
+      state.carts = [];
+      sessionStorage.clear();
+    },
   },
 });
 
-export const { initCart, addCartItem, removeCartItem, updateCartItem } = cartReducer.actions;
+export const { initCart, addCartItem, removeCartItem, updateCartItem, clearCart } =
+  cartReducer.actions;
 export default cartReducer.reducer;

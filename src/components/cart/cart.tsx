@@ -17,7 +17,7 @@ type CartProps = {
 };
 
 export type TCart = {
-  id: string;
+  _id: string;
   image: string;
   name: string;
   category: string;
@@ -78,7 +78,7 @@ const Cart = ({ cartOpen, setCartOpen }: CartProps) => {
               {Array.isArray(carts) &&
                 carts.length > 0 &&
                 carts.map((cart) => (
-                  <div key={cart.id} className='mt-5 flex flex-col justify-between gap-2 p-1'>
+                  <div key={cart._id} className='mt-5 flex flex-col justify-between gap-2 p-1'>
                     <div className='flex gap-2'>
                       {/* image and variant other details here */}
                       <Image
@@ -119,20 +119,20 @@ const Cart = ({ cartOpen, setCartOpen }: CartProps) => {
                       <div className='flex max-w-[150px] items-center px-2'>
                         <div className='flex w-full items-center rounded-lg border'>
                           <span
-                            onClick={() => removeQuantity(cart.id)}
+                            onClick={() => removeQuantity(cart._id)}
                             className='grid h-auto w-fit flex-grow cursor-pointer place-content-center px-2 text-lg hover:bg-black/10'
                           >
                             -
                           </span>
                           <span
                             onDoubleClick={(e) => (e.currentTarget.contentEditable = 'true')}
-                            onBlur={(e) => writeQuantity(cart.id, +e.currentTarget.textContent!)}
+                            onBlur={(e) => writeQuantity(cart._id, +e.currentTarget.textContent!)}
                             className='grid h-auto w-fit flex-grow place-content-center border-x px-2 text-lg'
                           >
                             {cart.quantity}
                           </span>
                           <span
-                            onClick={() => addQuantity(cart.id)}
+                            onClick={() => addQuantity(cart._id)}
                             className='grid h-auto w-fit flex-grow cursor-pointer place-content-center px-2 text-lg hover:bg-black/10'
                           >
                             +
@@ -142,7 +142,7 @@ const Cart = ({ cartOpen, setCartOpen }: CartProps) => {
                       <Button
                         variant={'destructive'}
                         className='size-10'
-                        onClick={() => dispatch(removeCartItem(cart.id))}
+                        onClick={() => dispatch(removeCartItem(cart._id))}
                       >
                         <Plus className='rotate-45' />
                       </Button>

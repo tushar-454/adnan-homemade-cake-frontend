@@ -10,10 +10,11 @@ import { TypographyH3 } from '@/components/ui/typography';
 import { BASE_URL2 } from '@/constant';
 import { useToast } from '@/hooks/use-toast';
 import { getDataSessionStorage } from '@/lib/utils';
-import { RootState } from '@/store/store';
+import { clearCart } from '@/store/features/cart';
+import { AppDispatch, RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export type TCouponObj = {
   type: string;
@@ -24,6 +25,7 @@ const Checkout = () => {
   const { toast } = useToast();
   const router = useRouter();
   const order = useSelector((state: RootState) => state.order);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleOrder = async () => {
     try {
@@ -34,9 +36,15 @@ const Checkout = () => {
         },
         body: JSON.stringify(order),
       });
+
       const data = await res.json();
       if (data.success) {
-        console.log(data);
+        toast({
+          title: 'Order Placed',
+          description: 'Your order has been placed successfully',
+        });
+        router.push('/');
+        dispatch(clearCart());
       }
     } catch (error) {
       console.log(error);

@@ -12,7 +12,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import Gradient from '@/components/ui/gradient';
 import { TypographyH3, TypographyLarge, TypographyP } from '@/components/ui/typography';
-import { updateOrderLineItems } from '@/store/features/order';
+import { resetOrderDiscount, updateOrderLineItems } from '@/store/features/order';
 import { AppDispatch, RootState } from '@/store/store';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -22,18 +22,16 @@ const ProductsTable = () => {
   const carts = useSelector((state: RootState) => state.cart.carts);
   const order = useSelector((state: RootState) => state.order);
   const [totalPrice, setTotalPrice] = useState(0);
-  const shipping = 0;
+  const [discount, setDiscount] = useState(0);
+  const [shipping, setShipping] = useState(0);
+  const [couponDiscount, setCouponDiscount] = useState(0);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (carts) {
-      const total = carts.reduce((acc, cur) => {
-        return acc + cur.price * cur.quantity * (cur.discount / 100);
-      }, 0);
-      setTotalPrice(total);
       const lineItems = carts.map((cart) => {
         return {
-          product_id: cart.id,
+          product_id: cart._id,
           name: cart.name,
           image: cart.image,
           variant: cart.variant?.name,
@@ -41,8 +39,40 @@ const ProductsTable = () => {
         };
       });
       dispatch(updateOrderLineItems(lineItems));
+      const result = carts.reduce(
+        (acc, cur) => {
+          acc.discount = cur.price * cur.quantity * (cur.discount / 100);
+          acc.total = cur.price * cur.quantity - acc.discount;
+          return acc;
+        },
+        {
+          discount: 0,
+          total: 0,
+        },
+      );
+      setTotalPrice(result.total);
+      setDiscount(result.discount);
     }
   }, [carts, dispatch]);
+
+  useEffect(() => {
+    if (order.division === 'Dhaka') {
+      setShipping(80);
+    } else {
+      setShipping(120);
+    }
+    if (order.coupon_code.length > 0) {
+      if (order.type === 'flat') {
+        setCouponDiscount(order.discount);
+      } else if (order.type === 'percentage') {
+        setCouponDiscount((totalPrice - discount) * (order.discount / 100));
+      }
+    } else {
+      dispatch(resetOrderDiscount());
+      setCouponDiscount(0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order, dispatch]);
 
   return (
     <div className='overflow-x-auto'>
@@ -66,7 +96,7 @@ const ProductsTable = () => {
         </TableHeader>
         <TableBody>
           {carts?.map((cart) => (
-            <TableRow key={cart.id}>
+            <TableRow key={cart._id}>
               <TableCell>
                 <div className='flex gap-2'>
                   {/* image and variant other details here */}
@@ -124,7 +154,7 @@ const ProductsTable = () => {
               <TypographyLarge>Discount:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>- {totalPrice}</TypographyLarge>
+              <TypographyLarge>- {discount}</TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -140,7 +170,7 @@ const ProductsTable = () => {
               <TypographyLarge>Coupon Discount:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>- {order.type === 'flat' ? order.discount : ''} </TypographyLarge>
+              <TypographyLarge>- {couponDiscount}</TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -150,11 +180,9 @@ const ProductsTable = () => {
             <TableCell colSpan={1} className='text-right'>
               <TypographyLarge>
                 +{' '}
-                {carts.reduce((acc, cur) => {
-                  return (
-                    acc + cur.price * cur.quantity - cur.price * cur.quantity * (cur.discount / 100)
-                  );
-                }, 0) + shipping}
+                {totalPrice - discount + shipping - couponDiscount < 0
+                  ? 0
+                  : totalPrice - discount + shipping - couponDiscount}
               </TypographyLarge>
             </TableCell>
           </TableRow>

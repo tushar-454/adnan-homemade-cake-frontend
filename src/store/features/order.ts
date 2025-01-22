@@ -57,9 +57,14 @@ const orderReducer = createSlice({
     updateOrderLineItems: (state, action) => {
       state.line_items = action.payload;
     },
+    resetOrderDiscount: (state) => {
+      state.discount = 0;
+      state.type = 'flat';
+      state.coupon_code = '';
+    },
   },
 });
 
-export const { updateOrderDiscount, updateOrderAddress, updateOrderLineItems } =
+export const { updateOrderDiscount, updateOrderAddress, updateOrderLineItems, resetOrderDiscount } =
   orderReducer.actions;
 export default orderReducer.reducer;
