@@ -23,12 +23,12 @@ const CouponCode = () => {
       const data = await res.json();
       if (data.success === false) return setPlaceholder(data.message);
       if (data.success && data.data) {
-        const { discount, quantity, startAt, expireAt, type } = data.data as TCoupon;
+        const { code, discount, quantity, startAt, expireAt, type } = data.data as TCoupon;
 
         if (startAt > Date.now()) return setPlaceholder('Coupon not valid yet.');
         if (expireAt < Date.now()) return setPlaceholder('Coupon is Expire.');
         if (quantity === 0) return setPlaceholder('Coupon quantity finished');
-        dispatch(updateOrderDiscount({ discount, type }));
+        dispatch(updateOrderDiscount({ discount, type, code }));
         setPlaceholder('Coupon applied');
       }
     } catch (error) {

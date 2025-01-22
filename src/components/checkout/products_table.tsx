@@ -12,13 +12,38 @@ import {
 import { Badge } from '@/components/ui/badge';
 import Gradient from '@/components/ui/gradient';
 import { TypographyH3, TypographyLarge, TypographyP } from '@/components/ui/typography';
-import { RootState } from '@/store/store';
+import { updateOrderLineItems } from '@/store/features/order';
+import { AppDispatch, RootState } from '@/store/store';
 import Image from 'next/image';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ProductsTable = () => {
   const carts = useSelector((state: RootState) => state.cart.carts);
+  const order = useSelector((state: RootState) => state.order);
+  const [totalPrice, setTotalPrice] = useState(0);
   const shipping = 0;
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (carts) {
+      const total = carts.reduce((acc, cur) => {
+        return acc + cur.price * cur.quantity * (cur.discount / 100);
+      }, 0);
+      setTotalPrice(total);
+      const lineItems = carts.map((cart) => {
+        return {
+          product_id: cart.id,
+          name: cart.name,
+          image: cart.image,
+          variant: cart.variant?.name,
+          quantity: cart.quantity,
+        };
+      });
+      dispatch(updateOrderLineItems(lineItems));
+    }
+  }, [carts, dispatch]);
+
   return (
     <div className='overflow-x-auto'>
       <Table className='min-w-[1024px] lg:w-full'>
@@ -91,14 +116,7 @@ const ProductsTable = () => {
               <TypographyLarge>Total:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>
-                +{' '}
-                {carts.reduce((acc, cur) => {
-                  return (
-                    acc + cur.price * cur.quantity - cur.price * cur.quantity * (cur.discount / 100)
-                  );
-                }, 0)}
-              </TypographyLarge>
+              <TypographyLarge>+ {totalPrice}</TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -106,12 +124,7 @@ const ProductsTable = () => {
               <TypographyLarge>Discount:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>
-                -{' '}
-                {carts.reduce((acc, cur) => {
-                  return acc + cur.price * cur.quantity * (cur.discount / 100);
-                }, 0)}
-              </TypographyLarge>
+              <TypographyLarge>- {totalPrice}</TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -127,7 +140,7 @@ const ProductsTable = () => {
               <TypographyLarge>Coupon Discount:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>-0 </TypographyLarge>
+              <TypographyLarge>- {order.type === 'flat' ? order.discount : ''} </TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>

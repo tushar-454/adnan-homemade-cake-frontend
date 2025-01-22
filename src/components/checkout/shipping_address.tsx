@@ -14,34 +14,70 @@ import {
   DIVISIONS_KEY_TYPE,
   UPAZILLAS,
 } from '@/constant/location';
+import { updateOrderAddress } from '@/store/features/order';
+import { AppDispatch } from '@/store/store';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Button } from '../ui/button';
 import Gradient from '../ui/gradient';
 import { Input } from '../ui/input';
 import { TypographyH4 } from '../ui/typography';
 
+const initialState = {
+  name: '',
+  email: '',
+  phone: '',
+  division: '',
+  district: '',
+  sub_district: '',
+  address: '',
+};
+
 const ShippingAddress = () => {
   const [division, setDivision] = useState<DIVISIONS_KEY_TYPE>('10');
   const [district, setDistrict] = useState<DISTRICTS_KEY_TYPE>('1');
+  const [address, setAddress] = useState(initialState);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(updateOrderAddress(address));
+  };
 
   return (
     <div>
       <TypographyH4>
         <Gradient>Shipping Address</Gradient>
       </TypographyH4>
-      <div className='mt-3 flex flex-col gap-3'>
-        <Input placeholder='Full Name' />
-        <Input type='email' placeholder='Email' />
-        <Input type='tel' placeholder='Phone Number' />
+      <form onSubmit={handleSubmit} className='mt-3 flex flex-col gap-3'>
+        <Input
+          placeholder='Full Name'
+          value={address.name}
+          onChange={(e) => setAddress((prev) => ({ ...prev, name: e.target.value }))}
+        />
+        <Input
+          type='email'
+          placeholder='Email'
+          value={address.email}
+          onChange={(e) => setAddress((prev) => ({ ...prev, email: e.target.value }))}
+        />
+        <Input
+          type='tel'
+          placeholder='Phone Number'
+          value={address.phone}
+          onChange={(e) => setAddress((prev) => ({ ...prev, phone: e.target.value }))}
+        />
         <Input placeholder='Bangladesh' disabled />
         <div className='flex flex-col gap-3 md:flex-row'>
           <Select
-            onValueChange={(division) =>
+            onValueChange={(division) => {
               setDivision(
                 DIVISIONS.find(
                   (item) => item.title === division,
                 )?.value.toString() as DIVISIONS_KEY_TYPE,
-              )
-            }
+              );
+              setAddress((prev) => ({ ...prev, division }));
+            }}
           >
             <SelectTrigger className='w-full md:w-1/3'>
               <SelectValue placeholder='Division' />
@@ -55,13 +91,14 @@ const ShippingAddress = () => {
             </SelectContent>
           </Select>
           <Select
-            onValueChange={(district) =>
+            onValueChange={(district) => {
               setDistrict(
                 DISTRICTS[division]
                   .find((item) => item.title === district)
                   ?.value.toString() as DISTRICTS_KEY_TYPE,
-              )
-            }
+              );
+              setAddress((prev) => ({ ...prev, district }));
+            }}
           >
             <SelectTrigger className='w-full md:w-1/3'>
               <SelectValue placeholder='District' />
@@ -78,7 +115,9 @@ const ShippingAddress = () => {
               ))}
             </SelectContent>
           </Select>
-          <Select>
+          <Select
+            onValueChange={(sub_district) => setAddress((prev) => ({ ...prev, sub_district }))}
+          >
             <SelectTrigger className='w-full md:w-1/3'>
               <SelectValue placeholder='Upazilla' />
             </SelectTrigger>
@@ -91,8 +130,15 @@ const ShippingAddress = () => {
             </SelectContent>
           </Select>
         </div>
-        <Input placeholder='Full Address' />
-      </div>
+        <Input
+          placeholder='Full Address'
+          value={address.address}
+          onChange={(e) => setAddress((prev) => ({ ...prev, address: e.target.value }))}
+        />
+        <Button variant={'default'} className=''>
+          Save Address
+        </Button>
+      </form>
     </div>
   );
 };

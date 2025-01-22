@@ -7,10 +7,13 @@ import { Container } from '@/components/shared/container';
 import { Button } from '@/components/ui/button';
 import Gradient from '@/components/ui/gradient';
 import { TypographyH3 } from '@/components/ui/typography';
+import { BASE_URL2 } from '@/constant';
 import { useToast } from '@/hooks/use-toast';
 import { getDataSessionStorage } from '@/lib/utils';
+import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 export type TCouponObj = {
   type: string;
@@ -20,6 +23,25 @@ export type TCouponObj = {
 const Checkout = () => {
   const { toast } = useToast();
   const router = useRouter();
+  const order = useSelector((state: RootState) => state.order);
+
+  const handleOrder = async () => {
+    try {
+      const res = await fetch(`${BASE_URL2}/order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(order),
+      });
+      const data = await res.json();
+      if (data.success) {
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (getDataSessionStorage('carts')?.length === 0) {
@@ -44,7 +66,7 @@ const Checkout = () => {
             <CouponCode />
             <ShippingAddress />
             <PaymentInformation />
-            <Button variant={'default'} className='mx-auto max-w-fit'>
+            <Button variant={'default'} className='mx-auto max-w-fit' onClick={handleOrder}>
               Place Order
             </Button>
           </div>

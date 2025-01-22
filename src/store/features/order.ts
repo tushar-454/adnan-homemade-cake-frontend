@@ -39,12 +39,27 @@ const orderReducer = createSlice({
   initialState,
   reducers: {
     updateOrderDiscount: (state, action) => {
-      const { type, discount } = action.payload;
+      const { type, discount, code } = action.payload;
       state.discount = discount;
       state.type = type;
+      state.coupon_code = code;
+    },
+    updateOrderAddress: (state, action) => {
+      const { name, email, phone, division, district, sub_district, address } = action.payload;
+      state.name = name;
+      state.email = email;
+      state.phone = phone;
+      state.division = division;
+      state.district = district;
+      state.sub_district = sub_district;
+      state.address = address;
+    },
+    updateOrderLineItems: (state, action) => {
+      state.line_items = action.payload;
     },
   },
 });
 
-export const { updateOrderDiscount } = orderReducer.actions;
+export const { updateOrderDiscount, updateOrderAddress, updateOrderLineItems } =
+  orderReducer.actions;
 export default orderReducer.reducer;
