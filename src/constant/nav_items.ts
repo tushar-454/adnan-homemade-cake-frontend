@@ -8,8 +8,8 @@ import {
   LayoutDashboard,
   LayoutList,
   Menu,
-  MessageSquareDiff,
   Settings,
+  Truck,
   UsersRound,
 } from 'lucide-react';
 
@@ -41,14 +41,14 @@ const nav_items: TNavItem[] = [
     icon: Flame,
   },
   {
-    name: 'Reviews',
-    link: '#reviews',
-    icon: MessageSquareDiff,
-  },
-  {
     name: 'Gallery',
     link: '#gallery',
     icon: Images,
+  },
+  {
+    name: 'Track Order',
+    link: '/track-order',
+    icon: Truck,
   },
 ];
 

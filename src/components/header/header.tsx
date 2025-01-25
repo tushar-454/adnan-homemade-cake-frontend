@@ -1,6 +1,7 @@
 'use client';
 
 import { assets } from '@/assets/assets';
+import { BASE_URL2 } from '@/constant';
 import { nav_items } from '@/constant/nav_items';
 import { getDataSessionStorage } from '@/lib/utils';
 import { initCart } from '@/store/features/cart';
@@ -25,6 +26,25 @@ const Header = () => {
   const headerRef = useRef<HTMLHeadingElement>(null);
   const [loading, setLoading] = useState(false);
   const { data: user } = useSession();
+
+  useEffect(() => {
+    if (user) {
+      const createUser = async () => {
+        await fetch(`${BASE_URL2}/auth/register`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: user.user?.name,
+            email: user.user?.email,
+            photo: user.user?.image,
+          }),
+        });
+      };
+      createUser();
+    }
+  }, [user]);
 
   useEffect(() => {
     const head = headerRef.current;
