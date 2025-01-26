@@ -12,38 +12,48 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard_nav_items } from '@/constant/nav_items';
-import { LogOut } from 'lucide-react';
+import { dashboard_nav_items, DashboardNavKeys } from '@/constant/nav_items';
+import { LogOut, XIcon } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { TypographyH4 } from '../ui/typography';
 
-const DashboardSidebar = () => {
+type DashboardSidebarProps = {
+  setOpen: (open: boolean) => void;
+};
+
+const DashboardSidebar = ({ setOpen }: DashboardSidebarProps) => {
   const { data: user } = useSession();
 
   return (
-    <Sidebar variant='floating'>
+    <Sidebar variant='sidebar'>
       <SidebarHeader>
-        <Link href='/'>Home</Link>
+        <div className='flex items-center justify-between gap-3'>
+          <TypographyH4>Dashboard</TypographyH4>
+          <XIcon className='cursor-pointer' onClick={() => setOpen(false)} />
+        </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {dashboard_nav_items.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.link}>
-                      <item.icon />
-                      <span>{item.name}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {Object.keys(dashboard_nav_items).map((key) => (
+          <SidebarGroup key={key}>
+            <SidebarGroupLabel>{key}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {dashboard_nav_items[key as DashboardNavKeys].map((item) => (
+                  <SidebarMenuItem key={item.name}>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.link}>
+                        <item.icon />
+                        <span>{item.name}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
       <SidebarFooter>
         <div className='flex items-center justify-between'>
