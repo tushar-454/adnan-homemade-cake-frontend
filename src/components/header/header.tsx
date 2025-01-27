@@ -3,8 +3,9 @@
 import { assets } from '@/assets/assets';
 import { BASE_URL2 } from '@/constant';
 import { nav_items } from '@/constant/nav_items';
-import { getDataSessionStorage } from '@/lib/utils';
-import { initCart } from '@/store/features/cart';
+// import { getDataSessionStorage } from '@/lib/utils';
+// import { initCart } from '@/store/features/cart';
+import { useUserRole } from '@/hooks/use-user-role';
 import { setOpenFilter } from '@/store/features/globalReducer';
 import { AppDispatch, RootState } from '@/store/store';
 import { MenuIcon, Plus, Search, ShoppingCart } from 'lucide-react';
@@ -26,6 +27,7 @@ const Header = () => {
   const headerRef = useRef<HTMLHeadingElement>(null);
   const [loading, setLoading] = useState(false);
   const { data: user } = useSession();
+  const role = useUserRole();
 
   useEffect(() => {
     if (user) {
@@ -46,7 +48,8 @@ const Header = () => {
     }
   }, [user]);
 
-  useEffect(() => {
+  {
+    /* useEffect(() => {
     const head = headerRef.current;
     document.addEventListener('scrollend', () => {
       if (head && window.scrollY > 80) {
@@ -66,6 +69,8 @@ const Header = () => {
       });
     };
   }, [dispatch]);
+  */
+  }
   return (
     <>
       <header className='border-b bg-white py-3' ref={headerRef}>
@@ -105,7 +110,7 @@ const Header = () => {
             </div>
             <div className='flex items-center gap-6'>
               {user ? (
-                <Link href='/dashboard'>
+                <Link href={role === 'user' ? '/user' : role === 'admin' ? '/dashboard' : '/'}>
                   <Image
                     src={user.user?.image || assets.DEFAULT_AVATAR}
                     alt={`${user.user?.name} user_image`}

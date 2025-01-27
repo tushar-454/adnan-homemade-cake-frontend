@@ -60,6 +60,6 @@ export async function generateStaticParams() {
   const { data: products }: TProductResponse = await res.json();
 
   return products.map((product) => ({
-    id: product._id,
+    id: product.slug,
   }));
 }
