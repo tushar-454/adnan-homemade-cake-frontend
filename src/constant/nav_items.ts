@@ -66,21 +66,6 @@ const dashboard_nav_items = {
       link: '/dashboard/orders',
       icon: Truck,
     },
-    {
-      name: 'Pending Orders',
-      link: '/dashboard/orders/pending',
-      icon: Truck,
-    },
-    {
-      name: 'Completed Orders',
-      link: '/dashboard/orders/completed',
-      icon: Truck,
-    },
-    {
-      name: 'Cancelled Orders',
-      link: '/dashboard/orders/cancelled',
-      icon: Truck,
-    },
   ],
   Products: [
     {
@@ -91,11 +76,6 @@ const dashboard_nav_items = {
     {
       name: 'Create Product',
       link: '/dashboard/products/create',
-      icon: LayoutList,
-    },
-    {
-      name: 'Update Product',
-      link: '/dashboard/products/update',
       icon: LayoutList,
     },
   ],
@@ -110,11 +90,6 @@ const dashboard_nav_items = {
       link: '/dashboard/coupon/create',
       icon: Feather,
     },
-    {
-      name: 'Update Coupon',
-      link: '/dashboard/coupon/update',
-      icon: Feather,
-    },
   ],
   Categories: [
     {
@@ -125,11 +100,6 @@ const dashboard_nav_items = {
     {
       name: 'Create Category',
       link: '/dashboard/categories/create',
-      icon: FolderKanban,
-    },
-    {
-      name: 'Update Category',
-      link: '/dashboard/categories/update',
       icon: FolderKanban,
     },
   ],
