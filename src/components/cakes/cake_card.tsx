@@ -12,13 +12,15 @@ const CakeCard = ({ product }: { product: TProduct }) => {
       key={product._id}
       className='flex h-full flex-col rounded-2xl border bg-white p-2 shadow-md'
     >
-      <Image
-        src={product.images[0]}
-        alt={product.name}
-        width={100}
-        height={100}
-        className='h-[250px] w-full rounded-lg object-cover md:h-[280px] lg:h-[350px]'
-      />
+      <Link href={`/cakes/${product.slug}`}>
+        <Image
+          src={product.images[0]}
+          alt={product.name}
+          width={500}
+          height={500}
+          className='h-[250px] w-full rounded-lg object-cover md:h-[280px] lg:h-[350px]'
+        />
+      </Link>
       <div className='flex flex-grow flex-col space-y-2 bg-white pt-2'>
         <div className='flex-grow'>
           <TypographyH4>{product.name}</TypographyH4>
