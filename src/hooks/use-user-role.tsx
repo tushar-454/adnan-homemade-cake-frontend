@@ -1,6 +1,6 @@
 'use client';
 
-import { BASE_URL2 } from '@/constant';
+import { BASE_URL } from '@/constant';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
@@ -10,7 +10,7 @@ const useUserRole = () => {
 
   useEffect(() => {
     if (user) {
-      fetch(`${BASE_URL2}/auth/user/${user.user?.email}`)
+      fetch(`${BASE_URL}/auth/user/${user.user?.email}`)
         .then((res) => res.json())
         .then((data) => {
           setRole(data.data.role);

@@ -4,7 +4,7 @@ import { CakesImages } from '@/components/cakes_details/CakesImages';
 import { Container } from '@/components/shared/container';
 import { Rating } from '@/components/shared/rating';
 import { Badge } from '@/components/ui/badge';
-import { BASE_URL2 } from '@/constant';
+import { BASE_URL } from '@/constant';
 
 type CakeResponse = {
   success: boolean;
@@ -13,7 +13,7 @@ type CakeResponse = {
 
 const CakeDetails = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
-  const res: Response = await fetch(`${BASE_URL2}/product/${slug}`, {
+  const res: Response = await fetch(`${BASE_URL}/product/${slug}`, {
     next: {
       revalidate: 600,
     },
@@ -56,7 +56,7 @@ const CakeDetails = async ({ params }: { params: Promise<{ slug: string }> }) =>
 export default CakeDetails;
 
 export async function generateStaticParams() {
-  const res: Response = await fetch(`${BASE_URL2}/product`);
+  const res: Response = await fetch(`${BASE_URL}/product`);
   const { data: products }: TProductResponse = await res.json();
 
   return products.map((product) => ({

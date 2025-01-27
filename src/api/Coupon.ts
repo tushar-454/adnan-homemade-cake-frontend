@@ -1,4 +1,4 @@
-import { BASE_URL2 } from '@/constant';
+import { BASE_URL } from '@/constant';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export type TCoupon = {
@@ -20,7 +20,7 @@ export type TCouponRes = {
 
 const coupon = createApi({
   reducerPath: 'coupon',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL2 }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
     coupon: builder.query<TCouponRes, string>({
       query: (code) => `/coupon/${code}`,

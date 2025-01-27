@@ -1,4 +1,4 @@
-import { BASE_URL2 } from '@/constant';
+import { BASE_URL } from '@/constant';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export type TReview = {
@@ -19,7 +19,7 @@ type TReviewResponse = {
 
 const reviews = createApi({
   reducerPath: 'reviews',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL2 }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
     reviews: builder.query<TReviewResponse, void>({
       query: () => '/review',

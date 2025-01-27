@@ -7,7 +7,7 @@ import { Container } from '@/components/shared/container';
 import { Button } from '@/components/ui/button';
 import Gradient from '@/components/ui/gradient';
 import { TypographyH3 } from '@/components/ui/typography';
-import { BASE_URL2 } from '@/constant';
+import { BASE_URL } from '@/constant';
 import { useToast } from '@/hooks/use-toast';
 import { getDataSessionStorage } from '@/lib/utils';
 import { clearCart } from '@/store/features/cart';
@@ -29,7 +29,7 @@ const Checkout = () => {
 
   const handleOrder = async () => {
     try {
-      const res = await fetch(`${BASE_URL2}/order`, {
+      const res = await fetch(`${BASE_URL}/order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import { TProduct } from '@/api/product';
-import { BASE_URL2 } from '@/constant';
+import { BASE_URL } from '@/constant';
 import { Container } from '../shared/container';
 import Gradient from '../ui/gradient';
 import { TypographyH2, TypographyP } from '../ui/typography';
@@ -17,7 +17,7 @@ const TopSelling = async () => {
 
   // Fetch top cakes
   try {
-    const res = await fetch(`${BASE_URL2}/product?sell_count=20`, {
+    const res = await fetch(`${BASE_URL}/product?sell_count=20`, {
       next: { revalidate: 600 },
     });
 

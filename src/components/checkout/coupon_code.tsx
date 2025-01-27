@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import Gradient from '@/components/ui/gradient';
 import { Input } from '@/components/ui/input';
 import { TypographyH4, TypographySmall } from '@/components/ui/typography';
-import { BASE_URL2 } from '@/constant';
+import { BASE_URL } from '@/constant';
 import { resetOrderDiscount, updateOrderDiscount } from '@/store/features/order';
 import { AppDispatch, RootState } from '@/store/store';
 import { useState } from 'react';
@@ -19,7 +19,7 @@ const CouponCode = () => {
     e.preventDefault();
     if (code === '') return setPlaceholder('Enter coupon');
     try {
-      const res: Response = await fetch(`${BASE_URL2}/coupon/${code}`);
+      const res: Response = await fetch(`${BASE_URL}/coupon/${code}`);
       const data = await res.json();
       if (data.success === false) {
         dispatch(resetOrderDiscount());

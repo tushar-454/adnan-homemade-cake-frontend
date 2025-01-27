@@ -2,10 +2,10 @@ import { TProductResponse } from '@/api/product';
 import CakeCard from '@/components/cakes/cake_card';
 import CakesFilter from '@/components/cakes/cake_filter';
 import { Container } from '@/components/shared/container';
-import { BASE_URL2 } from '@/constant';
+import { BASE_URL } from '@/constant';
 
 const Cakes = async () => {
-  const res: Response = await fetch(`${BASE_URL2}/product`, {
+  const res: Response = await fetch(`${BASE_URL}/product`, {
     next: {
       revalidate: 600,
     },

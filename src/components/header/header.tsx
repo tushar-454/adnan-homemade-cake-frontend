@@ -1,7 +1,7 @@
 'use client';
 
 import { assets } from '@/assets/assets';
-import { BASE_URL2 } from '@/constant';
+import { BASE_URL } from '@/constant';
 import { nav_items } from '@/constant/nav_items';
 // import { getDataSessionStorage } from '@/lib/utils';
 // import { initCart } from '@/store/features/cart';
@@ -32,7 +32,7 @@ const Header = () => {
   useEffect(() => {
     if (user) {
       const createUser = async () => {
-        await fetch(`${BASE_URL2}/auth/register`, {
+        await fetch(`${BASE_URL}/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
 import { getToken } from 'next-auth/jwt';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { BASE_URL2 } from './constant';
+import { BASE_URL } from './constant';
 
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET;
 
@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
   if (!email) {
     return NextResponse.redirect(new URL('/', request.url));
   }
-  const res = await fetch(`${BASE_URL2}/auth/user/${email}`);
+  const res = await fetch(`${BASE_URL}/auth/user/${email}`);
   const { data } = await res.json();
   if (!data || !data?.role) {
     return NextResponse.redirect(new URL('/', request.url));

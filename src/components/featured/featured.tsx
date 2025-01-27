@@ -1,5 +1,5 @@
 import { TProduct } from '@/api/product';
-import { BASE_URL2 } from '@/constant';
+import { BASE_URL } from '@/constant';
 import { Container } from '../shared/container';
 import { ProductResponse } from '../top_selling/top_selling';
 import Gradient from '../ui/gradient';
@@ -13,7 +13,7 @@ const Featured = async () => {
 
   // Fetch top cakes
   try {
-    const res: Response = await fetch(`${BASE_URL2}/product?is_featured=true`, {
+    const res: Response = await fetch(`${BASE_URL}/product?is_featured=true`, {
       next: { revalidate: 600 },
     });
 
