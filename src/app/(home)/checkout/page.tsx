@@ -11,6 +11,7 @@ import { BASE_URL } from '@/constant';
 import { useToast } from '@/hooks/use-toast';
 import { getDataSessionStorage } from '@/lib/utils';
 import { clearCart } from '@/store/features/cart';
+import { clearOrder } from '@/store/features/order';
 import { AppDispatch, RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -60,6 +61,7 @@ const Checkout = () => {
         });
         router.push('/');
         dispatch(clearCart());
+        dispatch(clearOrder());
       }
     } catch (error) {
       console.log(error);

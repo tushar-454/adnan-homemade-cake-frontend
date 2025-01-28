@@ -38,6 +38,9 @@ const orderReducer = createSlice({
   name: 'orderReducer',
   initialState,
   reducers: {
+    clearOrder: (state) => {
+      Object.assign(state, initialState);
+    },
     updateOrderDiscount: (state, action) => {
       const { type, discount, code } = action.payload;
       state.discount = discount;
@@ -65,6 +68,11 @@ const orderReducer = createSlice({
   },
 });
 
-export const { updateOrderDiscount, updateOrderAddress, updateOrderLineItems, resetOrderDiscount } =
-  orderReducer.actions;
+export const {
+  updateOrderDiscount,
+  updateOrderAddress,
+  updateOrderLineItems,
+  resetOrderDiscount,
+  clearOrder,
+} = orderReducer.actions;
 export default orderReducer.reducer;

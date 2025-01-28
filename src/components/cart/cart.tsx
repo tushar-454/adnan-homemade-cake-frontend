@@ -18,11 +18,12 @@ type CartProps = {
 
 export type TCart = {
   _id: string;
+  product_id: string;
   image: string;
   name: string;
   category: string;
   variant: {
-    id: string;
+    _id: string;
     name: string;
     price: number;
   };

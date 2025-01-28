@@ -31,7 +31,7 @@ const ProductsTable = () => {
     if (carts) {
       const lineItems = carts.map((cart) => {
         return {
-          product_id: cart._id,
+          product_id: cart.product_id,
           name: cart.name,
           image: cart.image,
           variant: cart.variant?.name,

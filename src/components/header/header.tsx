@@ -6,6 +6,8 @@ import { nav_items } from '@/constant/nav_items';
 // import { getDataSessionStorage } from '@/lib/utils';
 // import { initCart } from '@/store/features/cart';
 import { useUserRole } from '@/hooks/use_user_role';
+import { getDataSessionStorage } from '@/lib/utils';
+import { initCart } from '@/store/features/cart';
 import { setOpenFilter } from '@/store/features/globalReducer';
 import { AppDispatch, RootState } from '@/store/store';
 import { MenuIcon, Plus, Search, ShoppingCart } from 'lucide-react';
@@ -48,29 +50,27 @@ const Header = () => {
     }
   }, [user]);
 
-  {
-    /* useEffect(() => {
-    const head = headerRef.current;
-    document.addEventListener('scrollend', () => {
-      if (head && window.scrollY > 80) {
-        head.classList.add('sticky_animation');
-      }
-      if (head && window.scrollY === 0) {
-        head.classList.remove('sticky_animation');
-      }
-    });
+  useEffect(() => {
+    // const head = headerRef.current;
+    // document.addEventListener('scrollend', () => {
+    //   if (head && window.scrollY > 80) {
+    //     head.classList.add('sticky_animation');
+    //   }
+    //   if (head && window.scrollY === 0) {
+    //     head.classList.remove('sticky_animation');
+    //   }
+    // });
     const data = getDataSessionStorage('carts');
     dispatch(initCart(data ? data : []));
-    return () => {
-      document.removeEventListener('scrollend', () => {
-        if (head && window.scrollY > 90) {
-          console.log(head);
-        }
-      });
-    };
+    // return () => {
+    //   document.removeEventListener('scrollend', () => {
+    //     if (head && window.scrollY > 90) {
+    //       console.log(head);
+    //     }
+    //   });
+    // };
   }, [dispatch]);
-  */
-  }
+
   return (
     <>
       <header className='border-b bg-white py-3' ref={headerRef}>

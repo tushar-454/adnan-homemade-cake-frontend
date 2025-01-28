@@ -1,11 +1,11 @@
 'use client';
 import { TProduct } from '@/api/product';
 import { useToast } from '@/hooks/use-toast';
-import { addCartItem } from '@/store/features/cart';
-import { AppDispatch } from '@/store/store';
+import { addCartItem, updateCartItem } from '@/store/features/cart';
+import { AppDispatch, RootState } from '@/store/store';
 import { ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 
@@ -13,6 +13,8 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
   const { toast } = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const [variantId, setVariantId] = useState('');
+  const carts = useSelector((state: RootState) => state.cart.carts);
+
   const addtocart = () => {
     const variant = cake.variants.find((variant) => variant._id === variantId);
     if (!variant) {
@@ -22,8 +24,20 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
       });
       return;
     }
+    const cartExist = carts.find(
+      (cart) => cart.product_id === cake._id && cart.variant._id === variant._id,
+    );
+    if (cartExist) {
+      dispatch(updateCartItem({ id: cartExist._id, type: 'increment' }));
+      toast({
+        title: 'Already in cart. Incremented quantity',
+        description: `${cake.name} - ${variant.name} incremented in cart`,
+      });
+      return;
+    }
     const cart = {
-      _id: cake._id,
+      _id: crypto.randomUUID(),
+      product_id: cake._id,
       image: cake.images[0],
       name: cake.name,
       category: cake.category,
