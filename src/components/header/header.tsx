@@ -5,11 +5,11 @@ import { BASE_URL } from '@/constant';
 import { nav_items } from '@/constant/nav_items';
 // import { getDataSessionStorage } from '@/lib/utils';
 // import { initCart } from '@/store/features/cart';
-import { useUserRole } from '@/hooks/use-user-role';
+import { useUserRole } from '@/hooks/use_user_role';
 import { setOpenFilter } from '@/store/features/globalReducer';
 import { AppDispatch, RootState } from '@/store/store';
 import { MenuIcon, Plus, Search, ShoppingCart } from 'lucide-react';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -110,7 +110,10 @@ const Header = () => {
             </div>
             <div className='flex items-center gap-6'>
               {user ? (
-                <Link href={role === 'user' ? '/user' : role === 'admin' ? '/dashboard' : '/'}>
+                <Link
+                  href={role === 'user' ? '/' : role === 'admin' ? '/dashboard' : '/'}
+                  onClick={role === 'user' ? () => signOut() : () => {}}
+                >
                   <Image
                     src={user.user?.image || assets.DEFAULT_AVATAR}
                     alt={`${user.user?.name} user_image`}

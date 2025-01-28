@@ -1,6 +1,6 @@
 import { TProduct, TProductResponse } from '@/api/product';
 import AddToCart from '@/components/cakes_details/add_to_cart';
-import { CakesImages } from '@/components/cakes_details/CakesImages';
+import { CakesImages } from '@/components/cakes_details/cakes_images';
 import { Container } from '@/components/shared/container';
 import { Rating } from '@/components/shared/rating';
 import { Badge } from '@/components/ui/badge';

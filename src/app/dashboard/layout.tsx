@@ -11,7 +11,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       <SidebarProvider>
         <div className='flex w-full'>
           <DashboardSidebar />
-          <main className='w-full flex-grow px-5'>
+          <main className='w-full flex-grow'>
             {/* dashboard header  */}
             <DashboardHeader />
             {children}

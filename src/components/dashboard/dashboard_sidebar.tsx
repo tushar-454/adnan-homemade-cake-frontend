@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard_nav_items, DashboardNavKeys } from '@/constant/nav_items';
-import { LogOut } from 'lucide-react';
+import { ChevronLeft, LogOut } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,7 +26,12 @@ const DashboardSidebar = () => {
     <Sidebar>
       <SidebarHeader>
         <div className='flex items-center justify-between gap-3'>
-          <TypographyH4>Dashboard</TypographyH4>
+          <TypographyH4 className='flex items-center'>
+            <Link href={'/'} className='cursor-pointer'>
+              <ChevronLeft />
+            </Link>
+            <span>Dashboard</span>
+          </TypographyH4>
           {/* <XIcon className='cursor-pointer' onClick={() => setOpen(false)} /> */}
         </div>
       </SidebarHeader>
