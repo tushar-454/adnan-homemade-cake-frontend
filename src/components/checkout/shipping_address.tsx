@@ -1,29 +1,33 @@
 'use client';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
-import {
-  DISTRICTS,
-  DISTRICTS_KEY_TYPE,
-  DIVISIONS,
-  DIVISIONS_KEY_TYPE,
-  UPAZILLAS,
-} from '@/constant/location';
+// import { DISTRICTS_KEY_TYPE, DIVISIONS_KEY_TYPE } from '@/constant/location';
+import { useToast } from '@/hooks/use-toast';
 import { updateOrderAddress } from '@/store/features/order';
 import { AppDispatch } from '@/store/store';
-import { useState } from 'react';
+import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button } from '../ui/button';
+import { z } from 'zod';
+import { ResetButton } from '../generic_form/fields/ResetButton';
+import { SubmitButton } from '../generic_form/fields/SubmitButton';
+import { TextAreaField } from '../generic_form/fields/TextAreaField';
+import { TextField } from '../generic_form/fields/TextField';
+import { GenericForm, GenericFormRef } from '../generic_form/generic_form';
 import Gradient from '../ui/gradient';
-import { Input } from '../ui/input';
 import { TypographyH4 } from '../ui/typography';
 
-const initialState = {
+const FormSchema = z.object({
+  name: z.string().nonempty(),
+  email: z.string().email(),
+  phone: z.string().nonempty(),
+  division: z.string().nonempty(),
+  district: z.string().nonempty(),
+  sub_district: z.string().nonempty(),
+  address: z.string().nonempty(),
+});
+
+type FormType = z.infer<typeof FormSchema>;
+
+const initialValues: FormType = {
   name: '',
   email: '',
   phone: '',
@@ -34,111 +38,78 @@ const initialState = {
 };
 
 const ShippingAddress = () => {
-  const [division, setDivision] = useState<DIVISIONS_KEY_TYPE>('10');
-  const [district, setDistrict] = useState<DISTRICTS_KEY_TYPE>('1');
-  const [address, setAddress] = useState(initialState);
+  const { toast } = useToast();
+  // const [division, setDivision] = useState<DIVISIONS_KEY_TYPE>('10');
+  // const [district, setDistrict] = useState<DISTRICTS_KEY_TYPE>('1');
   const dispatch = useDispatch<AppDispatch>();
+  const formRef = useRef<GenericFormRef<FormType>>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    dispatch(updateOrderAddress(address));
+  const handleSubmit = (data: FormType | React.FormEvent<HTMLFormElement>) => {
+    dispatch(updateOrderAddress(data));
+    toast({
+      title: 'Success',
+      description: 'Shipping address saved successfully',
+    });
   };
 
   return (
-    <div>
+    <div className='space-y-2'>
       <TypographyH4>
         <Gradient>Shipping Address</Gradient>
       </TypographyH4>
-      <form onSubmit={handleSubmit} className='mt-3 flex flex-col gap-3'>
-        <Input
-          placeholder='Full Name'
-          value={address.name}
-          onChange={(e) => setAddress((prev) => ({ ...prev, name: e.target.value }))}
-        />
-        <Input
-          type='email'
-          placeholder='Email'
-          value={address.email}
-          onChange={(e) => setAddress((prev) => ({ ...prev, email: e.target.value }))}
-        />
-        <Input
-          type='tel'
-          placeholder='Phone Number'
-          value={address.phone}
-          onChange={(e) => setAddress((prev) => ({ ...prev, phone: e.target.value }))}
-        />
-        <Input placeholder='Bangladesh' disabled />
-        <div className='flex flex-col gap-3 md:flex-row'>
-          <Select
-            onValueChange={(division) => {
-              setDivision(
-                DIVISIONS.find(
-                  (item) => item.title === division,
-                )?.value.toString() as DIVISIONS_KEY_TYPE,
-              );
-              setAddress((prev) => ({ ...prev, division }));
-            }}
-          >
-            <SelectTrigger className='w-full md:w-1/3'>
-              <SelectValue placeholder='Division' />
-            </SelectTrigger>
-            <SelectContent>
-              {DIVISIONS.map((division) => (
-                <SelectItem key={division.title} value={division.title}>
-                  {division.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select
-            onValueChange={(district) => {
-              setDistrict(
-                DISTRICTS[division]
-                  .find((item) => item.title === district)
-                  ?.value.toString() as DISTRICTS_KEY_TYPE,
-              );
-              setAddress((prev) => ({ ...prev, district }));
-            }}
-          >
-            <SelectTrigger className='w-full md:w-1/3'>
-              <SelectValue placeholder='District' />
-            </SelectTrigger>
-            <SelectContent>
-              {DISTRICTS[division].map((district) => (
-                <SelectItem
-                  key={district.title + division}
-                  value={district.title}
-                  onClick={() => setDistrict(district.value.toString() as DISTRICTS_KEY_TYPE)}
-                >
-                  {district.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select
-            onValueChange={(sub_district) => setAddress((prev) => ({ ...prev, sub_district }))}
-          >
-            <SelectTrigger className='w-full md:w-1/3'>
-              <SelectValue placeholder='Upazilla' />
-            </SelectTrigger>
-            <SelectContent>
-              {UPAZILLAS[district].map((upazila) => (
-                <SelectItem key={upazila.title + district} value={upazila.title}>
-                  {upazila.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      <GenericForm
+        schema={FormSchema}
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        ref={formRef}
+      >
+        <div className='space-y-2'>
+          <TextField
+            name='name'
+            label='Full Name'
+            placeholder='Enter your full name here...'
+            required
+          />
+          <TextField name='email' label='Email' placeholder=' Enter your email here... ' required />
+          <TextField
+            name='phone'
+            label='Phone Number'
+            placeholder=' Enter your phone number here... '
+            required
+          />
+          <div className='grid grid-cols-1 gap-2 md:grid-cols-3'>
+            <TextField
+              name='division'
+              label='Division'
+              placeholder=' Enter your division here... '
+              required
+            />
+            <TextField
+              name='district'
+              label='District'
+              placeholder=' Enter your district here... '
+              required
+            />
+            <TextField
+              name='sub_district'
+              label='Upazilla'
+              placeholder=' Enter your upazilla here... '
+              required
+            />
+          </div>
+          <TextAreaField
+            name='address'
+            label='Full Address'
+            placeholder=' Enter your full address here... '
+            autoResize
+            required
+          />
+          <div className='flex items-center gap-2 pt-5'>
+            <SubmitButton width='auto' />
+            <ResetButton />
+          </div>
         </div>
-        <Input
-          placeholder='Full Address'
-          value={address.address}
-          onChange={(e) => setAddress((prev) => ({ ...prev, address: e.target.value }))}
-        />
-        <Button variant={'default'} className=''>
-          Save Address
-        </Button>
-      </form>
+      </GenericForm>
     </div>
   );
 };

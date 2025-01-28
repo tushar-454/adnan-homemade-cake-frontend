@@ -28,6 +28,21 @@ const Checkout = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleOrder = async () => {
+    const { address, district, division, email, line_items, name, phone, sub_district } = order;
+    if (!name || !email || !phone || !division || !district || !sub_district || !address) {
+      toast({
+        title: 'Error',
+        description: 'Please fill all the fields & save the address',
+      });
+      return;
+    }
+    if (line_items.length === 0) {
+      toast({
+        title: 'Error',
+        description: 'Please add some products to cart',
+      });
+      return;
+    }
     try {
       const res = await fetch(`${BASE_URL}/order`, {
         method: 'POST',
