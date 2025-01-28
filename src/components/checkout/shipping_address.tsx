@@ -2,7 +2,7 @@
 
 // import { DISTRICTS_KEY_TYPE, DIVISIONS_KEY_TYPE } from '@/constant/location';
 import { useToast } from '@/hooks/use-toast';
-import { updateOrderAddress } from '@/store/features/order';
+import { clearAddress, updateOrderAddress } from '@/store/features/order';
 import { AppDispatch } from '@/store/store';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
@@ -106,7 +106,7 @@ const ShippingAddress = () => {
           />
           <div className='flex items-center gap-2 pt-5'>
             <SubmitButton width='auto' />
-            <ResetButton />
+            <ResetButton cFunc={() => dispatch(clearAddress())} />
           </div>
         </div>
       </GenericForm>

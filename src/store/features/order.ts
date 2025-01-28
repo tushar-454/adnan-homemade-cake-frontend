@@ -41,6 +41,15 @@ const orderReducer = createSlice({
     clearOrder: (state) => {
       Object.assign(state, initialState);
     },
+    clearAddress: (state) => {
+      state.name = '';
+      state.email = '';
+      state.phone = '';
+      state.division = '';
+      state.district = '';
+      state.sub_district = '';
+      state.address = '';
+    },
     updateOrderDiscount: (state, action) => {
       const { type, discount, code } = action.payload;
       state.discount = discount;
@@ -74,5 +83,6 @@ export const {
   updateOrderLineItems,
   resetOrderDiscount,
   clearOrder,
+  clearAddress,
 } = orderReducer.actions;
 export default orderReducer.reducer;
