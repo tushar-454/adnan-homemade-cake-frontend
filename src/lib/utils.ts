@@ -47,3 +47,22 @@ export function updateDataSessionStorage(key: string, id: string, value: TCart) 
     sessionStorage.setItem(key, JSON.stringify(newValue));
   }
 }
+
+export function addLocalStorage(key: string, value: unknown) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+export function getLocalStorage(key: string) {
+  return JSON.parse(localStorage.getItem(key) as string);
+}
+
+export function removeLocalStorage(key: string) {
+  localStorage.removeItem(key);
+}
+
+export const clearAllCookies = () => {
+  document.cookie.split(';').forEach((cookie) => {
+    const [name] = cookie.split('=');
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+  });
+};

@@ -13,6 +13,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard_nav_items, DashboardNavKeys } from '@/constant/nav_items';
+import { removeLocalStorage } from '@/lib/utils';
 import { ChevronLeft, LogOut } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -76,6 +77,7 @@ const DashboardSidebar = () => {
               className='cursor-pointer text-red-600'
               onClick={() => {
                 signOut();
+                removeLocalStorage('isLogin');
               }}
             />
           </div>

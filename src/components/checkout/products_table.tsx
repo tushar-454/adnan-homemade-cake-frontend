@@ -127,7 +127,7 @@ const ProductsTable = () => {
                 <div className='flex flex-col gap-1'>
                   <TypographyLarge>
                     <Taka size={18} />
-                    {cart.price - cart.price * (cart.discount / 100)}
+                    {+(cart.price - cart.price * (cart.discount / 100)).toFixed(2)}
                   </TypographyLarge>
                 </div>
               </TableCell>
@@ -158,7 +158,7 @@ const ProductsTable = () => {
               <TypographyLarge>Discount:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>- {discount}</TypographyLarge>
+              <TypographyLarge>- {discount.toFixed(2)}</TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>

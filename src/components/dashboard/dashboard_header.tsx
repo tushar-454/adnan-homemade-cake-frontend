@@ -1,3 +1,4 @@
+import { removeLocalStorage } from '@/lib/utils';
 import { signOut } from 'next-auth/react';
 import { Button } from '../ui/button';
 import { useSidebar } from '../ui/sidebar';
@@ -32,6 +33,7 @@ const DashboardHeader = () => {
             variant={'destructive'}
             onClick={() => {
               signOut();
+              removeLocalStorage('isLogin');
             }}
           >
             Logout

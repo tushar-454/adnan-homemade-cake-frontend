@@ -1,12 +1,17 @@
 'use client';
 
 import { assets } from '@/assets/assets';
-import { BASE_URL } from '@/constant';
 import { nav_items } from '@/constant/nav_items';
 // import { getDataSessionStorage } from '@/lib/utils';
 // import { initCart } from '@/store/features/cart';
+import { useCreateTokenMutation, useCreateUserMutation } from '@/api/auth';
 import { useUserRole } from '@/hooks/use_user_role';
-import { getDataSessionStorage } from '@/lib/utils';
+import {
+  addLocalStorage,
+  getDataSessionStorage,
+  getLocalStorage,
+  removeLocalStorage,
+} from '@/lib/utils';
 import { initCart } from '@/store/features/cart';
 import { setOpenFilter } from '@/store/features/globalReducer';
 import { AppDispatch, RootState } from '@/store/store';
@@ -22,6 +27,8 @@ import { Button } from '../ui/button';
 import Gradient from '../ui/gradient';
 
 const Header = () => {
+  const [createUser] = useCreateUserMutation();
+  const [createToken] = useCreateTokenMutation();
   const carts = useSelector((state: RootState) => state.cart.carts);
   const dispatch = useDispatch<AppDispatch>();
   const [cartOpen, setCartOpen] = useState(false);
@@ -32,23 +39,23 @@ const Header = () => {
   const role = useUserRole();
 
   useEffect(() => {
-    if (user) {
-      const createUser = async () => {
-        await fetch(`${BASE_URL}/auth/register`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: user.user?.name,
-            email: user.user?.email,
-            photo: user.user?.image,
-          }),
+    const createUserAndToken = async () => {
+      if (user) {
+        await createToken({
+          email: user?.user?.email,
         });
-      };
-      createUser();
+        await createUser({
+          name: user?.user?.name,
+          email: user?.user?.email,
+          photo: user?.user?.image,
+        });
+        addLocalStorage('isLogin', true);
+      }
+    };
+    if (getLocalStorage('isLogin') === null) {
+      createUserAndToken();
     }
-  }, [user]);
+  }, [user, createToken, createUser]);
 
   useEffect(() => {
     // const head = headerRef.current;
@@ -112,7 +119,14 @@ const Header = () => {
               {user ? (
                 <Link
                   href={role === 'user' ? '/' : role === 'admin' ? '/dashboard' : '/'}
-                  onClick={role === 'user' ? () => signOut() : () => {}}
+                  onClick={
+                    role === 'user'
+                      ? () => {
+                          signOut();
+                          removeLocalStorage('isLogin');
+                        }
+                      : () => {}
+                  }
                 >
                   <Image
                     src={user.user?.image || assets.DEFAULT_AVATAR}

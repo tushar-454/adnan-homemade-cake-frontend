@@ -28,17 +28,41 @@ export type TProductResponse = {
   data: TProduct[];
 };
 
+type Error403 = {
+  status: number;
+  message: string;
+};
+type Error400 = {
+  status: number;
+  errors: {
+    field: string;
+    message: string;
+  }[];
+};
+
+export type TProductError = {
+  status: number;
+  data: Error403 | Error400;
+};
+
 export type TProductsImages = TProduct['images'];
 
 const product = createApi({
   reducerPath: 'product',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   endpoints: (builder) => ({
     getProducts: builder.query<TProduct, void>({
       query: () => '/products',
     }),
+    createProduct: builder.mutation({
+      query: (body) => ({
+        url: '/product',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetProductsQuery } = product;
+export const { useGetProductsQuery, useCreateProductMutation } = product;
 export { product };
