@@ -15,7 +15,9 @@ const CategoryCard = ({ category }: { category: TCategory }) => {
         height={100}
         className='h-24 min-w-24 select-none rounded-full object-cover'
       />
-      <TypographyP className='text-center'>{category.name || 'Category Name'}</TypographyP>
+      <TypographyP className='whitespace-nowrap text-center'>
+        {category.name || 'Category Name'}
+      </TypographyP>
     </>
   );
 };

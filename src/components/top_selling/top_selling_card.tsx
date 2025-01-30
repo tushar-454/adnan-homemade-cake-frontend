@@ -1,6 +1,7 @@
 import { TProduct } from '@/api/product';
 import Image from 'next/image';
 import Link from 'next/link';
+import { InnerHTML } from '../shared/inner_html';
 import { Rating } from '../shared/rating';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -23,9 +24,11 @@ const TopSellingCard = ({ product }: { product: TProduct }) => {
         <div className='flex-grow'>
           <TypographyH4>{product.name}</TypographyH4>
           <TypographyP>
-            {product.description.length > 90
-              ? `${product.description.slice(0, 90)} . . .`
-              : product.description}
+            {product.description.length > 90 ? (
+              <InnerHTML content={`${product.description.slice(0, 90)} . . .`} />
+            ) : (
+              <InnerHTML content={product.description} />
+            )}
           </TypographyP>
         </div>
         <div className='flex items-center justify-between gap-1'>

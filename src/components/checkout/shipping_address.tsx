@@ -50,6 +50,7 @@ const ShippingAddress = () => {
       title: 'Success',
       description: 'Shipping address saved successfully',
     });
+    window.scrollTo(0, 0);
   };
 
   return (

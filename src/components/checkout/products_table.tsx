@@ -41,8 +41,10 @@ const ProductsTable = () => {
       dispatch(updateOrderLineItems(lineItems));
       const result = carts.reduce(
         (acc, cur) => {
-          acc.discount = cur.price * cur.quantity * (cur.discount / 100);
-          acc.total = cur.price * cur.quantity - acc.discount;
+          const curDiscount = cur.price * cur.quantity * (cur.discount / 100);
+          const curPrice = cur.price * cur.quantity;
+          acc.discount = acc.discount + curDiscount;
+          acc.total = acc.total + curPrice - curDiscount;
           return acc;
         },
         {
@@ -180,9 +182,9 @@ const ProductsTable = () => {
             <TableCell colSpan={1} className='text-right'>
               <TypographyLarge>
                 +{' '}
-                {totalPrice - discount + shipping - couponDiscount < 0
+                {totalPrice + shipping - couponDiscount < 0
                   ? 0
-                  : totalPrice - discount + shipping - couponDiscount}
+                  : totalPrice + shipping - couponDiscount}
               </TypographyLarge>
             </TableCell>
           </TableRow>

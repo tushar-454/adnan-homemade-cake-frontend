@@ -2,6 +2,7 @@ import { TProduct, TProductResponse } from '@/api/product';
 import AddToCart from '@/components/cakes_details/add_to_cart';
 import { CakesImages } from '@/components/cakes_details/cakes_images';
 import { Container } from '@/components/shared/container';
+import { InnerHTML } from '@/components/shared/inner_html';
 import { Rating } from '@/components/shared/rating';
 import { Badge } from '@/components/ui/badge';
 import { BASE_URL } from '@/constant';
@@ -43,8 +44,9 @@ const CakeDetails = async ({ params }: { params: Promise<{ slug: string }> }) =>
               {cake.rating}
             </div>
             <Badge variant={'destructive'}>{cake.sell_count} - Sells</Badge>
-            <p className='my-4 text-gray-700'>{cake.description}</p>
-
+            <p className='my-4 text-gray-700'>
+              <InnerHTML content={cake.description} />
+            </p>
             <AddToCart cake={cake} />
           </div>
         </div>
