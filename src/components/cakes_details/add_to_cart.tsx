@@ -6,6 +6,7 @@ import { AppDispatch, RootState } from '@/store/store';
 import { ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Taka } from '../shared/taka';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 
@@ -67,7 +68,7 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
               className={`cursor-pointer ${variant._id === variantId ? 'bg-gray-300 hover:bg-gray-300' : ''}`}
             >
               {variant.name}
-              {variant.price && ` - $${variant.price}`}
+              {variant.price && ` - ${variant.price}`} <Taka size={12} />
             </Badge>
           ))}
         </div>

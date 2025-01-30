@@ -5,6 +5,7 @@ import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
+import { Taka } from '../shared/taka';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import Gradient from '../ui/gradient';
@@ -105,15 +106,22 @@ const Cart = ({ cartOpen, setCartOpen }: CartProps) => {
                     <div className='flex w-full flex-wrap items-center justify-between gap-2 p-1'>
                       {/* price and discount  */}
                       <div className='flex flex-col gap-1'>
-                        <TypographyLarge>${cart.price}</TypographyLarge>
+                        <TypographyLarge>
+                          <Taka />
+                          {cart.price}
+                        </TypographyLarge>
                         <Badge variant={'destructive'} className='max-w-fit whitespace-nowrap'>
-                          ${cart.discount}% Off
+                          <Taka />
+                          {cart.discount}% Off
                         </Badge>
                       </div>
                       {/* total price  */}
                       <div>
                         <TypographyH3>
-                          <Gradient>${cart.totalPrice}</Gradient>
+                          <Gradient>
+                            <Taka />
+                            {cart.totalPrice}
+                          </Gradient>
                         </TypographyH3>
                       </div>
                       {/* quantity and remove button  */}

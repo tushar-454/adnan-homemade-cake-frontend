@@ -2,6 +2,7 @@ import { TProduct } from '@/api/product';
 import Image from 'next/image';
 // import {Rating} from '../shared/rating';
 import { InnerHTML } from '../shared/inner_html';
+import { Taka } from '../shared/taka';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { TypographyH3, TypographyH4, TypographyP } from '../ui/typography';
@@ -17,7 +18,7 @@ const UpcomingCard = ({ product }: { product: TProduct }) => {
         alt={product.name}
         width={100}
         height={100}
-        className='h-[250px] w-full rounded-lg md:h-[280px] lg:h-[350px]'
+        className='h-[320px] w-full rounded-lg sm:h-[350px] md:h-[280px] lg:h-[350px]'
       />
       <div className='flex flex-grow flex-col space-y-2 bg-white pt-2'>
         <div className='flex-grow'>
@@ -50,7 +51,10 @@ const UpcomingCard = ({ product }: { product: TProduct }) => {
         </div>
         <div className='flex flex-wrap items-center justify-between gap-4'>
           <span className='flex flex-wrap items-center gap-1'>
-            <TypographyH3 className='relative'>Price: ${product.price} </TypographyH3>
+            <TypographyH3 className='relative'>
+              Price: <Taka size={24} />
+              {product.price}{' '}
+            </TypographyH3>
             {/* <Badge variant={'destructive'} className='whitespace-nowrap'>
               {product.discount}% Off
             </Badge> */}

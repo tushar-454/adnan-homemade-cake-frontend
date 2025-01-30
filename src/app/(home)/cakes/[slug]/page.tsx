@@ -4,6 +4,7 @@ import { CakesImages } from '@/components/cakes_details/cakes_images';
 import { Container } from '@/components/shared/container';
 import { InnerHTML } from '@/components/shared/inner_html';
 import { Rating } from '@/components/shared/rating';
+import { Taka } from '@/components/shared/taka';
 import { Badge } from '@/components/ui/badge';
 import { BASE_URL } from '@/constant';
 
@@ -34,9 +35,13 @@ const CakeDetails = async ({ params }: { params: Promise<{ slug: string }> }) =>
             <Badge variant={'secondary'}>{cake.category}</Badge>
             <div className='my-2'>
               <span className='mr-2 text-2xl font-bold'>
-                ${cake.price - cake.price * (cake.discount / 100)}
+                <Taka size={24} />
+                {cake.price - cake.price * (cake.discount / 100)}
               </span>
-              <span className='text-gray-500 line-through'>${cake.price}</span>
+              <span className='text-gray-500 line-through'>
+                <Taka size={10} />
+                {cake.price}
+              </span>
             </div>
 
             <div className='mb-1 flex items-center gap-2'>

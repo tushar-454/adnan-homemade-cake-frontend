@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { InnerHTML } from '../shared/inner_html';
 import { Rating } from '../shared/rating';
+import { Taka } from '../shared/taka';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { TypographyH3, TypographyH4, TypographyP } from '../ui/typography';
@@ -53,7 +54,10 @@ const CakeCard = ({ product }: { product: TProduct }) => {
         </div>
         <div className='flex flex-wrap items-center justify-between gap-4'>
           <span className='flex flex-wrap items-center gap-1'>
-            <TypographyH3 className='relative'>Price: ${product.price} </TypographyH3>
+            <TypographyH3 className='relative'>
+              Price: <Taka size={24} />
+              {product.price}{' '}
+            </TypographyH3>
             <Badge variant={'destructive'} className='whitespace-nowrap'>
               {product.discount}% Off
             </Badge>

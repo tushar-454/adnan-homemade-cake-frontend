@@ -17,6 +17,7 @@ import { AppDispatch, RootState } from '@/store/store';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Taka } from '../shared/taka';
 
 const ProductsTable = () => {
   const carts = useSelector((state: RootState) => state.cart.carts);
@@ -125,7 +126,8 @@ const ProductsTable = () => {
               <TableCell>
                 <div className='flex flex-col gap-1'>
                   <TypographyLarge>
-                    ${cart.price - cart.price * (cart.discount / 100)}
+                    <Taka size={18} />
+                    {cart.price - cart.price * (cart.discount / 100)}
                   </TypographyLarge>
                 </div>
               </TableCell>
@@ -135,7 +137,7 @@ const ProductsTable = () => {
               <TableCell className='text-right'>
                 <TypographyH3>
                   <Gradient>
-                    $
+                    <Taka />
                     {cart.price * cart.quantity -
                       cart.price * cart.quantity * (cart.discount / 100)}
                   </Gradient>
