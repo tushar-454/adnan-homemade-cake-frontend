@@ -2,6 +2,7 @@ import { carousel } from '@/api/carousel';
 import { category } from '@/api/category';
 import { coupon } from '@/api/Coupon';
 import { gallery } from '@/api/gallery';
+import { order as apiOrder } from '@/api/order'; // Alias the order import
 import { product } from '@/api/product';
 import { reviews } from '@/api/reviews';
 import { configureStore } from '@reduxjs/toolkit';
@@ -20,6 +21,7 @@ const store = configureStore({
     [reviews.reducerPath]: reviews.reducer,
     [gallery.reducerPath]: gallery.reducer,
     [coupon.reducerPath]: coupon.reducer,
+    [apiOrder.reducerPath]: apiOrder.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -28,7 +30,8 @@ const store = configureStore({
       .concat(product.middleware)
       .concat(reviews.middleware)
       .concat(gallery.middleware)
-      .concat(coupon.middleware),
+      .concat(coupon.middleware)
+      .concat(apiOrder.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

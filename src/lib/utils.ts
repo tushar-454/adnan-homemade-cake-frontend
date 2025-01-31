@@ -66,3 +66,19 @@ export const clearAllCookies = () => {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
   });
 };
+
+export function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = date.toLocaleString('en-US', { month: 'long' });
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'P.M.' : 'A.M.';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+
+  return `${day}, ${month} ${year} at ${hours}:${minutes} ${ampm}`;
+}
