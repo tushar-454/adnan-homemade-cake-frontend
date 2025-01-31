@@ -7,8 +7,8 @@ import { ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Taka } from '../shared/taka';
-import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 const AddToCart = ({ cake }: { cake: TProduct }) => {
   const { toast } = useToast();
@@ -60,17 +60,19 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
       <div className='mb-6'>
         <h3 className='mb-2 text-lg font-semibold'>Variants:</h3>
         <div className='flex flex-wrap gap-3'>
-          {cake.variants.map((variant) => (
-            <Badge
-              key={variant._id}
-              variant={'secondary'}
-              onClick={() => setVariantId(variantId === variant._id ? '' : variant._id)}
-              className={`cursor-pointer whitespace-nowrap ${variant._id === variantId ? 'bg-gray-300 hover:bg-gray-300' : ''}`}
-            >
-              {variant.name}
-              {variant.price && ` - ${variant.price}`} <Taka size={12} />
-            </Badge>
-          ))}
+          <Select onValueChange={(value) => setVariantId(value)}>
+            <SelectTrigger className='min-w-[180px] sm:max-w-fit'>
+              <SelectValue placeholder='Select a variant' />
+            </SelectTrigger>
+            <SelectContent>
+              {cake.variants.map((variant) => (
+                <SelectItem key={variant._id} value={variant._id}>
+                  {variant.name}
+                  {variant.price && ` - ${variant.price}`} <Taka size={12} />
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
