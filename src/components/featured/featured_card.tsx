@@ -17,8 +17,8 @@ const FeaturedCard = ({ product }: { product: TProduct }) => {
       <Image
         src={product.images[0] || 'https://via.placeholder.com/100'}
         alt={product.name}
-        width={100}
-        height={100}
+        width={250}
+        height={250}
         className='h-[320px] w-full rounded-lg sm:h-[350px] md:h-[280px] lg:h-[350px]'
       />
       <div className='flex flex-grow flex-col space-y-2 bg-white pt-2'>

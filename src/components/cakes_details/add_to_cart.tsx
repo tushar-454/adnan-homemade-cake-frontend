@@ -59,13 +59,13 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
     <>
       <div className='mb-6'>
         <h3 className='mb-2 text-lg font-semibold'>Variants:</h3>
-        <div className='flex space-x-2'>
+        <div className='flex flex-wrap gap-3'>
           {cake.variants.map((variant) => (
             <Badge
               key={variant._id}
               variant={'secondary'}
               onClick={() => setVariantId(variantId === variant._id ? '' : variant._id)}
-              className={`cursor-pointer ${variant._id === variantId ? 'bg-gray-300 hover:bg-gray-300' : ''}`}
+              className={`cursor-pointer whitespace-nowrap ${variant._id === variantId ? 'bg-gray-300 hover:bg-gray-300' : ''}`}
             >
               {variant.name}
               {variant.price && ` - ${variant.price}`} <Taka size={12} />
