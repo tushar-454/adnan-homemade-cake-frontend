@@ -93,7 +93,7 @@ const Header = () => {
               />
             </Link>
             <div
-              className={`min-h-auto absolute left-0 top-[5.5rem] z-[999999] flex w-full justify-start border-y-2 bg-white/80 p-5 backdrop-blur lg:static lg:z-auto lg:scale-y-100 lg:justify-center lg:border-0 lg:bg-transparent ${showMenu ? 'nav_animation' : 'scale-y-0'}`}
+              className={`min-h-auto absolute left-0 top-[5.5rem] z-[999999] flex w-full origin-top justify-start border-y-2 bg-white/80 p-5 backdrop-blur transition-all lg:static lg:z-auto lg:scale-y-100 lg:justify-center lg:border-0 lg:bg-transparent ${showMenu ? 'nav_animation' : 'scale-y-0'}`}
             >
               <ul className='flex flex-col items-start gap-8 lg:flex-row lg:items-center'>
                 {nav_items.map((item) => {

@@ -33,7 +33,6 @@ const TrackOrder = () => {
   };
 
   const handleSubmit = async (data: FormType | React.FormEvent<HTMLFormElement>) => {
-    console.log('form submitted');
     if ('trackingId' in data) {
       setTrackingId(+data.trackingId);
       refetch();

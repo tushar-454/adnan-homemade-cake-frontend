@@ -99,6 +99,11 @@
       transform: scaleY(1);
     }
   }
+
+  .nav_keyframe {
+    animation: nav_keyframe 0.3s !important;
+  }
+
   .sticky_animation {
     animation: sticky_header 0.5s;
     position: sticky;
