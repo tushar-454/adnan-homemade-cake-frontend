@@ -1,5 +1,6 @@
 'use client';
 import { CouponCode } from '@/components/checkout/coupon_code';
+import { CustomInstruction } from '@/components/checkout/custom_instruction';
 import { PaymentInformation } from '@/components/checkout/payment_information';
 import { ProductsTable } from '@/components/checkout/products_table';
 import { ShippingAddress } from '@/components/checkout/shipping_address';
@@ -88,6 +89,7 @@ const Checkout = () => {
         <div className='my-8'>
           <ProductsTable />
           <div className='mx-auto mt-10 w-full space-y-10 md:max-w-[768px]'>
+            <CustomInstruction />
             <CouponCode />
             <ShippingAddress />
             <PaymentInformation />

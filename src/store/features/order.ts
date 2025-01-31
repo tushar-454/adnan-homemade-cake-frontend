@@ -18,6 +18,7 @@ type TInitialState = {
   coupon_code: string;
   discount: number;
   type: 'flat' | 'percentage';
+  instruction: string;
 };
 
 const initialState: TInitialState = {
@@ -32,6 +33,7 @@ const initialState: TInitialState = {
   coupon_code: '',
   discount: 0,
   type: 'flat',
+  instruction: '',
 };
 
 const orderReducer = createSlice({
@@ -74,6 +76,9 @@ const orderReducer = createSlice({
       state.type = 'flat';
       state.coupon_code = '';
     },
+    updateOrderInstruction: (state, action) => {
+      state.instruction = action.payload;
+    },
   },
 });
 
@@ -84,5 +89,6 @@ export const {
   resetOrderDiscount,
   clearOrder,
   clearAddress,
+  updateOrderInstruction,
 } = orderReducer.actions;
 export default orderReducer.reducer;

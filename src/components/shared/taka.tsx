@@ -27,8 +27,8 @@ const Taka = ({ size = 20 }: TakaProps) => {
           gradientTransform='matrix(1 0 0 -1 0 511.19)'
           gradientUnits='userSpaceOnUse'
         >
-          <stop offset='0' stop-color='#fde560'></stop>
-          <stop offset='1' stop-color='#ff6f00'></stop>
+          <stop offset='0' stopColor='#fde560'></stop>
+          <stop offset='1' stopColor='#ff6f00'></stop>
         </linearGradient>
         <path
           fill='url(#a)'
