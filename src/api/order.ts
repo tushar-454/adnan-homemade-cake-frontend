@@ -12,7 +12,6 @@ type LineItem = {
 };
 
 type OrderData = {
-  instruction: null | string;
   _id: string;
   user: null | string;
   name: string;
@@ -34,6 +33,7 @@ type OrderData = {
   coupon_code: string;
   coupon_discount: number;
   tracking_id: number;
+  instruction: null | string;
   createdAt: string;
   updatedAt: string;
 };
@@ -43,6 +43,27 @@ type OrderResponse = {
   data: OrderData;
 };
 
+type CreateOrder = {
+  name: string;
+  email: string;
+  phone: string;
+  line_items: {
+    product_id: string;
+    name: string;
+    image: string;
+    variant: string;
+    quantity: number;
+  }[];
+  division: string;
+  district: string;
+  sub_district: string;
+  address: string;
+  coupon_code: string;
+  discount: number;
+  type: string;
+  instruction: string;
+};
+
 const order = createApi({
   reducerPath: 'apiOrder',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
@@ -50,8 +71,15 @@ const order = createApi({
     order: builder.query<OrderResponse, number>({
       query: (trackingId) => `/tracking/${trackingId}`,
     }),
+    createOrder: builder.mutation<OrderResponse, Partial<CreateOrder>>({
+      query: (order) => ({
+        url: '/order',
+        method: 'POST',
+        body: order,
+      }),
+    }),
   }),
 });
 
-export const { useOrderQuery } = order;
+export const { useOrderQuery, useCreateOrderMutation } = order;
 export { order };
