@@ -1,5 +1,5 @@
 'use client';
-import DashboardHeader from '@/components/dashboard/dashboard_header';
+import { DashboardHeader } from '@/components/dashboard/dashboard_header';
 import { DashboardSidebar } from '@/components/dashboard/dashboard_sidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/toaster';

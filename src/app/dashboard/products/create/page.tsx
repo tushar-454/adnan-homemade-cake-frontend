@@ -2,8 +2,8 @@
 
 import { useCategoryQuery } from '@/api/category';
 import { TProductError, useCreateProductMutation } from '@/api/product';
-import ImageInput from '@/components/dashboard/image_input';
-import VariantInput from '@/components/dashboard/variant_input';
+import { UploadImages } from '@/components/dashboard/upload_image';
+import { VariantInput } from '@/components/dashboard/variant_input';
 import { FieldArray } from '@/components/generic_form/field_array';
 import { ResetButton } from '@/components/generic_form/fields/ResetButton';
 import { SelectField } from '@/components/generic_form/fields/SelectField';
@@ -14,21 +14,17 @@ import { GenericForm, GenericFormRef } from '@/components/generic_form/generic_f
 import { Button } from '@/components/ui/button';
 import { TypographyH4 } from '@/components/ui/typography';
 import { useToast } from '@/hooks/use-toast';
+import { handleMultipleUpload } from '@/lib/utils';
 import { FormType, schema } from '@/schema/create-product';
 import { PlusCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 const initialValues: FormType = {
   name: '',
   description: '',
   price: 0,
   discount: 0,
-  images: [
-    {
-      link: '',
-    },
-  ],
   category: '',
   variants: [
     {
@@ -44,6 +40,7 @@ const ProductCreate = () => {
   const { data: { data: categories } = {} } = useCategoryQuery();
   const [createProduct] = useCreateProductMutation();
   const formRef = useRef<GenericFormRef<FormType>>(null);
+  const [images, setImages] = useState<File[]>([]);
 
   const categoryOptions = categories?.map((category) => ({
     value: category.name,
@@ -51,11 +48,18 @@ const ProductCreate = () => {
   }));
 
   const handleSubmit = async (formData: FormType | React.FormEvent<HTMLFormElement>) => {
-    const { images: imagesArr } = formData as FormType;
-    const images = imagesArr.map((image) => image.link);
+    if (images.length === 0) {
+      toast({
+        title: 'Please upload an image',
+        description: 'You need to upload at least one image',
+      });
+      return;
+    }
+    const imagesUrls = await handleMultipleUpload(images);
+
     const result = await createProduct({
       ...formData,
-      images,
+      images: imagesUrls,
     });
 
     if ('error' in result) {
@@ -99,33 +103,7 @@ const ProductCreate = () => {
           <TextField name='price' label='Price' type='number' />
           <TextField name='discount' label='Discount' type='number' />
           <SelectField<FormType> name='category' label='Category' options={categoryOptions || []} />
-          <FieldArray<FormType> name='images'>
-            {({ fields, append, remove }) => (
-              <div className='space-y-2'>
-                {/* Image Cards */}
-                {fields.map((field, index) => (
-                  <ImageInput key={field.id} index={index} onRemove={() => remove(index)} />
-                ))}
-                {/* Add Image Button */}
-                <div className='flex items-center justify-end'>
-                  <Button
-                    onClick={() =>
-                      append({
-                        link: '',
-                      })
-                    }
-                    type='button'
-                    variant='outline'
-                  >
-                    <div className='flex items-center gap-2'>
-                      <PlusCircle className='h-6 w-6' />
-                      <span>Add Image</span>
-                    </div>
-                  </Button>
-                </div>
-              </div>
-            )}
-          </FieldArray>
+          <UploadImages setImages={setImages} />
           <FieldArray<FormType> name='variants'>
             {({ fields, append, remove }) => (
               <div className='space-y-2'>

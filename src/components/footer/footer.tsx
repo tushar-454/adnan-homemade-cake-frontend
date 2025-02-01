@@ -146,7 +146,7 @@ const Footer = () => {
       </div>
       {/* float whatsapp icon */}
       <a
-        href='https://wa.me/+08801817967410'
+        href='https://wa.me/+8801817967410'
         className='fixed bottom-5 right-5 z-50 animate-bounce cursor-pointer rounded-full shadow-2xl'
         target='_blank'
       >

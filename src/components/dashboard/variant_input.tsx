@@ -43,4 +43,4 @@ const VariantInput = ({ index, onRemove }: VariantCardProps) => {
   );
 };
 
-export default VariantInput;
+export { VariantInput };
