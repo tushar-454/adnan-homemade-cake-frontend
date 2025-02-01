@@ -10,7 +10,12 @@ import { Taka } from '../shared/taka';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
-const AddToCart = ({ cake }: { cake: TProduct }) => {
+type AddToCartProps = {
+  cake: TProduct;
+  selectedImage: string;
+};
+
+const AddToCart = ({ cake, selectedImage }: AddToCartProps) => {
   const { toast } = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const [variantId, setVariantId] = useState('');
@@ -26,7 +31,10 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
       return;
     }
     const cartExist = carts.find(
-      (cart) => cart.product_id === cake._id && cart.variant._id === variant._id,
+      (cart) =>
+        cart.product_id === cake._id &&
+        cart.variant._id === variant._id &&
+        cart.image === selectedImage,
     );
     if (cartExist) {
       dispatch(updateCartItem({ id: cartExist._id, type: 'increment' }));
@@ -39,7 +47,7 @@ const AddToCart = ({ cake }: { cake: TProduct }) => {
     const cart = {
       _id: crypto.randomUUID(),
       product_id: cake._id,
-      image: cake.images[0],
+      image: selectedImage,
       name: cake.name,
       category: cake.category,
       variant,

@@ -45,6 +45,11 @@ export type TProductError = {
   data: Error403 | Error400;
 };
 
+export type TProductSlugResponse = {
+  success: boolean;
+  data: TProduct;
+};
+
 export type TProductsImages = TProduct['images'];
 
 const product = createApi({
@@ -61,8 +66,11 @@ const product = createApi({
         body,
       }),
     }),
+    getProductBySlug: builder.query<TProductSlugResponse, string>({
+      query: (slug) => `/product/${slug}`,
+    }),
   }),
 });
 
-export const { useGetProductsQuery, useCreateProductMutation } = product;
+export const { useGetProductsQuery, useCreateProductMutation, useGetProductBySlugQuery } = product;
 export { product };

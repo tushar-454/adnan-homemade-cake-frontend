@@ -1,10 +1,14 @@
 'use client';
 import { TProductsImages } from '@/api/product';
 import Image from 'next/image';
-import { useState } from 'react';
 
-const CakesImages = ({ images }: { images: TProductsImages }) => {
-  const [selectedImage, setSelectedImage] = useState(images[0]);
+type CakeImagesProps = {
+  images: TProductsImages;
+  selectedImage: string;
+  setSelectedImage: (image: string) => void;
+};
+
+const CakesImages = ({ images, selectedImage, setSelectedImage }: CakeImagesProps) => {
   return (
     <div className='mb-8 w-full px-4 md:w-1/2'>
       <div className='h-[32rem] w-full 2xl:h-[40rem]'>

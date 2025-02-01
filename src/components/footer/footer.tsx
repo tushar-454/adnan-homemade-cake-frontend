@@ -52,7 +52,7 @@ const Footer = () => {
               <a
                 className='transition-all hover:scale-110'
                 target='_blank'
-                href='https://wa.me/01817967410'
+                href='https://wa.me/+8801817967410'
               >
                 <Phone size={25} className='text-white' />
               </a>
@@ -72,8 +72,11 @@ const Footer = () => {
                 <PhoneCall size={24} className='text-white' />
               </div>
               <div className='ml-[18px]'>
-                <a href='tel:01817967410' className='font-Inter text-[14px] font-medium text-white'>
-                  01817-967410
+                <a
+                  href='tel:+8801817967410'
+                  className='font-Inter text-[14px] font-medium text-white'
+                >
+                  +8801817-967410
                 </a>
                 <p className='font-Inter text-[12px] font-medium text-white'>Support Number</p>
               </div>
@@ -143,8 +146,9 @@ const Footer = () => {
       </div>
       {/* float whatsapp icon */}
       <a
-        href='https://wa.me/01817967410'
-        className='fixed bottom-10 right-10 z-50 cursor-pointer rounded-full shadow-2xl'
+        href='https://wa.me/+08801817967410'
+        className='fixed bottom-5 right-5 z-50 animate-bounce cursor-pointer rounded-full shadow-2xl'
+        target='_blank'
       >
         <svg
           xmlns='http://www.w3.org/2000/svg'
