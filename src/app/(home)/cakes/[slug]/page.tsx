@@ -1,6 +1,8 @@
 'use client';
 import { useGetProductBySlugQuery } from '@/api/product';
 import AddToCart from '@/components/cakes_details/add_to_cart';
+import { CakeDetailsSkeleton } from '@/components/cakes_details/cake_details_skeleton';
+import { CakeError } from '@/components/cakes_details/cake_error';
 import { CakesImages } from '@/components/cakes_details/cakes_images';
 import { Container } from '@/components/shared/container';
 import { InnerHTML } from '@/components/shared/inner_html';
@@ -27,8 +29,8 @@ const CakeDetails = () => {
   return (
     <main>
       <Container>
-        {isLoading && <p>Loading...</p>}
-        {isError && <p>Error</p>}
+        {isLoading && <CakeDetailsSkeleton />}
+        {isError && <CakeError />}
         {!isLoading && !isError && cake && (
           <div className='my-8 flex flex-wrap'>
             {/*  Product Images  */}

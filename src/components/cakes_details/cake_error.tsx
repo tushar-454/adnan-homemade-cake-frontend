@@ -1,10 +1,7 @@
-// app/(cakes)/[slug]/error.tsx
-'use client';
-
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Button } from '../ui/button';
 
-export default function CakeError() {
+const CakeError = () => {
   return (
     <div className='flex flex-col items-center justify-center bg-gray-100 px-4 py-24 dark:bg-gray-900 sm:px-6 lg:px-8'>
       <div className='w-full max-w-md space-y-8 text-center'>
@@ -52,4 +49,6 @@ export default function CakeError() {
       </div>
     </div>
   );
-}
+};
+
+export { CakeError };

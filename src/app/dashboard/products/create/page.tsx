@@ -41,6 +41,7 @@ const ProductCreate = () => {
   const [createProduct] = useCreateProductMutation();
   const formRef = useRef<GenericFormRef<FormType>>(null);
   const [images, setImages] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const categoryOptions = categories?.map((category) => ({
     value: category.name,
@@ -48,43 +49,54 @@ const ProductCreate = () => {
   }));
 
   const handleSubmit = async (formData: FormType | React.FormEvent<HTMLFormElement>) => {
-    if (images.length === 0) {
-      toast({
-        title: 'Please upload an image',
-        description: 'You need to upload at least one image',
+    try {
+      setLoading(true);
+      if (images.length === 0) {
+        toast({
+          title: 'Please upload an image',
+          description: 'You need to upload at least one image',
+        });
+        setLoading(false);
+        return;
+      }
+      const imagesUrls = await handleMultipleUpload(images);
+
+      const result = await createProduct({
+        ...formData,
+        images: imagesUrls,
       });
-      return;
-    }
-    const imagesUrls = await handleMultipleUpload(images);
 
-    const result = await createProduct({
-      ...formData,
-      images: imagesUrls,
-    });
-
-    if ('error' in result) {
-      const error = result.error as TProductError;
-      if (error.status === 403) {
-        toast({
-          title: 'You are not authorized. Token expired',
-          description: 'Please login again.',
-        });
-      } else if (error.status === 400 && 'errors' in error.data) {
-        toast({
-          title: 'You have missed some fields',
-          description: `${error.data.errors.map((err) => err.field).join(', ')} are required`,
-        });
+      if ('error' in result) {
+        const error = result.error as TProductError;
+        if (error.status === 403) {
+          toast({
+            title: 'You are not authorized. Token expired',
+            description: 'Please login again.',
+          });
+          setLoading(false);
+        } else if (error.status === 400 && 'errors' in error.data) {
+          toast({
+            title: 'You have missed some fields',
+            description: `${error.data.errors.map((err) => err.field).join(', ')} are required`,
+          });
+          setLoading(false);
+        }
+      } else {
+        const { data } = result;
+        if (data.success) {
+          toast({
+            title: 'Cake created successfully',
+            description: 'You have successfully created a new cake',
+          });
+          formRef.current?.reset();
+          setLoading(false);
+          setImages([]);
+          router.push('/cakes/' + data.data.slug);
+        }
       }
-    } else {
-      const { data } = result;
-      if (data.success) {
-        toast({
-          title: 'Cake created successfully',
-          description: 'You have successfully created a new cake',
-        });
-        formRef.current?.reset();
-        router.push('/cakes/' + data.data.slug);
-      }
+    } catch (error) {
+      setLoading(false);
+      console.log('Error creating cake', error);
     }
   };
 
@@ -133,7 +145,7 @@ const ProductCreate = () => {
             )}
           </FieldArray>
           <div className='flex items-center gap-2 pt-5'>
-            <SubmitButton width='auto' label='Create Cake' />
+            <SubmitButton width='auto' label='Create Cake' loading={loading} disabled={loading} />
             <ResetButton />
           </div>
         </div>

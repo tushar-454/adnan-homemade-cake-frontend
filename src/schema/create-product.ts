@@ -4,7 +4,7 @@ export const schema = z.object({
   name: z.string().nonempty(),
   description: z.string().nonempty(),
   price: z.coerce.number().positive(),
-  discount: z.coerce.number().int().positive(),
+  discount: z.coerce.number().nonnegative(),
   category: z.string().nonempty(),
   variants: z
     .array(
