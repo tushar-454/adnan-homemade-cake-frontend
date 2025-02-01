@@ -1,31 +1,30 @@
 import { Plus, Trash } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { FormLabel } from '../ui/form';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 
 type UploadImagesProps = {
+  imageObjUrls: string[];
+  setImageObjUrls: React.Dispatch<React.SetStateAction<string[]>>;
+  images: File[];
   setImages: React.Dispatch<React.SetStateAction<File[]>>;
 };
 
-const UploadImages = ({ setImages }: UploadImagesProps) => {
-  const [state, setState] = useState<File[]>([]);
-  const [imageObjUrls, setImageObjUrls] = useState<string[]>([]);
-
+const UploadImages = ({ imageObjUrls, setImageObjUrls, images, setImages }: UploadImagesProps) => {
   const handleDelete = (index: number) => {
-    const newImages = state.filter((_, i) => i !== index);
-    setState(newImages);
+    const newImages = images.filter((_, i) => i !== index);
     setImages(newImages);
   };
 
   useEffect(() => {
-    const objUrlImages = state.map((file) => {
+    const objUrlImages = images.map((file) => {
       return URL.createObjectURL(file);
     });
     setImageObjUrls(objUrlImages);
-    setImages(state);
-  }, [state, setImages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images]);
 
   return (
     <div>
@@ -33,7 +32,9 @@ const UploadImages = ({ setImages }: UploadImagesProps) => {
       <Input
         id='imagesInput'
         type='file'
-        onChange={(e) => setState(e.target.files ? [...state, ...Array.from(e.target.files)] : [])}
+        onChange={(e) =>
+          setImages(e.target.files ? [...images, ...Array.from(e.target.files)] : [])
+        }
         className='hidden'
         multiple
       />

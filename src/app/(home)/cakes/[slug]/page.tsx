@@ -23,6 +23,7 @@ const CakeDetails = () => {
   const [selectedImage, setSelectedImage] = useState('');
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setSelectedImage(cake?.images[0] || '');
   }, [cake]);
 

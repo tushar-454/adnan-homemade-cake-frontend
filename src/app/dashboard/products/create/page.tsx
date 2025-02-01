@@ -41,6 +41,7 @@ const ProductCreate = () => {
   const [createProduct] = useCreateProductMutation();
   const formRef = useRef<GenericFormRef<FormType>>(null);
   const [images, setImages] = useState<File[]>([]);
+  const [imageObjUrls, setImageObjUrls] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   const categoryOptions = categories?.map((category) => ({
@@ -115,7 +116,12 @@ const ProductCreate = () => {
           <TextField name='price' label='Price' type='number' />
           <TextField name='discount' label='Discount' type='number' />
           <SelectField<FormType> name='category' label='Category' options={categoryOptions || []} />
-          <UploadImages setImages={setImages} />
+          <UploadImages
+            imageObjUrls={imageObjUrls}
+            setImageObjUrls={setImageObjUrls}
+            images={images}
+            setImages={setImages}
+          />
           <FieldArray<FormType> name='variants'>
             {({ fields, append, remove }) => (
               <div className='space-y-2'>
@@ -146,7 +152,12 @@ const ProductCreate = () => {
           </FieldArray>
           <div className='flex items-center gap-2 pt-5'>
             <SubmitButton width='auto' label='Create Cake' loading={loading} disabled={loading} />
-            <ResetButton />
+            <ResetButton
+              cFunc={() => {
+                setImageObjUrls([]);
+                setImages([]);
+              }}
+            />
           </div>
         </div>
       </GenericForm>

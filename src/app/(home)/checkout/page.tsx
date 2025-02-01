@@ -40,6 +40,7 @@ const Checkout = () => {
   const order = useSelector((state: RootState) => state.order);
   const dispatch = useDispatch<AppDispatch>();
   const [trackingId, setTrackingId] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleOrder = async () => {
     const { address, district, division, email, line_items, name, phone, sub_district } = order;
@@ -58,6 +59,7 @@ const Checkout = () => {
       return;
     }
     try {
+      setLoading(true);
       const { data } = await createOrder(order);
 
       if (data) {
@@ -67,12 +69,14 @@ const Checkout = () => {
             description: 'Your order has been placed successfully',
           });
           setTrackingId(data.data.tracking_id.toString());
+          setLoading(false);
           setShow(true);
           dispatch(clearCart());
           dispatch(clearOrder());
         }
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -102,7 +106,13 @@ const Checkout = () => {
               <CouponCode />
               <ShippingAddress />
               <PaymentInformation />
-              <Button variant={'default'} className='mx-auto max-w-fit' onClick={handleOrder}>
+              <Button
+                variant={'default'}
+                loading={loading}
+                disabled={loading}
+                className='mx-auto max-w-fit'
+                onClick={handleOrder}
+              >
                 Place Order
               </Button>
             </div>
@@ -118,8 +128,8 @@ const Checkout = () => {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Here your order tracking ID</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className='text-left'>Here your order tracking ID</DialogTitle>
+            <DialogDescription className='text-left'>
               <TypographyLarge className='flex items-center gap-2'>
                 {trackingId}{' '}
                 {copy ? (
@@ -139,7 +149,7 @@ const Checkout = () => {
                   />
                 )}{' '}
               </TypographyLarge>
-              <span>
+              <span className='text-left'>
                 Copy or save this tracking ID for future reference. You can track your order with
                 this tracking ID.
               </span>
