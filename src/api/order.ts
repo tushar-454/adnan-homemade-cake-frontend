@@ -42,6 +42,10 @@ type OrderResponse = {
   success: boolean;
   data: OrderData;
 };
+type OrdersResponse = {
+  success: boolean;
+  data: OrderData[];
+};
 
 type CreateOrder = {
   name: string;
@@ -66,8 +70,11 @@ type CreateOrder = {
 
 const order = createApi({
   reducerPath: 'apiOrder',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   endpoints: (builder) => ({
+    orders: builder.query<OrdersResponse, void>({
+      query: () => '/order',
+    }),
     order: builder.query<OrderResponse, number>({
       query: (trackingId) => `/tracking/${trackingId}`,
     }),
@@ -81,5 +88,5 @@ const order = createApi({
   }),
 });
 
-export const { useOrderQuery, useCreateOrderMutation } = order;
+export const { useOrderQuery, useOrdersQuery, useCreateOrderMutation } = order;
 export { order };

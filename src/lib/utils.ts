@@ -127,3 +127,16 @@ export const handleMultipleUpload = async (files: File[]) => {
     console.error('Upload error:', error);
   }
 };
+
+export const capitalizeFirstLetter = (sentence: string) => {
+  const map = sentence.split(' ').map((word) => {
+    const mapWord = word.split('').map((letter, i) => {
+      if (i === 0) {
+        return letter.toUpperCase();
+      }
+      return letter;
+    });
+    return mapWord.join('');
+  });
+  return map.join(' ');
+};

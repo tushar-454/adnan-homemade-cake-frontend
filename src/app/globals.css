@@ -97,6 +97,22 @@
   input[type='number'] {
     -moz-appearance: textfield;
   }
+  /* ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  } */
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #dddddd transparent;
+  }
 
   @keyframes nav_keyframe {
     0% {

@@ -2,6 +2,7 @@
 
 import { useGetProductsQuery } from '@/api/product';
 import TableSkeleton from '@/components/dashboard/table_skeleton';
+import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import {
   Table,
@@ -12,6 +13,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { TypographyH4, TypographyP } from '@/components/ui/typography';
+import Link from 'next/link';
 
 const tableHeadData = [
   'No',
@@ -47,24 +49,33 @@ const Products = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {cakes?.map((content, index) => (
+              {cakes?.map((cake, index) => (
                 <TableRow key={index}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{content.name}</TableCell>
-                  <TableCell>{content.price}</TableCell>
-                  <TableCell>{content.discount}</TableCell>
-                  <TableCell>{content.rating}</TableCell>
-                  <TableCell>{content.sell_count}</TableCell>
-                  <TableCell>
-                    <Switch checked={content.is_featured} />
+                  <TableCell className='whitespace-nowrap p-4'>{index + 1}</TableCell>
+                  <TableCell className='whitespace-nowrap p-4'>
+                    <Link href={`/cakes/${cake.slug}`} className='hover:underline'>
+                      {cake.name}
+                    </Link>
                   </TableCell>
-                  <TableCell>
-                    <Switch checked={content.is_upcoming} />
+                  <TableCell className='whitespace-nowrap p-4'>{cake.price}</TableCell>
+                  <TableCell className='whitespace-nowrap p-4'>{cake.discount}</TableCell>
+                  <TableCell className='whitespace-nowrap p-4'>{cake.rating}</TableCell>
+                  <TableCell className='whitespace-nowrap p-4'>{cake.sell_count}</TableCell>
+                  <TableCell className='whitespace-nowrap p-4'>
+                    <Switch checked={cake.is_featured} />
                   </TableCell>
-                  <TableCell>
-                    <Switch checked={content.is_deleted} />
+                  <TableCell className='whitespace-nowrap p-4'>
+                    <Switch checked={cake.is_upcoming} />
                   </TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableCell className='whitespace-nowrap p-4'>
+                    <Switch checked={cake.is_deleted} />
+                  </TableCell>
+                  <TableCell className='whitespace-nowrap p-4'>
+                    <Badge className='mr-2 cursor-pointer'>Edit</Badge>
+                    <Badge variant={'destructive'} className='cursor-pointer'>
+                      Delete
+                    </Badge>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

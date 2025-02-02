@@ -4,6 +4,7 @@ import {
   Feather,
   Flame,
   FolderKanban,
+  GalleryHorizontal,
   Images,
   LayoutDashboard,
   LayoutList,
@@ -101,6 +102,30 @@ const dashboard_nav_items = {
       name: 'Create Category',
       link: '/dashboard/categories/create',
       icon: FolderKanban,
+    },
+  ],
+  Gallery: [
+    {
+      name: 'Galleries',
+      link: '/dashboard/galleries',
+      icon: Images,
+    },
+    {
+      name: 'Create Gallery',
+      link: '/dashboard/galleries/create',
+      icon: Images,
+    },
+  ],
+  Carousel: [
+    {
+      name: 'Carousel',
+      link: '/dashboard/carousel',
+      icon: GalleryHorizontal,
+    },
+    {
+      name: 'Create Carousel',
+      link: '/dashboard/carousel/create',
+      icon: GalleryHorizontal,
     },
   ],
   Customers: [
