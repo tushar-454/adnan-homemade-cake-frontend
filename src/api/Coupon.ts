@@ -7,6 +7,7 @@ export type TCoupon = {
   type: string;
   discount: number;
   quantity: number;
+  minprice: number;
   startAt: number;
   expireAt: number;
   createdAt: string;
@@ -18,15 +19,39 @@ export type TCouponRes = {
   data: TCoupon;
 };
 
+type Error403 = {
+  status: number;
+  message: string;
+};
+type Error400 = {
+  status: number;
+  errors: {
+    field: string;
+    message: string;
+  }[];
+};
+
+export type TCouponError = {
+  status: number;
+  data: Error403 | Error400;
+};
+
 const coupon = createApi({
   reducerPath: 'coupon',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   endpoints: (builder) => ({
     coupon: builder.query<TCouponRes, string>({
       query: (code) => `/coupon/${code}`,
     }),
+    createCoupon: builder.mutation<TCouponRes, Partial<TCoupon>>({
+      query: (body) => ({
+        url: '/coupon',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useCouponQuery } = coupon;
+export const { useCouponQuery, useCreateCouponMutation } = coupon;
 export { coupon };

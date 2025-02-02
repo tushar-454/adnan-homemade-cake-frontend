@@ -13,8 +13,9 @@ const CouponCode = () => {
   const [code, setCode] = useState('');
   const [placeholder, setPlaceholder] = useState('');
   const order = useSelector((state: RootState) => state.order);
+  const { carts } = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch<AppDispatch>();
-
+  const totalPrice = carts.reduce((acc, item) => acc + item.totalPrice, 0);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (code === '') return setPlaceholder('Enter coupon');
@@ -27,11 +28,14 @@ const CouponCode = () => {
         return;
       }
       if (data.success && data.data) {
-        const { code, discount, quantity, startAt, expireAt, type } = data.data as TCoupon;
+        const { code, discount, quantity, minprice, startAt, expireAt, type } =
+          data.data as TCoupon;
 
         if (startAt > Date.now()) return setPlaceholder('Coupon not valid yet.');
         if (expireAt < Date.now()) return setPlaceholder('Coupon is Expire.');
         if (quantity === 0) return setPlaceholder('Coupon quantity finished');
+        if (totalPrice < minprice)
+          return setPlaceholder(`Minimum ${minprice} amount is required for this coupon`);
         dispatch(updateOrderDiscount({ discount, type, code }));
         setPlaceholder('Coupon applied');
       }

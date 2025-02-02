@@ -14,9 +14,10 @@ import { GenericForm, GenericFormRef } from '@/components/generic_form/generic_f
 import { Button } from '@/components/ui/button';
 import { TypographyH4 } from '@/components/ui/typography';
 import { useToast } from '@/hooks/use-toast';
-import { handleMultipleUpload } from '@/lib/utils';
-import { FormType, schema } from '@/schema/create-product';
+import { handleMultipleUpload, removeLocalStorage } from '@/lib/utils';
+import { FormType, schema } from '@/schema/create_product';
 import { PlusCircle } from 'lucide-react';
+import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
@@ -74,6 +75,10 @@ const ProductCreate = () => {
             title: 'You are not authorized. Token expired',
             description: 'Please login again.',
           });
+          setTimeout(() => {
+            removeLocalStorage('isLogin');
+            signOut();
+          }, 1000);
           setLoading(false);
         } else if (error.status === 400 && 'errors' in error.data) {
           toast({
@@ -111,11 +116,16 @@ const ProductCreate = () => {
         ref={formRef}
       >
         <div className='space-y-2'>
-          <TextField name='name' label='Name' />
-          <TextAreaField name='description' label='Description' autoResize />
-          <TextField name='price' label='Price' type='number' />
-          <TextField name='discount' label='Discount' type='number' />
-          <SelectField<FormType> name='category' label='Category' options={categoryOptions || []} />
+          <TextField name='name' label='Name' required />
+          <TextAreaField name='description' label='Description' autoResize required />
+          <TextField name='price' label='Price' type='number' required />
+          <TextField name='discount' label='Discount' type='number' required />
+          <SelectField<FormType>
+            name='category'
+            label='Category'
+            options={categoryOptions || []}
+            required
+          />
           <UploadImages
             imageObjUrls={imageObjUrls}
             setImageObjUrls={setImageObjUrls}
