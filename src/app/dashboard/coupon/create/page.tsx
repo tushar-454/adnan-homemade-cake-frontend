@@ -40,8 +40,8 @@ const CouponCreate = () => {
       discount,
       quantity,
       minprice,
-      startAt: startAt?.getTime(),
-      expireAt: expireAt.getTime(),
+      startAt: startAt?.toISOString(),
+      expireAt: expireAt.toISOString(),
     };
     try {
       setLoading(true);

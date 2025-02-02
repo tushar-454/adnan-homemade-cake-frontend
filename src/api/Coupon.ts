@@ -8,8 +8,8 @@ export type TCoupon = {
   discount: number;
   quantity: number;
   minprice: number;
-  startAt: number;
-  expireAt: number;
+  startAt: string;
+  expireAt: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -17,6 +17,11 @@ export type TCoupon = {
 export type TCouponRes = {
   success: boolean;
   data: TCoupon;
+};
+
+export type TCouponsRes = {
+  success: boolean;
+  data: TCoupon[];
 };
 
 type Error403 = {
@@ -50,8 +55,11 @@ const coupon = createApi({
         body,
       }),
     }),
+    getCoupons: builder.query<TCouponsRes, void>({
+      query: () => '/coupon',
+    }),
   }),
 });
 
-export const { useCouponQuery, useCreateCouponMutation } = coupon;
+export const { useCouponQuery, useCreateCouponMutation, useGetCouponsQuery } = coupon;
 export { coupon };

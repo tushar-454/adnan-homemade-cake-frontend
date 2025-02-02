@@ -31,8 +31,10 @@ const CouponCode = () => {
         const { code, discount, quantity, minprice, startAt, expireAt, type } =
           data.data as TCoupon;
 
-        if (startAt > Date.now()) return setPlaceholder('Coupon not valid yet.');
-        if (expireAt < Date.now()) return setPlaceholder('Coupon is Expire.');
+        if (new Date(startAt).getTime() > new Date().getTime())
+          return setPlaceholder('Coupon not start yet.');
+        if (new Date(expireAt).getTime() < new Date().getTime())
+          return setPlaceholder('Coupon is Expire.');
         if (quantity === 0) return setPlaceholder('Coupon quantity finished');
         if (totalPrice < minprice)
           return setPlaceholder(`Minimum ${minprice} amount is required for this coupon`);

@@ -174,7 +174,7 @@ const ProductsTable = () => {
               <TypographyLarge>Coupon Discount:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>- {couponDiscount}</TypographyLarge>
+              <TypographyLarge>- {couponDiscount.toFixed(2)}</TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -186,7 +186,7 @@ const ProductsTable = () => {
                 +{' '}
                 {totalPrice + shipping - couponDiscount < 0
                   ? 0
-                  : totalPrice + shipping - couponDiscount}
+                  : (totalPrice + shipping - couponDiscount).toFixed(2)}
               </TypographyLarge>
             </TableCell>
           </TableRow>
