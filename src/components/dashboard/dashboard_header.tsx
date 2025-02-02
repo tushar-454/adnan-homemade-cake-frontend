@@ -7,7 +7,7 @@ import { TypographyH3 } from '../ui/typography';
 const DashboardHeader = () => {
   const { toggleSidebar } = useSidebar();
   return (
-    <header className='border-b border-gray-200'>
+    <header className='w-full border-b border-gray-200'>
       <div className='flex items-center justify-between p-4'>
         <div className='flex items-center gap-3'>
           <Button variant={'outline'} onClick={() => toggleSidebar()}>

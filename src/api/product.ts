@@ -56,8 +56,8 @@ const product = createApi({
   reducerPath: 'product',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   endpoints: (builder) => ({
-    getProducts: builder.query<TProduct, void>({
-      query: () => '/products',
+    getProducts: builder.query<TProductResponse, void>({
+      query: () => '/product',
     }),
     createProduct: builder.mutation({
       query: (body) => ({
