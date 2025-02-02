@@ -87,10 +87,10 @@ const Footer = () => {
               </div>
               <div className='ml-[18px]'>
                 <a
-                  href='mailto:help@lorem.com'
+                  href='mailto:mohammad1112024adnan@gmail.com'
                   className='font-Inter text-[14px] font-medium text-[#fff]'
                 >
-                  adnanhomemadecake@gmail.com
+                  mohammad1112024adnan@gmail.com
                 </a>
                 <p className='font-Inter text-[12px] font-medium text-[#fff]'>Support Email</p>
               </div>

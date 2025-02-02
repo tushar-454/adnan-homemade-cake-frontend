@@ -1,4 +1,4 @@
-import { FormType } from '@/schema/create-product';
+import { FormType } from '@/schema/create_product';
 import { Trash2 } from 'lucide-react';
 import { TextField } from '../generic_form/fields/TextField';
 import { Button } from '../ui/button';
@@ -18,11 +18,13 @@ const VariantInput = ({ index, onRemove }: VariantCardProps) => {
             name={`variants.${index}.name`}
             label='Variant Name'
             placeholder='Enter variant name'
+            required
           />
           <TextField<FormType>
             name={`variants.${index}.price`}
             label='Variant Price'
             placeholder='Enter price'
+            required
           />
         </div>
 
