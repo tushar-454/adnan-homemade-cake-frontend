@@ -85,8 +85,16 @@ const order = createApi({
         body: order,
       }),
     }),
+    updateOrder: builder.mutation<{ success: boolean; message: string }, Partial<OrderData>>({
+      query: ({ _id, status, is_deleted }) => ({
+        url: `/order/${_id}`,
+        method: 'PUT',
+        body: { status, is_deleted },
+      }),
+    }),
   }),
 });
 
-export const { useOrderQuery, useOrdersQuery, useCreateOrderMutation } = order;
+export const { useOrderQuery, useOrdersQuery, useCreateOrderMutation, useUpdateOrderMutation } =
+  order;
 export { order };

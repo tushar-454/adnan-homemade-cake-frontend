@@ -55,6 +55,7 @@ const ProductCreate = () => {
       setLoading(true);
       if (images.length === 0) {
         toast({
+          variant: 'destructive',
           title: 'Please upload an image',
           description: 'You need to upload at least one image',
         });
@@ -72,6 +73,7 @@ const ProductCreate = () => {
         const error = result.error as TProductError;
         if (error.status === 403) {
           toast({
+            variant: 'destructive',
             title: 'You are not authorized. Token expired',
             description: 'Please login again.',
           });
@@ -82,6 +84,7 @@ const ProductCreate = () => {
           setLoading(false);
         } else if (error.status === 400 && 'errors' in error.data) {
           toast({
+            variant: 'destructive',
             title: 'You have missed some fields',
             description: `${error.data.errors.map((err) => err.field).join(', ')} are required`,
           });

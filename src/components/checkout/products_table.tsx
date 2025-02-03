@@ -150,7 +150,7 @@ const ProductsTable = () => {
               <TypographyLarge>Total:</TypographyLarge>
             </TableCell>
             <TableCell colSpan={1} className='text-right'>
-              <TypographyLarge>+ {totalPrice}</TypographyLarge>
+              <TypographyLarge>+ {totalPrice.toFixed(2)}</TypographyLarge>
             </TableCell>
           </TableRow>
           <TableRow>

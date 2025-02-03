@@ -1,6 +1,6 @@
 'use client';
 
-import { useOrdersQuery } from '@/api/order';
+import { useOrdersQuery, useUpdateOrderMutation } from '@/api/order';
 import TableSkeleton from '@/components/dashboard/table_skeleton';
 import {
   Select,
@@ -18,6 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { TypographyH4, TypographyP } from '@/components/ui/typography';
+import { useToast } from '@/hooks/use-toast';
 import { capitalizeFirstLetter, formatDate } from '@/lib/utils';
 import { useEffect } from 'react';
 
@@ -37,7 +38,26 @@ const tableHeadData = [
 ];
 
 const Orders = () => {
+  const { toast } = useToast();
   const { data: { data: orders } = {}, isError, isLoading, refetch } = useOrdersQuery();
+  const [updateOrder] = useUpdateOrderMutation();
+
+  const handleOrderStatusUpdate = async (orderId: string, status: string) => {
+    const { data, error } = await updateOrder({ _id: orderId, status });
+    if (data?.success) {
+      toast({
+        title: 'Order status update',
+      });
+      return;
+    }
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Order status update failed',
+        description: 'Maybe your token is expired. Please login again.',
+      });
+    }
+  };
 
   useEffect(() => {
     refetch();
@@ -88,7 +108,7 @@ const Orders = () => {
                   <TableCell className='whitespace-nowrap p-4'>{order.discount}</TableCell>
                   <TableCell className='whitespace-nowrap p-4'>{`${order.address}, ${order.district} - ${order.division}`}</TableCell>
                   <TableCell>
-                    <Select>
+                    <Select onValueChange={(value) => handleOrderStatusUpdate(order._id, value)}>
                       <SelectTrigger className='w-[180px]'>
                         <SelectValue placeholder={capitalizeFirstLetter(order.status)} />
                       </SelectTrigger>

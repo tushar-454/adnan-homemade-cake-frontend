@@ -50,6 +50,7 @@ const CouponCreate = () => {
         const error = result.error as TCouponError;
         if (error.status === 403) {
           toast({
+            variant: 'destructive',
             title: 'You are not authorized. Token expired',
             description: 'Please login again.',
           });
@@ -60,6 +61,7 @@ const CouponCreate = () => {
           setLoading(false);
         } else if (error.status === 400 && 'errors' in error.data) {
           toast({
+            variant: 'destructive',
             title: 'You have missed some fields',
             description: `${error.data.errors.map((err) => `${err.field} - ${err.message}`).join(', ')}`,
           });
