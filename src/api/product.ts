@@ -69,8 +69,16 @@ const product = createApi({
     getProductBySlug: builder.query<TProductSlugResponse, string>({
       query: (slug) => `/product/${slug}`,
     }),
+    deleteProduct: builder.mutation({
+      query: (id: string) => ({ url: `/product/${id}`, method: 'DELETE' }),
+    }),
   }),
 });
 
-export const { useGetProductsQuery, useCreateProductMutation, useGetProductBySlugQuery } = product;
+export const {
+  useGetProductsQuery,
+  useCreateProductMutation,
+  useGetProductBySlugQuery,
+  useDeleteProductMutation,
+} = product;
 export { product };

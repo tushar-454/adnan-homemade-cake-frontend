@@ -1,6 +1,6 @@
 'use client';
 
-import { useGetProductsQuery } from '@/api/product';
+import { useDeleteProductMutation, useGetProductsQuery } from '@/api/product';
 import TableSkeleton from '@/components/dashboard/table_skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
@@ -13,6 +13,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { TypographyH4, TypographyP } from '@/components/ui/typography';
+import { useToast } from '@/hooks/use-toast';
+import { removeLocalStorage } from '@/lib/utils';
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 
 const tableHeadData = [
@@ -29,7 +32,41 @@ const tableHeadData = [
 ];
 
 const Products = () => {
-  const { data: { data: cakes } = {}, isError, isLoading } = useGetProductsQuery();
+  const { toast } = useToast();
+  const { data: { data: cakes } = {}, isError, isLoading, refetch } = useGetProductsQuery();
+  const [deleteProduct] = useDeleteProductMutation();
+
+  const handleDeleteProduct = async (id: string) => {
+    try {
+      const { error } = await deleteProduct(id);
+      if (error && 'status' in error) {
+        if (Number(error?.status) === 403) {
+          toast({
+            variant: 'destructive',
+            title: 'Token expired. Please login again',
+          });
+          setTimeout(() => {
+            removeLocalStorage('isLogin');
+            signOut();
+          }, 2000);
+          return;
+        }
+        if (Number(error?.status) === 400) {
+          toast({
+            variant: 'destructive',
+            title: 'Product deletion failed',
+          });
+          return;
+        }
+      }
+      toast({
+        title: 'Product deleted',
+      });
+      refetch();
+    } catch (error) {
+      console.log('error in handleDeleteProduct', error);
+    }
+  };
 
   return (
     <div className='p-4'>
@@ -73,7 +110,11 @@ const Products = () => {
                   </TableCell>
                   <TableCell className='whitespace-nowrap p-4'>
                     <Badge className='mr-2 cursor-pointer'>Edit</Badge>
-                    <Badge variant={'destructive'} className='cursor-pointer'>
+                    <Badge
+                      variant={'destructive'}
+                      onClick={() => handleDeleteProduct(cake._id)}
+                      className='cursor-pointer'
+                    >
                       Delete
                     </Badge>
                   </TableCell>

@@ -57,7 +57,7 @@ const CouponCreate = () => {
           setTimeout(() => {
             removeLocalStorage('isLogin');
             signOut();
-          }, 1000);
+          }, 2000);
           setLoading(false);
         } else if (error.status === 400 && 'errors' in error.data) {
           toast({

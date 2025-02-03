@@ -19,7 +19,8 @@ import {
 } from '@/components/ui/table';
 import { TypographyH4, TypographyP } from '@/components/ui/typography';
 import { useToast } from '@/hooks/use-toast';
-import { capitalizeFirstLetter, formatDate } from '@/lib/utils';
+import { capitalizeFirstLetter, formatDate, removeLocalStorage } from '@/lib/utils';
+import { signOut } from 'next-auth/react';
 import { useEffect } from 'react';
 
 const tableHeadData = [
@@ -44,17 +45,23 @@ const Orders = () => {
 
   const handleOrderStatusUpdate = async (orderId: string, status: string) => {
     const { data, error } = await updateOrder({ _id: orderId, status });
+    if (error && 'status' in error) {
+      if (error.status === 403) {
+        toast({
+          variant: 'destructive',
+          title: 'Order status update failed',
+          description: 'Maybe your token is expired. Please login again.',
+        });
+        setTimeout(() => {
+          removeLocalStorage('isLogin');
+          signOut();
+        }, 2000);
+        return;
+      }
+    }
     if (data?.success) {
       toast({
         title: 'Order status update',
-      });
-      return;
-    }
-    if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Order status update failed',
-        description: 'Maybe your token is expired. Please login again.',
       });
     }
   };
