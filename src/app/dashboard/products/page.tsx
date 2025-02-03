@@ -38,7 +38,8 @@ const Products = () => {
         {isLoading && <TableSkeleton />}
         {isError && (
           <TypographyP className='text-center text-red-500'>
-            Something is wrong while fetching products
+            Something is wrong while fetching products. Maybe your token is expired. Please login
+            again.
           </TypographyP>
         )}
         {!isLoading && !isError && (

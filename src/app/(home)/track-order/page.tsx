@@ -4,10 +4,19 @@ import { useOrderQuery } from '@/api/order';
 import { TextField } from '@/components/generic_form/fields/TextField';
 import { GenericForm, GenericFormRef } from '@/components/generic_form/generic_form';
 import { Container } from '@/components/shared/container';
+import { Taka } from '@/components/shared/taka';
 import { Button } from '@/components/ui/button';
 import Gradient from '@/components/ui/gradient';
-import { TypographyH2, TypographyH3, TypographyH4, TypographyP } from '@/components/ui/typography';
-import { formatDate } from '@/lib/utils';
+import {
+  TypographyH2,
+  TypographyH3,
+  TypographyH4,
+  TypographyP,
+  TypographySmall,
+} from '@/components/ui/typography';
+import { TRACKING_STATUS } from '@/constant';
+import { capitalizeFirstLetter, formatDate } from '@/lib/utils';
+import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { z } from 'zod';
 
@@ -22,7 +31,7 @@ export type FormType = z.infer<typeof schema>;
 const TrackOrder = () => {
   const [trackingId, setTrackingId] = useState(0);
   const {
-    data: order,
+    data: { data: order } = {},
     isLoading,
     isError,
     refetch,
@@ -40,7 +49,7 @@ const TrackOrder = () => {
   };
 
   return (
-    <main className='h-screen'>
+    <main className='min-h-screen'>
       <Container>
         <div className='mx-auto w-full space-y-4 pt-8 sm:w-[500px] sm:pt-16'>
           <TypographyH2 className='text-center'>
@@ -74,36 +83,93 @@ const TrackOrder = () => {
             </TypographyH3>
           )}
           {!isLoading && !isError && order && (
-            <div className=''>
-              <TypographyH3>
-                <Gradient>Your Order Details</Gradient>
-              </TypographyH3>
-              <div className='flex flex-col justify-between gap-5'>
-                <div className='tracking-info'>
-                  <TypographyP>
-                    <strong>Tracking ID:</strong> {trackingId}
-                  </TypographyP>
-                  <TypographyP>
-                    <strong>Status:</strong> {order.data.status}
-                  </TypographyP>
-                  <TypographyP>
-                    <strong>Created At:</strong> {formatDate(order.data.createdAt)}
-                  </TypographyP>
-                  <TypographyP>
-                    <strong>Updated At:</strong> {formatDate(order.data.updatedAt)}
+            <div className='mx-auto max-w-2xl rounded-lg border-t-4 border-primary bg-white p-6 shadow-lg'>
+              <TypographyH2 className='mb-4 text-center text-primary'>
+                Order Tracking Details
+              </TypographyH2>
+
+              <div className='mt-6'>
+                <TypographyH3 className='text-gray-700'>
+                  Order ID: <span className='font-bold text-primary'>{order.tracking_id}</span>
+                </TypographyH3>
+                <TypographyP className='mt-2 text-gray-600'>
+                  Order Date:{' '}
+                  <span className='font-semibold text-primary'>{formatDate(order.createdAt)}</span>
+                </TypographyP>
+
+                <div className='mt-4 rounded-lg border-l-4 border-primary bg-green-50 p-4'>
+                  <TypographyH4 className='text-md font-semibold text-gray-700'>
+                    Current Status:
+                  </TypographyH4>
+                  <TypographyP className='mt-1 text-primary'>
+                    {capitalizeFirstLetter(order.status)}
                   </TypographyP>
                 </div>
 
-                <TypographyH4>Order Items:</TypographyH4>
-                <ul className='order-items'>
-                  {order.data.line_items.map((item, index) => (
-                    <li key={index} className='order-item'>
-                      <p>
-                        {item.name} * {item.quantity}, {item.variant} - {item.price}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
+                <div className='mt-6'>
+                  <TypographyH4 className='text-gray-700'>Tracking Progress:</TypographyH4>
+                  <div className='relative mt-2 h-3 w-full rounded-full bg-gray-300 shadow-inner'>
+                    <div
+                      className={`absolute h-3 rounded-full bg-primary ${
+                        order.status === 'pending'
+                          ? 'w-[calc(20%-3rem)]'
+                          : order.status === 'confirm'
+                            ? 'w-[calc(40%-3rem)]'
+                            : order.status === 'cooking'
+                              ? 'w-[calc(60%-3rem)]'
+                              : order.status === 'shipped'
+                                ? 'w-[calc(80%-3rem)]'
+                                : 'w-[calc(100%)]'
+                      }`}
+                    ></div>
+                  </div>
+                  <div className='mt-2 flex justify-between text-sm font-medium text-gray-600'>
+                    {TRACKING_STATUS.map((status) => (
+                      <span
+                        key={status}
+                        className={`${order.status.toLowerCase() === status.toLowerCase() ? 'text-primary' : 'text-gray-500'}`}
+                      >
+                        {status}
+                      </span>
+                    ))}
+                  </div>
+                  {/* order summary section  */}
+                  <div className='mt-6'>
+                    <TypographyH4 className='text-md font-semibold text-gray-700'>
+                      Order Summary: {order.line_items.length} Items
+                    </TypographyH4>
+                    <div>
+                      {order?.line_items?.map((item) => (
+                        <div key={item._id} className='mt-4 rounded-lg border bg-white p-4 shadow'>
+                          <div className='flex items-center gap-4'>
+                            <Image
+                              src={item.image}
+                              alt={item.name}
+                              width={100}
+                              height={100}
+                              className='h-16 w-16 rounded-lg border'
+                            />
+                            <div>
+                              <h5 className='font-semibold text-primary'>{item.name}</h5>
+                              <TypographyP className='text-sm text-gray-600'>
+                                Quantity: <span className='font-semibold'>{item.quantity}</span>
+                              </TypographyP>
+                              <TypographyP className='text-sm text-gray-600'>
+                                Quantity: <span className='font-semibold'>{item.variant}</span>
+                              </TypographyP>
+                              <TypographySmall className='text-gray-600'>
+                                Total Price:{' '}
+                                <span className='font-semibold'>
+                                  <Taka size={16} /> {item.price * item.quantity}
+                                </span>
+                              </TypographySmall>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}

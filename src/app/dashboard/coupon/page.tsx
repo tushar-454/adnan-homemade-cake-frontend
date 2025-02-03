@@ -41,7 +41,8 @@ const Coupons = () => {
         {isLoading && <TableSkeleton />}
         {isError && (
           <TypographyP className='text-center text-red-500'>
-            Something is wrong while fetching coupons
+            Something is wrong while fetching coupons. Maybe your token is expired. Please login
+            again.
           </TypographyP>
         )}
         {!isLoading && !isError && (
