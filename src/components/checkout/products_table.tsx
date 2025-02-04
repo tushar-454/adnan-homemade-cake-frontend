@@ -59,7 +59,7 @@ const ProductsTable = () => {
   }, [carts, dispatch]);
 
   useEffect(() => {
-    if (order.division === 'Dhaka') {
+    if (order.division === '30') {
       setShipping(80);
     } else {
       setShipping(120);

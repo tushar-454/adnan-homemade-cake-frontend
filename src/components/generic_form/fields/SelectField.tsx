@@ -1,26 +1,20 @@
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import {
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from '@/components/ui/form';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
 import { FieldValues, Path, useFormContext } from 'react-hook-form';
 
 type Props<T extends FieldValues> = {
-	name: Path<T>;
-	label?: string;
-	placeholder?: string;
-	options: { value: string; text: string }[];
-	required?: boolean;
-	className?: string;
+  name: Path<T>;
+  label?: string;
+  placeholder?: string;
+  options: { value: string; text: string }[];
+  required?: boolean;
+  className?: string;
 };
 
 /**
@@ -46,48 +40,48 @@ type Props<T extends FieldValues> = {
  */
 
 export const SelectField = <T extends FieldValues>({
-	name,
-	label,
-	placeholder,
-	options,
-	required = false,
-	className,
+  name,
+  label,
+  placeholder,
+  options,
+  required = false,
+  className,
 }: Props<T>) => {
-	const { control } = useFormContext<T>();
+  const { control } = useFormContext<T>();
 
-	return (
-		<FormField
-			name={name}
-			control={control}
-			render={({ field }) => (
-				<FormItem className={className}>
-					{label && (
-						<FormLabel>
-							<span>{label}</span>
-							{required && <span className="ml-1 text-red-500">*</span>}
-						</FormLabel>
-					)}
-					<Select onValueChange={field.onChange} value={field.value}>
-						<FormControl>
-							<SelectTrigger>
-								<SelectValue placeholder={placeholder ?? 'Select an item'} />
-							</SelectTrigger>
-						</FormControl>
+  return (
+    <FormField
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <FormItem className={className}>
+          {label && (
+            <FormLabel>
+              <span>{label}</span>
+              {required && <span className='ml-1 text-red-500'>*</span>}
+            </FormLabel>
+          )}
+          <Select onValueChange={field.onChange} value={field.value}>
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder={placeholder ?? 'Select an item'} />
+              </SelectTrigger>
+            </FormControl>
 
-						<SelectContent>
-							{options.map((option) => (
-								<SelectItem key={option.value} value={option.value}>
-									{option.text}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+            <SelectContent>
+              {options?.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.text}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-					<FormMessage />
-				</FormItem>
-			)}
-		/>
-	);
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
 
 SelectField.displayName = 'SelectField';

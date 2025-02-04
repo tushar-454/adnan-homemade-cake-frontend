@@ -1,13 +1,14 @@
 'use client';
 
-// import { DISTRICTS_KEY_TYPE, DIVISIONS_KEY_TYPE } from '@/constant/location';
+import { DDType, DISTRICTS, DIVISIONS, UPAZILLAS } from '@/constant/location';
 import { useToast } from '@/hooks/use-toast';
 import { clearAddress, updateOrderAddress } from '@/store/features/order';
 import { AppDispatch } from '@/store/store';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { z } from 'zod';
 import { ResetButton } from '../generic_form/fields/ResetButton';
+import { SelectField } from '../generic_form/fields/SelectField';
 import { SubmitButton } from '../generic_form/fields/SubmitButton';
 import { TextAreaField } from '../generic_form/fields/TextAreaField';
 import { TextField } from '../generic_form/fields/TextField';
@@ -39,10 +40,43 @@ const initialValues: FormType = {
 
 const ShippingAddress = () => {
   const { toast } = useToast();
-  // const [division, setDivision] = useState<DIVISIONS_KEY_TYPE>('10');
-  // const [district, setDistrict] = useState<DISTRICTS_KEY_TYPE>('1');
   const dispatch = useDispatch<AppDispatch>();
   const formRef = useRef<GenericFormRef<FormType>>(null);
+  const [division, setDivision] = useState('');
+  const [district, setDistrict] = useState('');
+  const [subDistricts, setSubDistricts] = useState<DDType>([]);
+  const [districts, setDistricts] = useState<DDType>([]);
+
+  useEffect(() => {
+    if (!formRef.current) return;
+
+    const subscription = formRef.current.form.watch((values) => {
+      if (values.division !== division) {
+        formRef.current?.form.clearErrors('division');
+        setDivision(values.division || '');
+        formRef.current?.form.setValue('district', '');
+      }
+      if (values.district !== district) {
+        formRef.current?.form.clearErrors('district');
+        setDistrict(values.district || '');
+        formRef.current?.form.setValue('sub_district', '');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [division, district]);
+
+  useEffect(() => {
+    if (division) {
+      setDistricts(DISTRICTS[division] || []);
+    }
+  }, [division]);
+
+  useEffect(() => {
+    if (district) {
+      setSubDistricts(UPAZILLAS[district] || []);
+    }
+  }, [district]);
 
   const handleSubmit = (data: FormType | React.FormEvent<HTMLFormElement>) => {
     dispatch(updateOrderAddress(data));
@@ -79,24 +113,9 @@ const ShippingAddress = () => {
             required
           />
           <div className='grid grid-cols-1 gap-2 md:grid-cols-3'>
-            <TextField
-              name='division'
-              label='Division'
-              placeholder=' Enter your division here... '
-              required
-            />
-            <TextField
-              name='district'
-              label='District'
-              placeholder=' Enter your district here... '
-              required
-            />
-            <TextField
-              name='sub_district'
-              label='Upazilla'
-              placeholder=' Enter your upazilla here... '
-              required
-            />
+            <SelectField name='division' label='Division' options={DIVISIONS} required />
+            <SelectField name='district' label='District' options={districts} required />
+            <SelectField name='sub_district' label='Sub District' options={subDistricts} required />
           </div>
           <TextAreaField
             name='address'

@@ -33,7 +33,9 @@ const tableHeadData = [
   'Items',
   'Total Price',
   'Discount',
-  'Shipping Address',
+  'Street Address',
+  'Address',
+  'Custom Instruction',
   'Order Status',
   'Order ID',
 ];
@@ -113,7 +115,11 @@ const Orders = () => {
                   <TableCell className='whitespace-nowrap p-4'>{order.line_items.length}</TableCell>
                   <TableCell className='whitespace-nowrap p-4'>{order.price}</TableCell>
                   <TableCell className='whitespace-nowrap p-4'>{order.discount}</TableCell>
-                  <TableCell className='whitespace-nowrap p-4'>{`${order.address}, ${order.district} - ${order.division}`}</TableCell>
+                  <TableCell className='whitespace-nowrap p-4'>{order.address}</TableCell>
+                  <TableCell className='whitespace-nowrap p-4'>{`${order.sub_district} - ${order.district} - ${order.division}`}</TableCell>
+                  <TableCell className='whitespace-nowrap p-4'>
+                    {order.instruction ? order.instruction : 'N/A'}
+                  </TableCell>
                   <TableCell>
                     <Select onValueChange={(value) => handleOrderStatusUpdate(order._id, value)}>
                       <SelectTrigger className='w-[180px]'>

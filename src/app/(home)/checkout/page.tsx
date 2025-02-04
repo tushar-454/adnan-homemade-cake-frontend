@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import Gradient from '@/components/ui/gradient';
 import { TypographyH3, TypographyLarge } from '@/components/ui/typography';
+import { DISTRICTS, DIVISIONS, UPAZILLAS } from '@/constant/location';
 import { useToast } from '@/hooks/use-toast';
 import { copyToClipboard, getDataSessionStorage } from '@/lib/utils';
 import { clearCart } from '@/store/features/cart';
@@ -60,7 +61,13 @@ const Checkout = () => {
     }
     try {
       setLoading(true);
-      const { data } = await createOrder(order);
+      const { data } = await createOrder({
+        ...order,
+        division: DIVISIONS.find((d) => d.value === order.division)?.text || '',
+        district: DISTRICTS[order.division].find((d) => d.value === order.district)?.text || '',
+        sub_district:
+          UPAZILLAS[order.district].find((d) => d.value === order.sub_district)?.text || '',
+      });
 
       if (data) {
         if (data.data.tracking_id) {
