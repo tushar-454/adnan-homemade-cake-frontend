@@ -93,8 +93,21 @@ const TrackOrder = () => {
                   Order ID: <span className='font-bold text-primary'>{order.tracking_id}</span>
                 </TypographyH3>
                 <TypographyP className='mt-2 text-gray-600'>
-                  Order Date:{' '}
+                  <span className='font-semibold'>Order Date: </span>
                   <span className='font-semibold text-primary'>{formatDate(order.createdAt)}</span>
+                </TypographyP>
+                <TypographyP className='mt-2 text-gray-600'>
+                  <span className='font-semibold'>Street Address:</span> {order.address}
+                </TypographyP>
+
+                <TypographyP className='mt-2 text-gray-600'>
+                  <span className='font-semibold'>Address: </span> {order.sub_district} -{' '}
+                  {order.district} - {order.division}
+                </TypographyP>
+
+                <TypographyP className='mt-2 text-gray-600'>
+                  <span className='font-semibold'>Phone Number: </span>
+                  <a href={`tel:${order.phone}`}>{order.phone}</a>
                 </TypographyP>
 
                 <div className='mt-4 rounded-lg border-l-4 border-primary bg-green-50 p-4'>
