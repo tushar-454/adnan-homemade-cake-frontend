@@ -1,6 +1,6 @@
 'use client';
 
-import { TCouponError, useCreateCouponMutation } from '@/api/Coupon';
+import { TCouponError, useCreateCouponMutation } from '@/api/coupon';
 import { DateTimeField } from '@/components/generic_form/fields/DateTimeField';
 import { ResetButton } from '@/components/generic_form/fields/ResetButton';
 import { SelectField } from '@/components/generic_form/fields/SelectField';

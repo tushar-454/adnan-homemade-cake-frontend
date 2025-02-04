@@ -1,6 +1,6 @@
 import { carousel } from '@/api/carousel';
 import { category } from '@/api/category';
-import { coupon } from '@/api/Coupon';
+import { coupon } from '@/api/coupon';
 import { gallery } from '@/api/gallery';
 import { order as apiOrder } from '@/api/order'; // Alias the order import
 import { product } from '@/api/product';

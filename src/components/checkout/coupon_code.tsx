@@ -1,4 +1,4 @@
-import { TCoupon } from '@/api/Coupon';
+import { TCoupon } from '@/api/coupon';
 import { Button } from '@/components/ui/button';
 import Gradient from '@/components/ui/gradient';
 import { Input } from '@/components/ui/input';

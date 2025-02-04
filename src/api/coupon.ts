@@ -58,8 +58,19 @@ const coupon = createApi({
     getCoupons: builder.query<TCouponsRes, void>({
       query: () => '/coupon',
     }),
+    deleteCoupon: builder.mutation({
+      query: (id: string) => ({
+        url: `/coupon/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
-export const { useCouponQuery, useCreateCouponMutation, useGetCouponsQuery } = coupon;
+export const {
+  useCouponQuery,
+  useCreateCouponMutation,
+  useGetCouponsQuery,
+  useDeleteCouponMutation,
+} = coupon;
 export { coupon };
