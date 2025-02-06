@@ -14,12 +14,36 @@ type TGalleryResponse = {
   data: TGallery[];
 };
 
+type Error403 = {
+  status: number;
+  message: string;
+};
+type Error400 = {
+  status: number;
+  errors: {
+    field: string;
+    message: string;
+  }[];
+};
+
+export type TGalleryError = {
+  status: number;
+  data: Error403 | Error400;
+};
+
 const gallery = createApi({
   reducerPath: 'gallery',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   endpoints: (builder) => ({
     gallery: builder.query<TGalleryResponse, void>({
       query: () => '/gallery',
+    }),
+    createGallery: builder.mutation<TGalleryResponse, Partial<TGallery>>({
+      query: (body) => ({
+        url: '/gallery',
+        method: 'POST',
+        body,
+      }),
     }),
     deleteGallery: builder.mutation({
       query: (id: string) => ({
@@ -30,5 +54,5 @@ const gallery = createApi({
   }),
 });
 
-export const { useGalleryQuery, useDeleteGalleryMutation } = gallery;
+export const { useGalleryQuery, useCreateGalleryMutation, useDeleteGalleryMutation } = gallery;
 export { gallery };
