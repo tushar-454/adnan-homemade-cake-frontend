@@ -46,8 +46,14 @@ const category = createApi({
         body,
       }),
     }),
+    deleteCategory: builder.mutation({
+      query: (id: string) => ({
+        url: `/category/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
-export const { useCategoryQuery, useCreateCategoryMutation } = category;
+export const { useCategoryQuery, useCreateCategoryMutation, useDeleteCategoryMutation } = category;
 export { category };
