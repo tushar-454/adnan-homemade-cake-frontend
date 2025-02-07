@@ -17,13 +17,19 @@ type TCarouselResponse = {
 
 const carousel = createApi({
   reducerPath: 'carousel',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   endpoints: (builder) => ({
     carousel: builder.query<TCarouselResponse, void>({
       query: () => '/carousel',
     }),
+    deleteCarousel: builder.mutation({
+      query: (id: string) => ({
+        url: `/carousel/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
-export const { useCarouselQuery } = carousel;
+export const { useCarouselQuery, useDeleteCarouselMutation } = carousel;
 export { carousel };
