@@ -30,38 +30,48 @@ const UploadImages = ({
     const newImages = images.filter((_, i) => i !== index);
     setImages(newImages);
   };
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files || [];
+    const validFiles: File[] = [];
+
     if (isRestrictedAspectRatio) {
-      const file = e.target.files?.[0];
-      if (file) {
-        const reader = new FileReader();
+      if (files.length > 0) {
+        const processFilePromises = Array.from(files).map((file) => {
+          return new Promise<void>((resolve) => {
+            const reader = new FileReader();
 
-        reader.onload = (readerEvent) => {
-          const img = new window.Image();
-          img.onload = () => {
-            // Get image dimensions and calculate aspect ratio
-            const width = img.width;
-            const height = img.height;
-            const aspectRatio = width / height;
+            reader.onload = (readerEvent) => {
+              const img = new window.Image();
 
-            if (aspectRatio !== customWidth / customHeight) {
-              toast({
-                variant: 'destructive',
-                title: 'Invalid aspect ratio',
-                description: `Image must have a ${customWidth}:${customHeight} aspect ratio`,
-              });
-            } else {
-              setImages(e.target.files ? [...images, ...Array.from(e.target.files)] : []);
-            }
-          };
-          img.src = readerEvent?.target?.result as string;
-        };
-        reader.readAsDataURL(file);
+              img.onload = () => {
+                const width = img.width;
+                const height = img.height;
+                const aspectRatio = width / height;
+
+                if (aspectRatio !== customWidth / customHeight) {
+                  toast({
+                    variant: 'destructive',
+                    title: 'Invalid aspect ratio',
+                    description: `Image must have a ${customWidth}:${customHeight} aspect ratio`,
+                  });
+                } else {
+                  validFiles.push(file);
+                }
+                resolve();
+              };
+              img.src = readerEvent?.target?.result as string;
+            };
+
+            reader.readAsDataURL(file);
+          });
+        });
+        Promise.all(processFilePromises).then(() => {
+          setImages((prevImages) => [...prevImages, ...validFiles]);
+        });
       }
       return;
     }
-    setImages(e.target.files ? [...images, ...Array.from(e.target.files)] : []);
+    setImages((prevImages) => [...prevImages, ...Array.from(files)]);
   };
 
   useEffect(() => {
