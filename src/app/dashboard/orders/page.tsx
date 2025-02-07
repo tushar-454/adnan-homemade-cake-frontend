@@ -76,7 +76,7 @@ const Orders = () => {
     <div className='p-4'>
       <TypographyH4 className='mb-5'>Orders</TypographyH4>
       <div className='w-full overflow-hidden'>
-        {isLoading && <TableSkeleton />}
+        {isLoading && <TableSkeleton height='h-8' />}
         {isError && (
           <TypographyP className='text-center text-red-500'>
             Something is wrong while fetching orders. Maybe your token is expired. Please login

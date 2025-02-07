@@ -1,4 +1,4 @@
-const TableSkeleton = ({ height = 'h-8' }: { height: string }) => {
+const TableSkeleton = ({ height }: { height: string }) => {
   return (
     <div className='flex w-full flex-col space-y-2'>
       <div className={`${height} w-full animate-pulse bg-neutral-200`}></div>
