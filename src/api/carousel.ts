@@ -15,6 +15,23 @@ type TCarouselResponse = {
   data: TCarousel[];
 };
 
+type Error403 = {
+  status: number;
+  message: string;
+};
+type Error400 = {
+  status: number;
+  errors: {
+    field: string;
+    message: string;
+  }[];
+};
+
+export type TCarouselError = {
+  status: number;
+  data: Error403 | Error400;
+};
+
 const carousel = createApi({
   reducerPath: 'carousel',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
@@ -28,8 +45,15 @@ const carousel = createApi({
         method: 'DELETE',
       }),
     }),
+    createCarousel: builder.mutation<TCarouselResponse, Partial<TCarousel>>({
+      query: (body) => ({
+        url: '/carousel',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useCarouselQuery, useDeleteCarouselMutation } = carousel;
+export const { useCarouselQuery, useCreateCarouselMutation, useDeleteCarouselMutation } = carousel;
 export { carousel };
