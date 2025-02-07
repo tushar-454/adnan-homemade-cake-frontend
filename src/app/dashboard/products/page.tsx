@@ -1,6 +1,11 @@
 'use client';
 
-import { useDeleteProductMutation, useGetProductsQuery } from '@/api/product';
+import {
+  TProduct,
+  useDeleteProductMutation,
+  useGetProductsQuery,
+  useUpdateProductMutation,
+} from '@/api/product';
 import TableSkeleton from '@/components/dashboard/table_skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -44,11 +49,41 @@ const Products = () => {
   const [deletedId, setDeletedId] = useState('');
   const [showModal, setShowModal] = useState(false);
   const { toast } = useToast();
-  const { data: { data: cakes } = {}, isError, isLoading, refetch } = useGetProductsQuery();
+  const { data: { data: cakes } = {}, isError, isLoading } = useGetProductsQuery();
   const [deleteProduct, { isLoading: deleteProductLoading }] = useDeleteProductMutation();
+  const [updateProduct] = useUpdateProductMutation();
+
+  const handleProductSwitchUpdate = async (id: string, body: Partial<TProduct>) => {
+    try {
+      const { error } = await updateProduct({ id, body });
+      if (error && 'status' in error) {
+        if (Number(error?.status) === 403) {
+          toast({
+            variant: 'destructive',
+            title: 'Token expired. Please login again',
+          });
+          setTimeout(() => {
+            removeLocalStorage('isLogin');
+            signOut();
+          }, 2000);
+          return;
+        }
+        if (Number(error?.status) === 400) {
+          toast({
+            variant: 'destructive',
+            title: 'Product update failed',
+          });
+          return;
+        }
+      }
+    } catch (error) {
+      console.log('error in handleUpdateProduct', error);
+    }
+  };
 
   const handleDeleteProduct = async (id: string) => {
     try {
+      setShowModal(false);
       const { error } = await deleteProduct(id);
       if (error && 'status' in error) {
         if (Number(error?.status) === 403) {
@@ -73,8 +108,6 @@ const Products = () => {
       toast({
         title: 'Product deleted',
       });
-      setShowModal(false);
-      refetch();
     } catch (error) {
       console.log('error in handleDeleteProduct', error);
     }
@@ -113,13 +146,28 @@ const Products = () => {
                     <TableCell className='whitespace-nowrap p-4'>{cake.rating}</TableCell>
                     <TableCell className='whitespace-nowrap p-4'>{cake.sell_count}</TableCell>
                     <TableCell className='whitespace-nowrap p-4'>
-                      <Switch checked={cake.is_featured} />
+                      <Switch
+                        onCheckedChange={(value) => {
+                          handleProductSwitchUpdate(cake._id, { is_featured: value });
+                        }}
+                        checked={cake.is_featured}
+                      />
                     </TableCell>
                     <TableCell className='whitespace-nowrap p-4'>
-                      <Switch checked={cake.is_upcoming} />
+                      <Switch
+                        onCheckedChange={(value) => {
+                          handleProductSwitchUpdate(cake._id, { is_upcoming: value });
+                        }}
+                        checked={cake.is_upcoming}
+                      />
                     </TableCell>
                     <TableCell className='whitespace-nowrap p-4'>
-                      <Switch checked={cake.is_deleted} />
+                      <Switch
+                        onCheckedChange={(value) => {
+                          handleProductSwitchUpdate(cake._id, { is_deleted: value });
+                        }}
+                        checked={cake.is_deleted}
+                      />
                     </TableCell>
                     <TableCell className='whitespace-nowrap p-4'>
                       <Badge className='mr-2 cursor-pointer'>Edit</Badge>

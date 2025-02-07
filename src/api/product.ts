@@ -71,6 +71,44 @@ const product = createApi({
     }),
     deleteProduct: builder.mutation({
       query: (id: string) => ({ url: `/product/${id}`, method: 'DELETE' }),
+      // Optimistic update for deletion
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          product.util.updateQueryData('getProducts', undefined, (draft) => {
+            draft.data = draft.data.filter((product) => product._id !== id);
+          }),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
+    updateProduct: builder.mutation({
+      query: ({ id, body }: { id: string; body: Partial<TProduct> }) => ({
+        url: `/product/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      // Optimistic update for update
+      async onQueryStarted({ id, body }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          product.util.updateQueryData('getProducts', undefined, (draft) => {
+            const productIndex = draft.data.findIndex((product) => product._id === id);
+            if (productIndex !== -1) {
+              draft.data[productIndex] = { ...draft.data[productIndex], ...body };
+            }
+          }),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
   }),
 });
@@ -80,5 +118,6 @@ export const {
   useCreateProductMutation,
   useGetProductBySlugQuery,
   useDeleteProductMutation,
+  useUpdateProductMutation,
 } = product;
 export { product };
