@@ -1,3 +1,4 @@
+import { useToast } from '@/hooks/use-toast';
 import { Plus, Trash } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect } from 'react';
@@ -10,12 +11,57 @@ type UploadImagesProps = {
   setImageObjUrls: React.Dispatch<React.SetStateAction<string[]>>;
   images: File[];
   setImages: React.Dispatch<React.SetStateAction<File[]>>;
+  isRestrictedAspectRatio?: boolean;
+  customWidth?: number;
+  customHeight?: number;
 };
 
-const UploadImages = ({ imageObjUrls, setImageObjUrls, images, setImages }: UploadImagesProps) => {
+const UploadImages = ({
+  imageObjUrls,
+  setImageObjUrls,
+  images,
+  setImages,
+  isRestrictedAspectRatio = false,
+  customWidth = 1,
+  customHeight = 1,
+}: UploadImagesProps) => {
+  const { toast } = useToast();
   const handleDelete = (index: number) => {
     const newImages = images.filter((_, i) => i !== index);
     setImages(newImages);
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isRestrictedAspectRatio) {
+      const file = e.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = (readerEvent) => {
+          const img = new window.Image();
+          img.onload = () => {
+            // Get image dimensions and calculate aspect ratio
+            const width = img.width;
+            const height = img.height;
+            const aspectRatio = width / height;
+
+            if (aspectRatio !== customWidth / customHeight) {
+              toast({
+                variant: 'destructive',
+                title: 'Invalid aspect ratio',
+                description: `Image must have a ${customWidth}:${customHeight} aspect ratio`,
+              });
+            } else {
+              setImages(e.target.files ? [...images, ...Array.from(e.target.files)] : []);
+            }
+          };
+          img.src = readerEvent?.target?.result as string;
+        };
+        reader.readAsDataURL(file);
+      }
+      return;
+    }
+    setImages(e.target.files ? [...images, ...Array.from(e.target.files)] : []);
   };
 
   useEffect(() => {
@@ -32,9 +78,7 @@ const UploadImages = ({ imageObjUrls, setImageObjUrls, images, setImages }: Uplo
       <Input
         id='imagesInput'
         type='file'
-        onChange={(e) =>
-          setImages(e.target.files ? [...images, ...Array.from(e.target.files)] : [])
-        }
+        onChange={(e) => handleImageChange(e)}
         className='hidden'
         multiple
       />
