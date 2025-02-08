@@ -27,6 +27,7 @@ import {
 } from '@/components/ui/table';
 import { TypographyH4, TypographyP } from '@/components/ui/typography';
 import { useToast } from '@/hooks/use-toast';
+import { revalidateCakes } from '@/lib/actions';
 import { removeLocalStorage } from '@/lib/utils';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
@@ -108,6 +109,7 @@ const Products = () => {
       toast({
         title: 'Product deleted',
       });
+      revalidateCakes();
     } catch (error) {
       console.log('error in handleDeleteProduct', error);
     }

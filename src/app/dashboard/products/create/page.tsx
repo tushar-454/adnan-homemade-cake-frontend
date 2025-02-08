@@ -14,6 +14,7 @@ import { GenericForm, GenericFormRef } from '@/components/generic_form/generic_f
 import { Button } from '@/components/ui/button';
 import { TypographyH4 } from '@/components/ui/typography';
 import { useToast } from '@/hooks/use-toast';
+import { revalidateCakes } from '@/lib/actions';
 import { handleMultipleUpload, removeLocalStorage } from '@/lib/utils';
 import { FormType, schema } from '@/schema/create_product';
 import { PlusCircle } from 'lucide-react';
@@ -100,6 +101,7 @@ const ProductCreate = () => {
           formRef.current?.reset();
           setLoading(false);
           setImages([]);
+          revalidateCakes();
           router.push('/cakes/' + data.data.slug);
         }
       }

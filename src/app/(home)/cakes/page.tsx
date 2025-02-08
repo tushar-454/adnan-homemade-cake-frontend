@@ -8,6 +8,7 @@ const Cakes = async () => {
   const res: Response = await fetch(`${BASE_URL}/product`, {
     next: {
       revalidate: 300,
+      tags: ['cakes'],
     },
   });
   const { data: cakes = [] }: TProductResponse = await res.json();
