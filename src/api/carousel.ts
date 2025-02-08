@@ -44,6 +44,20 @@ const carousel = createApi({
         url: `/carousel/${id}`,
         method: 'DELETE',
       }),
+      // Optimistic update for deletion
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          carousel.util.updateQueryData('carousel', undefined, (draft) => {
+            draft.data = draft.data.filter((carousel) => carousel._id !== id);
+          }),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     createCarousel: builder.mutation<TCarouselResponse, Partial<TCarousel>>({
       query: (body) => ({

@@ -37,6 +37,7 @@ const Carousel = () => {
 
   const handleDeleteCarousel = async (id: string) => {
     try {
+      setShowModal(false);
       const { error } = await deleteCarousel(id);
       if (error && 'status' in error) {
         if (Number(error?.status) === 403) {
@@ -61,8 +62,6 @@ const Carousel = () => {
       toast({
         title: 'Carousel item deleted',
       });
-      setShowModal(false);
-      refetch();
     } catch (error) {
       console.log('error in handleDeleteCarousel', error);
     }

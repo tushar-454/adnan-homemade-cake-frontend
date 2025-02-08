@@ -63,6 +63,19 @@ const coupon = createApi({
         url: `/coupon/${id}`,
         method: 'DELETE',
       }),
+      // Optimistic update for deletion
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const patchedResult = dispatch(
+          coupon.util.updateQueryData('getCoupons', undefined, (draft) => {
+            draft.data = draft.data.filter((coupon) => coupon._id !== id);
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchedResult.undo();
+        }
+      },
     }),
   }),
 });

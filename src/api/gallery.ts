@@ -50,6 +50,20 @@ const gallery = createApi({
         url: `/gallery/${id}`,
         method: 'DELETE',
       }),
+      // Optimistic update for deletion
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const patchedResult = dispatch(
+          gallery.util.updateQueryData('gallery', undefined, (draft) => {
+            draft.data = draft.data.filter((gallery) => gallery._id !== id);
+          }),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchedResult.undo();
+        }
+      },
     }),
   }),
 });

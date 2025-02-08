@@ -51,6 +51,19 @@ const category = createApi({
         url: `/category/${id}`,
         method: 'DELETE',
       }),
+      // Optimistic update for deletion
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const patchedResult = dispatch(
+          category.util.updateQueryData('category', undefined, (draft) => {
+            draft.data = draft.data.filter((category) => category._id !== id);
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchedResult.undo();
+        }
+      },
     }),
   }),
 });

@@ -37,6 +37,7 @@ const Categories = () => {
 
   const handleDeleteCoupon = async (id: string) => {
     try {
+      setShowModal(false);
       const { error } = await deleteCategory(id);
       if (error && 'status' in error) {
         if (Number(error?.status) === 403) {
@@ -61,8 +62,6 @@ const Categories = () => {
       toast({
         title: 'Category deleted',
       });
-      setShowModal(false);
-      refetch();
     } catch (error) {
       console.log('error in handleDeleteCategory', error);
     }

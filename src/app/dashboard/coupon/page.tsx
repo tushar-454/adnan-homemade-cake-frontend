@@ -46,6 +46,7 @@ const Coupons = () => {
 
   const handleDeleteCoupon = async (id: string) => {
     try {
+      setShowModal(false);
       const { error } = await deleteCoupon(id);
       if (error && 'status' in error) {
         if (Number(error?.status) === 403) {
@@ -70,8 +71,6 @@ const Coupons = () => {
       toast({
         title: 'Coupon deleted',
       });
-      setShowModal(false);
-      refetch();
     } catch (error) {
       console.log('error in handleDeleteCoupon', error);
     }
