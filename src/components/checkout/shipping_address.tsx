@@ -2,6 +2,7 @@
 
 import { DDType, DISTRICTS, DIVISIONS, UPAZILLAS } from '@/constant/location';
 import { useToast } from '@/hooks/use-toast';
+import { addLocalStorage, getLocalStorage } from '@/lib/utils';
 import { clearAddress, updateOrderAddress } from '@/store/features/order';
 import { AppDispatch } from '@/store/store';
 import { useEffect, useRef, useState } from 'react';
@@ -28,7 +29,9 @@ const FormSchema = z.object({
 
 type FormType = z.infer<typeof FormSchema>;
 
-const initialValues: FormType = {
+const address = getLocalStorage('address');
+const validatedAddress = address ? FormSchema.safeParse(address) : null;
+const initialValues: FormType = validatedAddress?.success ? validatedAddress.data : {
   name: '',
   email: '',
   phone: '',
@@ -80,6 +83,7 @@ const ShippingAddress = () => {
 
   const handleSubmit = (data: FormType | React.FormEvent<HTMLFormElement>) => {
     dispatch(updateOrderAddress(data));
+    addLocalStorage('address', data);
     toast({
       title: 'Success',
       description: 'Shipping address saved successfully',
