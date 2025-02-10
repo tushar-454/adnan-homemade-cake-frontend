@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Printer } from 'lucide-react';
 import { TypographyH4, TypographyP } from '@/components/ui/typography';
 import { useToast } from '@/hooks/use-toast';
 import { capitalizeFirstLetter, formatDate, removeLocalStorage } from '@/lib/utils';
@@ -38,6 +39,7 @@ const tableHeadData = [
   'Custom Instruction',
   'Order Status',
   'Order ID',
+  'Invoice'
 ];
 
 const Orders = () => {
@@ -136,6 +138,9 @@ const Orders = () => {
                     </Select>
                   </TableCell>
                   <TableCell className='whitespace-nowrap p-4'>{order.tracking_id}</TableCell>
+                  <TableCell className='whitespace-nowrap p-4'>
+                    <Printer />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
