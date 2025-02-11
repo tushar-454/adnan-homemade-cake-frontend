@@ -17,11 +17,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Printer } from 'lucide-react';
 import { TypographyH4, TypographyP } from '@/components/ui/typography';
 import { useToast } from '@/hooks/use-toast';
 import { capitalizeFirstLetter, formatDate, removeLocalStorage } from '@/lib/utils';
+import { Printer } from 'lucide-react';
 import { signOut } from 'next-auth/react';
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 const tableHeadData = [
@@ -39,7 +40,7 @@ const tableHeadData = [
   'Custom Instruction',
   'Order Status',
   'Order ID',
-  'Invoice'
+  'Invoice',
 ];
 
 const Orders = () => {
@@ -139,7 +140,9 @@ const Orders = () => {
                   </TableCell>
                   <TableCell className='whitespace-nowrap p-4'>{order.tracking_id}</TableCell>
                   <TableCell className='whitespace-nowrap p-4'>
-                    <Printer />
+                    <Link href={`/invoice/${order.tracking_id}`}>
+                      <Printer className='cursor-pointer' />
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}

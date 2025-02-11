@@ -2,7 +2,7 @@
 
 import { DDType, DISTRICTS, DIVISIONS, UPAZILLAS } from '@/constant/location';
 import { useToast } from '@/hooks/use-toast';
-import { addLocalStorage, getLocalStorage } from '@/lib/utils';
+import { addLocalStorage, getLocalStorage, removeLocalStorage } from '@/lib/utils';
 import { clearAddress, updateOrderAddress } from '@/store/features/order';
 import { AppDispatch } from '@/store/store';
 import { useEffect, useRef, useState } from 'react';
@@ -29,9 +29,7 @@ const FormSchema = z.object({
 
 type FormType = z.infer<typeof FormSchema>;
 
-const address = getLocalStorage('address');
-const validatedAddress = address ? FormSchema.safeParse(address) : null;
-const initialValues: FormType = validatedAddress?.success ? validatedAddress.data : {
+const initialValues: FormType = {
   name: '',
   email: '',
   phone: '',
@@ -51,8 +49,26 @@ const ShippingAddress = () => {
   const [districts, setDistricts] = useState<DDType>([]);
 
   useEffect(() => {
-    if (!formRef.current) return;
+    const address = getLocalStorage('address');
+    const validatedAddress = address ? FormSchema.safeParse(address) : null;
+    if (validatedAddress?.success) {
+      dispatch(updateOrderAddress(validatedAddress));
+      const { name, email, phone, district, division, sub_district, address } =
+        validatedAddress?.data;
+      formRef.current?.form.setValue('name', name);
+      formRef.current?.form.setValue('email', email);
+      formRef.current?.form.setValue('phone', phone);
+      formRef.current?.form.setValue('division', division);
+      formRef.current?.form.setValue('district', district);
+      formRef.current?.form.setValue('sub_district', sub_district);
+      formRef.current?.form.setValue('address', address);
+      setDivision(division);
+      setDistrict(district);
+    }
+  }, [district, division, dispatch]);
 
+  useEffect(() => {
+    if (!formRef.current) return;
     const subscription = formRef.current.form.watch((values) => {
       if (values.division !== division) {
         formRef.current?.form.clearErrors('division');
@@ -130,7 +146,12 @@ const ShippingAddress = () => {
           />
           <div className='flex items-center gap-2 pt-5'>
             <SubmitButton width='auto' />
-            <ResetButton cFunc={() => dispatch(clearAddress())} />
+            <ResetButton
+              cFunc={() => {
+                dispatch(clearAddress());
+                removeLocalStorage('address');
+              }}
+            />
           </div>
         </div>
       </GenericForm>
