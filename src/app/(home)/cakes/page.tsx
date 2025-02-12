@@ -4,8 +4,23 @@ import CakesFilter from '@/components/cakes/cake_filter';
 import { Container } from '@/components/shared/container';
 import { BASE_URL } from '@/constant';
 
-const Cakes = async () => {
-  const res: Response = await fetch(`${BASE_URL}/product`, {
+const Cakes = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
+  const { min_price, max_price, category } = searchParams;
+  let query = '';
+  if (min_price) {
+    query += `min_price=${min_price}`;
+  }
+  if (max_price) {
+    query += `&max_price=${max_price}`;
+  }
+  if (category) {
+    query += `&category=${category}`;
+  }
+  const res: Response = await fetch(`${BASE_URL}/product?${query}`, {
     next: {
       revalidate: 300,
       tags: ['cakes'],

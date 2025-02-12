@@ -4,6 +4,8 @@ import { useCategoryQuery } from '@/api/category';
 import { setOpenFilter } from '@/store/features/globalReducer';
 import { AppDispatch, RootState } from '@/store/store';
 import { Minus, Plus } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterCategorySkeleton } from '../skeleton/filter_category';
 import { Button } from '../ui/button';
@@ -17,6 +19,58 @@ const CakesFilter = () => {
   const dispatch = useDispatch<AppDispatch>();
   const openFilter = useSelector((state: RootState) => state.global.openFilter);
   const { data: { data: categories } = {}, isLoading, isError } = useCategoryQuery();
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [minPrice, setMinPrice] = useState(searchParams.get('min_price') || '');
+  const [maxPrice, setMaxPrice] = useState(searchParams.get('max_price') || '');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    searchParams.getAll('category') || [],
+  );
+
+  const updatePriceFilter = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (minPrice) {
+      params.set('min_price', minPrice);
+    } else {
+      params.delete('min_price');
+    }
+
+    if (maxPrice) {
+      params.set('max_price', maxPrice);
+    } else {
+      params.delete('max_price');
+    }
+
+    router.push(`?${params.toString()}`);
+  }, [minPrice, maxPrice, router, searchParams]);
+
+  useEffect(() => {
+    const timer = setTimeout(updatePriceFilter, 500);
+    return () => clearTimeout(timer);
+  }, [minPrice, maxPrice, updatePriceFilter]);
+
+  // Handle category selection
+  const handleCategoryChange = (category: string) => {
+    let updatedCategories = [...selectedCategories];
+
+    if (updatedCategories.includes(category)) {
+      updatedCategories = updatedCategories.filter((cat) => cat !== category);
+    } else {
+      updatedCategories.push(category);
+    }
+
+    setSelectedCategories(updatedCategories);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('category');
+
+    updatedCategories.forEach((cat) => params.append('category', cat));
+
+    router.push(`?${params.toString()}`);
+  };
 
   let placeholder;
   if (isLoading && !isError) {
@@ -32,9 +86,12 @@ const CakesFilter = () => {
   if (!isLoading && !isError && Array.isArray(categories) && categories.length === 0) {
     placeholder = <TypographyMuted className='text-center'>No categories found</TypographyMuted>;
   }
+
   return (
     <div
-      className={`absolute z-50 max-w-[350px] rounded-2xl border bg-white p-5 transition-all duration-300 lg:static lg:z-auto ${openFilter ? 'left-0 top-[90px]' : '-left-full'}`}
+      className={`max_price-w-[350px] absolute z-50 rounded-2xl border bg-white p-5 transition-all duration-300 lg:static lg:z-auto ${
+        openFilter ? 'left-0 top-[90px]' : '-left-full'
+      }`}
     >
       <span className='flex items-center justify-between'>
         <TypographyH3>
@@ -58,7 +115,11 @@ const CakesFilter = () => {
             {Array.isArray(categories) &&
               categories.map((category) => (
                 <li key={category._id} className='flex cursor-pointer items-center gap-2'>
-                  <Checkbox id={category.name} />
+                  <Checkbox
+                    id={category.name}
+                    checked={selectedCategories.includes(category.name)}
+                    onCheckedChange={() => handleCategoryChange(category.name)}
+                  />
                   <label htmlFor={category.name} className='cursor-pointer'>
                     {category.name}
                   </label>
@@ -72,9 +133,19 @@ const CakesFilter = () => {
           <Gradient>Price</Gradient>
         </TypographyH4>
         <div className='flex items-center gap-2'>
-          <Input type='number' placeholder='Min' />
+          <Input
+            type='number'
+            placeholder='Min'
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+          />
           <Minus />
-          <Input type='number' placeholder='Max' />
+          <Input
+            type='number'
+            placeholder='Max'
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+          />
         </div>
       </div>
     </div>
