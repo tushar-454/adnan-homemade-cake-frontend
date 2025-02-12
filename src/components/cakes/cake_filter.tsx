@@ -90,7 +90,7 @@ const CakesFilter = () => {
   return (
     <div
       className={`max_price-w-[350px] absolute z-50 rounded-2xl border bg-white p-5 transition-all duration-300 lg:static lg:z-auto ${
-        openFilter ? 'left-0 top-[90px]' : '-left-full'
+        openFilter ? 'left-0 top-[90px]' : '-left-[50rem]'
       }`}
     >
       <span className='flex items-center justify-between'>
