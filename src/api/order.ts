@@ -11,7 +11,7 @@ type LineItem = {
   _id: string;
 };
 
-type OrderData = {
+export type OrderData = {
   _id: string;
   user: null | string;
   name: string;
