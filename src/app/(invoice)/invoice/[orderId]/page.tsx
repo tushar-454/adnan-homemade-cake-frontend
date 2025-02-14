@@ -10,7 +10,6 @@ const InvoicePreview = () => {
   const { data: { data: order } = {}, refetch } = useOrderQuery(invoiceId, {
     skip: invoiceId === 0,
   });
-
   useEffect(() => {
     const path = window.location.pathname;
     const invoiceId = path.split('/').pop();
