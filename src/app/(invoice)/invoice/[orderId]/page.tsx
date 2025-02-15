@@ -26,13 +26,14 @@ const Invoice = () => {
     const pathParts = path.split('/');
     const invoiceId = pathParts.pop();
     if (Number(invoiceId)) {
+      document.title = `Invoice - ${invoiceId} - Adnan Homemade Cake`;
       setInvoiceId(Number(invoiceId));
     }
   }, []);
 
   if (isLoading)
     return (
-      <div className='flex h-screen flex-col items-center justify-center gap-10'>
+      <div className='flex min-h-screen flex-col items-center justify-center gap-10'>
         <TypographyH4>Creating Invoice ...</TypographyH4>
         <LoadingSpinner />
       </div>

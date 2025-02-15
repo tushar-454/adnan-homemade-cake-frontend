@@ -7,7 +7,7 @@ const RootLayout = ({
 }>) => {
   return (
     <Wrapper>
-      <div>{children}</div>
+      <div className='w-full'>{children}</div>
     </Wrapper>
   );
 };

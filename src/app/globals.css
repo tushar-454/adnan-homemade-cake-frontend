@@ -151,7 +151,7 @@
 
 /* Fixed A4 size container */
 .invoice-container {
-  width: 210mm;
+  min-width: 210mm;
   height: auto;
   margin: 0 auto;
   padding: 10mm 20mm;
@@ -162,9 +162,11 @@
 .invoice-body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
-  height: auto;
+  align-items: center;
   background-color: #f3f4f6;
 }
 
@@ -172,5 +174,8 @@
 @media print {
   .no-print {
     display: none;
+  }
+  .invoice-body {
+    min-height: auto;
   }
 }
