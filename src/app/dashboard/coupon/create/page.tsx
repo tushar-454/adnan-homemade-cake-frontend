@@ -112,7 +112,7 @@ const CouponCreate = () => {
           <DateTimeField name='startAt' label='Start At' className='pt-2' required />
           <DateTimeField name='expireAt' label='Expire At' className='pt-2' required />
           <div className='flex items-center gap-2 pt-5'>
-            <SubmitButton width='auto' label='Create Cake' loading={loading} disabled={loading} />
+            <SubmitButton width='auto' label='Create Coupon' loading={loading} disabled={loading} />
             <ResetButton />
           </div>
         </div>

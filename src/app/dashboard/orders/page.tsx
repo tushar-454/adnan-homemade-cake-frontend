@@ -22,7 +22,6 @@ import { useToast } from '@/hooks/use-toast';
 import { capitalizeFirstLetter, formatDate, removeLocalStorage } from '@/lib/utils';
 import { Printer } from 'lucide-react';
 import { signOut } from 'next-auth/react';
-import Link from 'next/link';
 import { useEffect } from 'react';
 
 const tableHeadData = [
@@ -140,9 +139,9 @@ const Orders = () => {
                   </TableCell>
                   <TableCell className='whitespace-nowrap p-4'>{order.tracking_id}</TableCell>
                   <TableCell className='whitespace-nowrap p-4'>
-                    <Link href={`/invoice/${order.tracking_id}`}>
+                    <a href={`/invoice/${order.tracking_id}`} target='_blank'>
                       <Printer className='cursor-pointer' />
-                    </Link>
+                    </a>
                   </TableCell>
                 </TableRow>
               ))}

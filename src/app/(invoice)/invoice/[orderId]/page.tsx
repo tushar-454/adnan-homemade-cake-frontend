@@ -117,6 +117,7 @@ const Invoice = () => {
                         width={50}
                         height={50}
                         className='size-16 rounded object-cover'
+                        onLoad={() => index === order.line_items.length - 1 && window.print()}
                       />
                     </td>
                     <td className='border p-2'>

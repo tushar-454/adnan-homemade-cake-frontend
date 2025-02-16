@@ -122,7 +122,7 @@ const GalleryCreate = () => {
           <div className='flex items-center gap-2 pt-5'>
             <SubmitButton
               width='auto'
-              label='Create Category'
+              label='Create Gallery'
               loading={loading}
               disabled={loading}
             />
