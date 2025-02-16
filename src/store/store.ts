@@ -5,6 +5,7 @@ import { gallery } from '@/api/gallery';
 import { order as apiOrder } from '@/api/order'; // Alias the order import
 import { product } from '@/api/product';
 import { reviews } from '@/api/reviews';
+import { user } from '@/api/user';
 import { configureStore } from '@reduxjs/toolkit';
 import cartReducer from './features/cart';
 import globalReducer from './features/globalReducer';
@@ -22,6 +23,7 @@ const store = configureStore({
     [gallery.reducerPath]: gallery.reducer,
     [coupon.reducerPath]: coupon.reducer,
     [apiOrder.reducerPath]: apiOrder.reducer,
+    [user.reducerPath]: user.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -31,7 +33,8 @@ const store = configureStore({
       .concat(reviews.middleware)
       .concat(gallery.middleware)
       .concat(coupon.middleware)
-      .concat(apiOrder.middleware),
+      .concat(apiOrder.middleware)
+      .concat(user.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
