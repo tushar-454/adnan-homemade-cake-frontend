@@ -4,7 +4,7 @@ import { TypographyP } from '../ui/typography';
 
 const CategoryCard = ({ category }: { category: TCategory }) => {
   return (
-    <>
+    <div className='flex flex-col items-center gap-5'>
       <Image
         src={
           category.photo ||
@@ -18,7 +18,7 @@ const CategoryCard = ({ category }: { category: TCategory }) => {
       <TypographyP className='whitespace-nowrap text-center'>
         {category.name || 'Category Name'}
       </TypographyP>
-    </>
+    </div>
   );
 };
 

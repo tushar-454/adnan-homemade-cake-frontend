@@ -1,47 +1,22 @@
 'use client';
 
 import { useCarouselQuery } from '@/api/carousel';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import Autoplay from 'embla-carousel-autoplay';
+import { useRef } from 'react';
 import { Container } from '../shared/container';
 import { CarouselSkeleton } from '../skeleton/carousel';
+import {
+  Carousel as AsCarousel,
+  CarouselItem as AsCarouselItem,
+  CarouselContent,
+} from '../ui/carousel';
 import { TypographyMuted, TypographyP } from '../ui/typography';
 import { CarouselItem } from './carousel_item';
 
 const Carousel = () => {
   const { data, isLoading, isError } = useCarouselQuery();
-  const [currentSlide, setCurrentSlide] = useState(0);
-
   const { data: carousels } = data || { success: false, data: [] };
-
-  // carousel control function
-  const handleCarousel = (action: 'next' | 'prev') => {
-    if (!carousels) return;
-    const totalSlides = carousels.length - 1;
-    if (action === 'next') {
-      if (currentSlide === totalSlides) {
-        return setCurrentSlide(0);
-      }
-      setCurrentSlide((prev) => prev + 1);
-    }
-    if (action === 'prev') {
-      if (currentSlide === 0) {
-        return setCurrentSlide(totalSlides);
-      }
-      setCurrentSlide((prev) => prev - 1);
-    }
-  };
-  // auto slide
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!isLoading && !isError && carousels) {
-        setCurrentSlide((currentSlider) =>
-          currentSlider === carousels.length - 1 ? 0 : currentSlider + 1,
-        );
-      }
-    }, 1000 * 3);
-    return () => clearInterval(interval);
-  }, [isLoading, isError, carousels]);
+  const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
 
   if (isLoading && !isError) {
     return <CarouselSkeleton />;
@@ -71,27 +46,16 @@ const Carousel = () => {
     <section>
       <Container>
         {/* Carousel wrapper  */}
-        <div className='relative my-8 !overflow-hidden'>
-          <div
-            className='ease-[cubic-bezier(0.81, 0.01, 0, 0.28)] flex h-40 duration-500 sm:h-60 md:h-96 2xl:h-[650px]'
-            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-          >
-            {carousels.map((carousel) => (
-              <CarouselItem key={carousel._id} carousel={carousel} />
-            ))}
-          </div>
-
-          {/* slider controls */}
-          {carousels.length > 1 && (
-            <div className='absolute top-1/2 z-50 flex w-full -translate-y-1/2 items-center justify-between'>
-              <span onClick={() => handleCarousel('prev')}>
-                <ChevronLeft className='cursor-pointer text-4xl text-white' />
-              </span>
-              <span onClick={() => handleCarousel('next')}>
-                <ChevronRight className='cursor-pointer text-4xl text-white' />
-              </span>
-            </div>
-          )}
+        <div className='my-8'>
+          <AsCarousel opts={{ align: 'start', loop: true }} plugins={[plugin.current]}>
+            <CarouselContent className='h-40 sm:h-[385px] 2xl:h-[750px]'>
+              {carousels.map((carousel) => (
+                <AsCarouselItem key={carousel._id}>
+                  <CarouselItem carousel={carousel} />
+                </AsCarouselItem>
+              ))}
+            </CarouselContent>
+          </AsCarousel>
         </div>
       </Container>
     </section>
