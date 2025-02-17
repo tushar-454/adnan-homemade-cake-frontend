@@ -2,6 +2,7 @@ import { TProduct } from '@/api/product';
 import { BASE_URL } from '@/constant';
 import { Container } from '../shared/container';
 import { ProductResponse } from '../top_selling/top_selling';
+import { Carousel, CarouselContent, CarouselItem } from '../ui/carousel';
 import Gradient from '../ui/gradient';
 import { TypographyH2, TypographyP } from '../ui/typography';
 import FeaturedCard from './featured_card';
@@ -47,12 +48,16 @@ const Featured = async () => {
   if (products && Array.isArray(products) && products.length > 0) {
     placeholder = (
       <>
-        {/* wrapper  */}
-        <div className='my-8 grid grid-cols-1 items-start justify-between gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-          {/* product */}
-          {products
-            ?.filter((p) => p.is_featured === true)
-            ?.map((product) => <FeaturedCard key={product._id} product={product} />)}
+        <div className='my-8'>
+          <Carousel opts={{ align: 'start', loop: true }}>
+            <CarouselContent>
+              {products.map((product) => (
+                <CarouselItem key={product._id} className='sm:basis-1/2 md:basis-1/3 lg:basis-1/4'>
+                  <FeaturedCard product={product} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         </div>
       </>
     );

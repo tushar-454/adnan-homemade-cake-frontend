@@ -1,6 +1,7 @@
 import { TProduct } from '@/api/product';
 import { BASE_URL } from '@/constant';
 import { Container } from '../shared/container';
+import { Carousel, CarouselContent, CarouselItem } from '../ui/carousel';
 import Gradient from '../ui/gradient';
 import { TypographyH2, TypographyP } from '../ui/typography';
 import { TopSellingCard } from './top_selling_card';
@@ -51,12 +52,16 @@ const TopSelling = async () => {
   if (products && Array.isArray(products) && products.length > 0) {
     placeholder = (
       <>
-        {/* wrapper  */}
-        <div className='my-8 grid grid-cols-1 items-start justify-between gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-          {/* product */}
-          {products.map((product) => (
-            <TopSellingCard key={product._id} product={product} />
-          ))}
+        <div className='my-8'>
+          <Carousel opts={{ align: 'start', loop: true }}>
+            <CarouselContent>
+              {products.map((product) => (
+                <CarouselItem key={product._id} className='sm:basis-1/2 md:basis-1/3 lg:basis-1/4'>
+                  <TopSellingCard product={product} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         </div>
       </>
     );
