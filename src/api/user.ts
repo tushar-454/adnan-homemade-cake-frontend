@@ -24,8 +24,15 @@ const user = createApi({
     users: builder.query<TUserResponse, void>({
       query: () => '/users',
     }),
+    updateUser: builder.mutation<TUser, Partial<TUser>>({
+      query: ({ _id, ...data }) => ({
+        url: `/users/${_id}`,
+        method: 'PUT',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useUsersQuery } = user;
+export const { useUsersQuery, useUpdateUserMutation } = user;
 export { user };

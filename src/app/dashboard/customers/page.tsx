@@ -1,8 +1,7 @@
 'use client';
 
-import { useUsersQuery } from '@/api/user';
+import { useUpdateUserMutation, useUsersQuery } from '@/api/user';
 import TableSkeleton from '@/components/dashboard/table_skeleton';
-import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
@@ -20,7 +19,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { TypographyH4, TypographyP, TypographySmall } from '@/components/ui/typography';
-import { useToast } from '@/hooks/use-toast';
 import { capitalizeFirstLetter } from '@/lib/utils';
 import Image from 'next/image';
 import { useEffect } from 'react';
@@ -28,8 +26,18 @@ import { useEffect } from 'react';
 const tableHeadData = ['No', 'User', 'Phone', 'Role', 'Status', 'Deleted'];
 
 const Customers = () => {
-  const { toast } = useToast();
   const { data: { data: users } = {}, isError, isLoading, refetch } = useUsersQuery();
+  const [updateUser] = useUpdateUserMutation();
+
+  const handleRoleChange = async (id: string, value: string) => {
+    if (value !== 'admin' && value !== 'user') return;
+    await updateUser({ _id: id, role: value });
+  };
+
+  const handleStatusChange = async (id: string, value: string) => {
+    if (value !== 'active' && value !== 'inactive') return;
+    await updateUser({ _id: id, status: value });
+  };
 
   useEffect(() => {
     refetch();
@@ -78,12 +86,18 @@ const Customers = () => {
                     <a href={`tel:${user.phone}`}>{user.phone ?? 'N/A'}</a>
                   </TableCell>
                   <TableCell className='whitespace-nowrap p-4'>
-                    <Badge variant={user.role === 'admin' ? 'destructive' : 'default'}>
-                      {user.role}
-                    </Badge>
+                    <Select onValueChange={(value) => handleRoleChange(user._id, value)}>
+                      <SelectTrigger className='w-[180px]'>
+                        <SelectValue placeholder={capitalizeFirstLetter(user.role)} />
+                        <SelectContent>
+                          <SelectItem value='user'>User</SelectItem>
+                          <SelectItem value='admin'>Admin</SelectItem>
+                        </SelectContent>
+                      </SelectTrigger>
+                    </Select>
                   </TableCell>
                   <TableCell className='whitespace-nowrap p-4'>
-                    <Select>
+                    <Select onValueChange={(value) => handleStatusChange(user._id, value)}>
                       <SelectTrigger className='w-[180px]'>
                         <SelectValue placeholder={capitalizeFirstLetter(user.status)} />
                         <SelectContent>
