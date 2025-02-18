@@ -19,7 +19,7 @@ const Cakes = async ({ searchParams }: CakesProps) => {
   if (max_price) query.append('max_price', max_price);
   if (category) query.append('category', category);
 
-  const res: Response = await fetch(`${BASE_URL}/product?${query.toString()}`, {
+  const res: Response = await fetch(`${BASE_URL}/product/?is_deleted=false&${query.toString()}`, {
     next: {
       revalidate: 300,
       tags: ['cakes'],
