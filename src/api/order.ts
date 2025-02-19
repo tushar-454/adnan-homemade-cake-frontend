@@ -34,6 +34,7 @@ export type OrderData = {
   coupon_discount: number;
   tracking_id: number;
   instruction: null | string;
+  isReviewed: boolean;
   createdAt: string;
   updatedAt: string;
 };
