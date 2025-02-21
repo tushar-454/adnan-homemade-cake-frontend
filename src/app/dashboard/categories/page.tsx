@@ -1,6 +1,7 @@
 'use client';
 
-import { useCategoryQuery, useDeleteCategoryMutation } from '@/api/category';
+import { TCategory, useCategoryQuery, useDeleteCategoryMutation } from '@/api/category';
+import CategoriesUpdate from '@/components/category/update_category';
 import TableSkeleton from '@/components/dashboard/table_skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -31,9 +32,12 @@ const tableHeadData = ['No', 'Category Image', 'Category Name', 'Actions'];
 const Categories = () => {
   const [deletedId, setDeletedId] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
   const { toast } = useToast();
   const { data: { data: category } = {}, isError, isLoading, refetch } = useCategoryQuery();
   const [deleteCategory, { isLoading: deleteCategoryLoading }] = useDeleteCategoryMutation();
+  const [targetCategory, setTargetCategory] = useState<TCategory | undefined>(undefined);
+  const [updateId, setUpdateId] = useState('');
 
   const handleDeleteCoupon = async (id: string) => {
     try {
@@ -108,7 +112,16 @@ const Categories = () => {
                     </TableCell>
                     <TableCell className='whitespace-nowrap p-4'>{item.name}</TableCell>
                     <TableCell className='whitespace-nowrap p-4'>
-                      <Badge className='mr-2 cursor-pointer'>Edit</Badge>
+                      <Badge
+                        className='mr-2 cursor-pointer'
+                        onClick={() => {
+                          setTargetCategory(category.find((cat) => cat._id === item._id));
+                          setShowUpdateModal(true);
+                          setUpdateId(item._id);
+                        }}
+                      >
+                        Edit
+                      </Badge>
                       <Badge
                         variant={'destructive'}
                         onClick={() => {
@@ -148,6 +161,15 @@ const Categories = () => {
                 </Button>
                 <Button onClick={() => setShowModal(false)}>Cancel</Button>
               </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={showUpdateModal} onOpenChange={setShowUpdateModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogDescription className='text-left'>
+              <CategoriesUpdate targetCategory={targetCategory} updateId={updateId} />
             </DialogDescription>
           </DialogHeader>
         </DialogContent>

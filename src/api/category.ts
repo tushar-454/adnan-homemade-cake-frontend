@@ -46,6 +46,13 @@ const category = createApi({
         body,
       }),
     }),
+    updateCategory: builder.mutation<TCategoryRes, Partial<TCategory>>({
+      query: ({ _id, ...body }) => ({
+        url: '/category/' + _id,
+        method: 'PUT',
+        body,
+      }),
+    }),
     deleteCategory: builder.mutation({
       query: (id: string) => ({
         url: `/category/${id}`,
@@ -68,5 +75,10 @@ const category = createApi({
   }),
 });
 
-export const { useCategoryQuery, useCreateCategoryMutation, useDeleteCategoryMutation } = category;
+export const {
+  useCategoryQuery,
+  useCreateCategoryMutation,
+  useDeleteCategoryMutation,
+  useUpdateCategoryMutation,
+} = category;
 export { category };
