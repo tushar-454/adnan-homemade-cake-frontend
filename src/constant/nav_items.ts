@@ -9,7 +9,7 @@ import {
   LayoutDashboard,
   LayoutList,
   Menu,
-  Settings,
+  Star,
   Truck,
   UsersRound,
 } from 'lucide-react';
@@ -135,11 +135,11 @@ const dashboard_nav_items = {
       icon: UsersRound,
     },
   ],
-  Settings: [
+  Reviews: [
     {
-      name: 'Settings',
-      link: '/dashboard/settings',
-      icon: Settings,
+      name: 'Reviews',
+      link: '/dashboard/reviews',
+      icon: Star,
     },
   ],
 };

@@ -38,6 +38,9 @@ const reviews = createApi({
     reviews: builder.query<TReviewResponse, void>({
       query: () => '/review',
     }),
+    allReviews: builder.query<TReviewResponse, void>({
+      query: () => '/review/?is_deleted=all',
+    }),
     createReview: builder.mutation<TReviewResponse, { orderId: string; comment: string }>({
       query: ({ orderId, comment }) => ({
         url: '/review/' + orderId,
@@ -45,8 +48,35 @@ const reviews = createApi({
         body: { comment },
       }),
     }),
+    updateReview: builder.mutation<TReviewResponse, Partial<TReview>>({
+      query: ({ _id, ...body }) => ({
+        url: '/review/' + _id,
+        method: 'PUT',
+        body,
+      }),
+      async onQueryStarted({ _id, ...patch }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          reviews.util.updateQueryData('allReviews', undefined, (draft) => {
+            const review = draft.data.find((review) => review._id === _id);
+            if (review) {
+              Object.assign(review, patch);
+            }
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
-export const { useReviewsQuery, useCreateReviewMutation } = reviews;
+export const {
+  useReviewsQuery,
+  useCreateReviewMutation,
+  useUpdateReviewMutation,
+  useAllReviewsQuery,
+} = reviews;
 export { reviews };
